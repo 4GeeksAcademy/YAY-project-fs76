@@ -71,7 +71,7 @@ class Eventos (db.Model):
             "breve_descripcion": self.breve_descripcion,
             "accesibilidad": self.accesibilidad,
             "dificultad": self.dificultad,
-            "precio": f"{self.precio} €",
+            "precio": self.precio,
             "cupo": self.cupo,
             "observaciones": self.observaciones,
         }

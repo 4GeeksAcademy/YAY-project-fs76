@@ -93,7 +93,7 @@ def add_evento():
         precio=request_body["precio"],
         cupo=request_body["cupo"],
         observaciones=request_body["observaciones"],
-        is_active=request_body["is_active"],                     
+        is_active=True,                 
     )
 
     db.session.add(nuevo_evento)
