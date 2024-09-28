@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Intereses
+from api.models import db, User, Intereses, Eventos
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -68,3 +68,35 @@ def handle_interes(id):
         db.session.delete(interes)
         db.session.commit()
         return jsonify({"message": f"Interés con id {id} eliminado"}), 200
+
+@api.route('/eventos', methods=['GET'])
+def get_eventos():
+    all_eventos = Eventos.query.all()
+    results = list(map(lambda evento: evento.serialize(), all_eventos))
+
+    return jsonify(results), 200
+
+@api.route('/eventos', methods=['POST'])
+def add_evento():
+    request_body = request.get_json()
+
+    nuevo_evento = Eventos(
+        nombre=request_body["nombre"],
+        fecha=request_body["fecha"],
+        hora_inicio=request_body["hora_inicio"],
+        hora_fin=request_body["hora_fin"],
+        ciudad=request_body["ciudad"],
+        codigo_postal=request_body["codigo_postal"],
+        breve_descripcion=request_body["breve_descripcion"],
+        accesibilidad=request_body["accesibilidad"],
+        dificultad=request_body["dificultad"],
+        precio=request_body["precio"],
+        cupo=request_body["cupo"],
+        observaciones=request_body["observaciones"],
+        is_active=request_body["is_active"],                     
+    )
+
+    db.session.add(nuevo_evento)
+    db.session.commit()
+
+    return jsonify(nuevo_evento.serialize()), 200
