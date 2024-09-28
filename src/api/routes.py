@@ -100,3 +100,50 @@ def add_evento():
     db.session.commit()
 
     return jsonify(nuevo_evento.serialize()), 200
+
+@api.route('/eventos/<int:evento_id>', methods=['GET'])
+def get_evento(evento_id):
+    evento = Eventos.query.filter_by(id=evento_id).first()
+    if evento is None:
+        return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
+
+    return jsonify(evento.serialize()), 200
+
+@api.route('/eventos/<int:evento_id>', methods=['PUT'])
+def update_evento(evento_id):
+    evento = Eventos.query.filter_by(id=evento_id).first()
+    
+    if evento is None:
+        return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
+
+    request_body = request.get_json()
+
+    evento.nombre = request_body.get("nombre", evento.nombre)
+    evento.fecha = request_body.get("fecha", evento.fecha)
+    evento.hora_inicio = request_body.get("hora_inicio", evento.hora_inicio)
+    evento.hora_fin = request_body.get("hora_fin", evento.hora_fin)
+    evento.ciudad = request_body.get("ciudad", evento.ciudad)
+    evento.codigo_postal = request_body.get("codigo_postal", evento.codigo_postal)
+    evento.breve_descripcion = request_body.get("breve_descripcion", evento.breve_descripcion)
+    evento.accesibilidad = request_body.get("accesibilidad", evento.accesibilidad)
+    evento.dificultad = request_body.get("dificultad", evento.dificultad)
+    evento.precio = request_body.get("precio", evento.precio)
+    evento.cupo = request_body.get("cupo", evento.cupo)
+    evento.observaciones = request_body.get("observaciones", evento.observaciones)
+    evento.is_active = request_body.get("is_active", evento.is_active)
+
+    db.session.commit()
+
+    return jsonify(evento.serialize()), 200
+
+@api.route('/eventos/<int:evento_id>', methods=['DELETE'])
+def delete_evento(evento_id):
+    evento = Eventos.query.filter_by(id=evento_id).first()
+    
+    if evento is None:
+        return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
+
+    db.session.delete(evento)
+    db.session.commit()
+
+    return jsonify({"message": "Evento eliminado exitosamente"}), 200
