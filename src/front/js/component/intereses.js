@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
 
 export const Intereses = () => {
     const { store, actions } = useContext(Context); 
@@ -40,7 +41,7 @@ export const Intereses = () => {
     };
 
     return (
-        <div>
+		<div className="text-center mt-5">
             <h1>Lista de Intereses</h1>
             {store.intereses.length > 0 ? (
                 <ul>
@@ -89,6 +90,9 @@ export const Intereses = () => {
                 />
                 <button class="btn btn-primary" onClick={handleCreate}>Crear</button>
             </div>
+            <Link to="/">
+				<button className="btn btn-primary mt-5">Back home</button>
+			</Link>
         </div>
     );
 };
