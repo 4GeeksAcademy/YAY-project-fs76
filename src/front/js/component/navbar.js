@@ -12,6 +12,9 @@ export const Navbar = () => {
 				<Link to="/interes">
 						<button className="btn btn-primary me-3">Lista de Intereses</button>
 					</Link>
+					<Link to="/entidades">
+						<button className="btn btn-primary me-3">Lista de Entidades</button>
+					</Link>
 				<Link to="/eventos">
 						<button className="btn btn-primary me-3">Lista de Eventos</button>
 					</Link>

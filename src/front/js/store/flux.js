@@ -34,6 +34,25 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
+getEntidades: async () => {
+    try {
+        const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
+        if (!resp.ok) {
+            throw new Error("Error fetching entidades, status: " + resp.status);
+        }
+        const data = await resp.json();
+        if (!Array.isArray(data)) {
+            throw new Error("Unexpected data format: expected an array of entidades");
+        }
+        setStore({ entidades: data });
+
+        return data;
+
+    } catch (error) {
+        console.error("Error loading entidades from backend", error);
+        return null; 
+    }
+},
 
             // Acción para obtener la lista de intereses desde el backend
             getInteres: async () => {
@@ -139,7 +158,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             addEvento: (newEvento, onSuccess, onError) => {
-                fetch(process.env.BACKEND_URL + 'api/eventos', {
+                fetch(process.env.BACKEND_URL + '/api/eventos', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -159,7 +178,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
         
             loadEventos: () => {
-                return fetch(process.env.BACKEND_URL + 'api/eventos')
+                return fetch(process.env.BACKEND_URL + '/api/eventos')
                     .then(resp => {
                         console.log('Response:', resp);
                         return resp.json();
@@ -179,7 +198,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     method: "DELETE",
                     redirect: "follow"
                 };
-                return fetch(`${process.env.BACKEND_URL}api/eventos/${eventoId}`, requestOptions)
+                return fetch(`${process.env.BACKEND_URL}/api/eventos/${eventoId}`, requestOptions)
                 .then((resp) => {
                     console.log('Response:', resp);
                     return resp.text();
@@ -195,7 +214,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
         
             updateEvento: (theid, updatedEvento, onSuccess, onError) => {
-                fetch(`${process.env.BACKEND_URL}api/eventos/${theid}`, {
+                fetch(`${process.env.BACKEND_URL}/api/eventos/${theid}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'

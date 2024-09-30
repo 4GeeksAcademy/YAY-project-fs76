@@ -2,9 +2,12 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Intereses, Eventos
+from api.models import db, User, Intereses, Eventos, Entidad
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+
+
+
 
 api = Blueprint('api', __name__)
 
@@ -20,6 +23,45 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+
+@api.route('/entidades', methods=['GET'])
+def get_entidades():
+    entidades = Entidad.query.all()
+    return jsonify([entidad.serialize() for entidad in entidades])
+
+
+@api.route('/entidades', methods=['POST'])
+def add_entidad():
+    data = request.json
+    nueva_entidad = Entidad(nombre=data['nombre'], tipo=data['tipo'])  # Add tipo here
+    db.session.add(nueva_entidad)
+    db.session.commit()
+    return jsonify(nueva_entidad.serialize()), 201
+
+
+@api.route('/entidades/<int:id>', methods=['GET'])
+def get_entidad(id):
+    entidad = Entidad.query.get_or_404(id)
+    return jsonify(entidad.serialize())
+
+
+@api.route('/entidades/<int:id>', methods=['PUT'])
+def update_entidad(id):
+    data = request.json
+    entidad = Entidad.query.get_or_404(id)
+    entidad.nombre = data['nombre']
+    entidad.tipo = data['tipo']  # Add tipo here
+    db.session.commit()
+    return jsonify(entidad.serialize())
+
+
+@api.route('/entidades/<int:id>', methods=['DELETE'])
+def delete_entidad(id):
+    entidad = Entidad.query.get_or_404(id)
+    db.session.delete(entidad)
+    db.session.commit()
+    return jsonify({"message": "Entidad eliminada con éxito"}), 204
 
 @api.route('/interes', methods=['GET', 'POST'])
 def handle_intereses():
@@ -147,3 +189,7 @@ def delete_evento(evento_id):
     db.session.commit()
 
     return jsonify({"message": "Evento eliminado exitosamente"}), 200
+
+
+if __name__ == '__main__':
+    api.run(debug=True)

@@ -8,6 +8,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
+import { Entidades } from "./component/entidades";
 import { Navbar } from "./component/navbar";
 import { Intereses } from "./component/intereses";
 import { Eventos } from "./component/eventos";
@@ -37,6 +38,7 @@ const Layout = () => {
                         <Route element={<Evento_Form />} path="/formulario-evento" />
                         <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
                         <Route element={<Single />} path="/single/:theid" />
+                        <Route element={<Entidades />} path="/entidades" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
                     </Routes>
                     <Footer />
