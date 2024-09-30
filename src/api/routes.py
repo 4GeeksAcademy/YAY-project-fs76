@@ -84,17 +84,16 @@ def handle_intereses():
 
 @api.route('/interes/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_interes(id):
+    print(f"Recibiendo solicitud para el ID {id}")  # Imprime el ID recibido
     interes = Intereses.query.get(id)
 
     if not interes:
         return jsonify({"message": "Interés no encontrado"}), 404
 
     if request.method == 'GET':
-      
         return jsonify(interes.serialize()), 200
 
     if request.method == 'PUT':
-     
         data = request.get_json()
         if not data:
             return jsonify({"message": "Faltan datos"}), 400
@@ -106,10 +105,10 @@ def handle_interes(id):
         return jsonify(interes.serialize()), 200
 
     if request.method == 'DELETE':
-        
         db.session.delete(interes)
         db.session.commit()
         return jsonify({"message": f"Interés con id {id} eliminado"}), 200
+
 
 @api.route('/eventos', methods=['GET'])
 def get_eventos():
