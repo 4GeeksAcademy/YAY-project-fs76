@@ -20,7 +20,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
-
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
@@ -33,6 +32,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+			getEntidades: async () => {
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
+					if (!resp.ok) {
+						throw new Error("Error fetching entidades, status: " + resp.status);
+					}
+					const data = await resp.json();
+					if (!Array.isArray(data)) {
+						throw new Error("Unexpected data format: expected an array of entidades");
+					}
+					setStore({ entidades: data });
+			
+					return data;
+			
+				} catch (error) {
+					console.error("Error loading entidades from backend", error);
+					return null; 
+				}
+			},
+			
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
