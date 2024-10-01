@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             auth: false,
             intereses: [],
             eventos: [],
+            partners: [],
             demo: [
                 {
                     title: "FIRST",
@@ -36,25 +37,26 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
-getEntidades: async () => {
-    try {
-        const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
-        if (!resp.ok) {
-            throw new Error("Error fetching entidades, status: " + resp.status);
-        }
-        const data = await resp.json();
-        if (!Array.isArray(data)) {
-            throw new Error("Unexpected data format: expected an array of entidades");
-        }
-        setStore({ entidades: data });
+            getEntidades: async () => {
+                try {
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
+                    if (!resp.ok) {
+                        throw new Error("Error fetching entidades, status: " + resp.status);
+                    }
+                    const data = await resp.json();
+                    if (!Array.isArray(data)) {
+                        throw new Error("Unexpected data format: expected an array of entidades");
+                    }
+                    setStore({ entidades: data });
 
-        return data;
+                    return data;
 
-    } catch (error) {
-        console.error("Error loading entidades from backend", error);
-        return null; 
+             } catch (error) {
+                  console.error("Error loading entidades from backend", error);
+              return null; 
     }
 },
+          
 signup: async (email, password) => {
     try {
         const response = await fetch("https://obscure-giggle-g4547qvxr79rfxr7-3001.app.github.dev/api/signup", {
@@ -71,6 +73,11 @@ signup: async (email, password) => {
             console.error("Error en el registro:", errorData);
             return false;
         }
+                } catch (error) {
+                    console.error("Error loading entidades from backend", error);
+                    return null;
+                }
+            }
 
         return true; // Registro exitoso
     } catch (error) {
@@ -189,18 +196,18 @@ signup: async (email, password) => {
                     },
                     body: JSON.stringify(newEvento)
                 })
-                .then(resp => resp.json())
-                .then(data => {
-                    const store = getStore();
-                    setStore({ eventos: [...store.eventos, data] });
-                    onSuccess();
-                })
-                .catch(error => {
-                    console.log(error);
-                    onError();
-                });
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        setStore({ eventos: [...store.eventos, data] });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
+                    });
             },
-        
+
             loadEventos: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos')
                     .then(resp => {
@@ -215,28 +222,28 @@ signup: async (email, password) => {
                     })
                     .catch(error => console.log(error));
             },
-        
+
             deleteEvento: (eventoId) => {
                 const store = getStore();
-                const requestOptions = { 
+                const requestOptions = {
                     method: "DELETE",
                     redirect: "follow"
                 };
                 return fetch(`${process.env.BACKEND_URL}/api/eventos/${eventoId}`, requestOptions)
-                .then((resp) => {
-                    console.log('Response:', resp);
-                    return resp.text();
-                })
-                .then((data) => {
-                    console.log('Data:', data);
-                    const eventos = store.eventos.filter((evento) => evento.id !== eventoId);
-                    setStore({ eventos: eventos });
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+                    .then((resp) => {
+                        console.log('Response:', resp);
+                        return resp.text();
+                    })
+                    .then((data) => {
+                        console.log('Data:', data);
+                        const eventos = store.eventos.filter((evento) => evento.id !== eventoId);
+                        setStore({ eventos: eventos });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
             },
-        
+
             updateEvento: (theid, updatedEvento, onSuccess, onError) => {
                 fetch(`${process.env.BACKEND_URL}/api/eventos/${theid}`, {
                     method: 'PUT',
@@ -245,20 +252,65 @@ signup: async (email, password) => {
                     },
                     body: JSON.stringify(updatedEvento)
                 })
-                .then(resp => resp.json())
-                .then(data => {
-                    const store = getStore();
-                    const updatedEventos = store.eventos.map(evento => 
-                        evento.id === updatedEvento.id ? updatedEvento : evento
-                    );
-                    setStore({ eventos: updatedEventos });
-                    onSuccess();
-                })
-                .catch(error => {
-                    console.log(error);
-                    onError();
-                });
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        const updatedEventos = store.eventos.map(evento =>
+                            evento.id === updatedEvento.id ? updatedEvento : evento
+                        );
+                        setStore({ eventos: updatedEventos });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
+                    });
             },
+
+            signupPartner: (email, password) => {
+                console.log("Signup Partner desde flux")
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        "email": email,
+                        "password": password
+                    })
+                };
+                fetch(process.env.BACKEND_URL + "/api/partner-signup", requestOptions)
+                    .then(response => {
+                        if (response.status === 200) {
+                            const store = getStore();
+                            const newPartner = { email };
+                            setStore({
+                                partners: [...store.partners, newPartner],
+                            });
+                        }
+                        return response.json()
+                    })
+                    .then(data => {
+                        console.log(data)
+                        localStorage.setItem("token", data.access_token);
+                        setStore({ auth: true, message: null });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            },
+
+            checkPartnerExists: (email) => {
+				return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json;charset=UTF-8'
+					},
+					body: JSON.stringify({ email })
+				})
+				.then(response => response.json())
+				.then(data => data.exists);
+			},
 
             changeColor: (index, color) => {
                 const store = getStore();
