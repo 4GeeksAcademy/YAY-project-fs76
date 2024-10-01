@@ -1,13 +1,14 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Intereses, Eventos, Entidad
+from flask import Flask, request, jsonify, url_for, Blueprint, session
+from api.models import db, User, Intereses, Eventos, Entidad, Partners
 from api.utils import generate_sitemap, APIException
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-
-
-
 
 api = Blueprint('api', __name__)
 
@@ -30,7 +31,6 @@ def get_entidades():
     entidades = Entidad.query.all()
     return jsonify([entidad.serialize() for entidad in entidades])
 
-
 @api.route('/entidades', methods=['POST'])
 def add_entidad():
     data = request.json
@@ -39,12 +39,10 @@ def add_entidad():
     db.session.commit()
     return jsonify(nueva_entidad.serialize()), 201
 
-
 @api.route('/entidades/<int:id>', methods=['GET'])
 def get_entidad(id):
     entidad = Entidad.query.get_or_404(id)
     return jsonify(entidad.serialize())
-
 
 @api.route('/entidades/<int:id>', methods=['PUT'])
 def update_entidad(id):
@@ -54,7 +52,6 @@ def update_entidad(id):
     entidad.tipo = data['tipo']  # Add tipo here
     db.session.commit()
     return jsonify(entidad.serialize())
-
 
 @api.route('/entidades/<int:id>', methods=['DELETE'])
 def delete_entidad(id):
@@ -188,6 +185,65 @@ def delete_evento(evento_id):
     db.session.commit()
 
     return jsonify({"message": "Evento eliminado exitosamente"}), 200
+
+@api.route('/partners', methods=['GET'])
+def get_partners():
+    all_partners = Partners.query.all()
+    results = list(map(lambda partner: partner.serialize(), all_partners))
+
+    return jsonify(results), 200
+
+@api.route('/partners/<int:partner_id>', methods=['GET'])
+def get_partner(partner_id):
+    partner = Partners.query.filter_by(id=partner_id).first()
+    if partner is None:
+        return jsonify({"ERROR": "Partner no encontrado. Revise que el número de ID introducido, corresponda a un partner existente"}), 404
+
+    return jsonify(partner.serialize()), 200
+
+@api.route("/private-partner", methods=["GET"])
+@jwt_required()
+def private_partner():
+    current_partner = get_jwt_identity()
+    return jsonify(logged_in_as=current_partner, message="Has iniciado sesión y tienes acceso a la ruta privada."), 200
+
+@api.route("/logout-partner", methods=['POST'])
+@jwt_required()
+def logout_partner():
+    session.pop('jwt_token', None) 
+    return jsonify({"msg": "Cierre de sesión con éxito"}), 200
+
+@api.route('/checkPartner', methods=['POST'])
+def check_partner_exists():
+    partnerName = request.json.get('partnerName')
+    email = request.json.get('email')
+
+    if not partnerName and not email:
+        return jsonify(message="Nombre y correo electrónico obligatorio"), 400
+
+    if email:
+        existing_partner = Partners.query.filter_by(email=email).first()
+        if existing_partner:
+            return jsonify(exists=True, message="Ya existe un Partner registrado con este correo electrónico"), 200
+
+    if partnerName:
+        existing_partner = Partners.query.filter_by(partnerName=partnerName).first()
+        if existing_partner:
+            return jsonify(exists=True, message="Ya existe un Partner registrado con ese nombre"), 200
+
+    return jsonify(exists=False), 200
+
+@api.route('/partners/<int:partner_id>', methods=['DELETE'])
+def delete_partner(partner_id):
+    partner = Partners.query.filter_by(id=partner_id).first()
+    
+    if partner is None:
+        return jsonify({"ERROR": "Partner no encontrado. Revise que el número de ID introducido, corresponda a un partner existente"}), 404
+
+    db.session.delete(partner)
+    db.session.commit()
+
+    return jsonify({"message": "Partner eliminado exitosamente"}), 200
 
 
 if __name__ == '__main__':
