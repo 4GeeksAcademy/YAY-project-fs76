@@ -245,6 +245,30 @@ def delete_partner(partner_id):
 
     return jsonify({"message": "Partner eliminado exitosamente"}), 200
 
+@api.route('/partner-signup', methods=['POST'])
+def signup_partner():
+    email = request.json['email']
+    password = request.json['password']
+    
+    # Verificar si se han proporcionado ambos campos
+    if not email or not password:
+        return jsonify(message="Correo electrónico y contraseña obligatorios"), 400
+     
+    # Verificar si la contraseña tiene una longitud mínima
+    if len(password) < 8:
+        return jsonify(message="La contraseña debe tener al menos 8 caracteres"), 400
+    
+    # Verificar si el correo electrónico ya existe
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user:
+        return jsonify(message="Ya existe un Partner registrado con este correo electrónico"), 400
+    
+    new_partner = Partners(email=email, password=password, is_active=True)
+    db.session.add(new_partner)
+    db.session.commit()
+    access_token = create_access_token(identity=email)
+    return jsonify({ "message": "Cuenta de Partner creada exitosamente","access_token": access_token}), 201
+
 
 if __name__ == '__main__':
     api.run(debug=True)
