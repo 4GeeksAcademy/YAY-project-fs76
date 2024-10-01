@@ -2,7 +2,8 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            intereses: [],  // Nueva propiedad para almacenar la lista de intereses
+            auth: false,
+            intereses: [],
             eventos: [],
             demo: [
                 {
