@@ -14,6 +14,7 @@ import { Intereses } from "./component/intereses";
 import { Eventos } from "./component/eventos";
 import { Evento_Card } from "./component/evento_card";
 import { Evento_Form } from "./component/evento_form";
+import { Partners } from "./pages/partners";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -39,6 +40,7 @@ const Layout = () => {
                         <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Entidades />} path="/entidades" />
+                        <Route element={<Partners />} path="/partners" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
                     </Routes>
                     <Footer />

@@ -121,6 +121,7 @@ class Partners(db.Model):
             "entidad_id": self.entidad_id,     
             # do not serialize the password, its a security breach
         }
+    
 class Usuarios(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), nullable=True)
