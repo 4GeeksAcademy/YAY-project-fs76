@@ -2,13 +2,15 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import db, User, Intereses, Eventos, Entidad, Partners
+from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 api = Blueprint('api', __name__)
 
@@ -244,6 +246,63 @@ def delete_partner(partner_id):
     db.session.commit()
 
     return jsonify({"message": "Partner eliminado exitosamente"}), 200
+
+
+@api.route('/usuarios', methods=['GET'])
+def get_usuarios():
+    all_usuarios = Usuarios.query.all()
+    results = list(map(lambda usuario: usuario.serialize(), all_usuarios))
+    return jsonify(results), 200
+
+# Obtener un usuario por ID
+@api.route('/usuarios/<int:usuario_id>', methods=['GET'])
+def get_usuario(usuario_id):
+    usuario = Usuarios.query.filter_by(id=usuario_id).first()
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado. Revise que el número de ID introducido corresponda a un usuario existente"}), 404
+    return jsonify(usuario.serialize()), 200
+
+# Ruta privada para usuarios autenticados
+@api.route("/private-usuario", methods=["GET"])
+@jwt_required()
+def private_usuario():
+    current_usuario = get_jwt_identity()
+    return jsonify(logged_in_as=current_usuario, message="Has iniciado sesión y tienes acceso a la ruta privada."), 200
+
+# Cerrar sesión del usuario
+@api.route("/logout-usuario", methods=['POST'])
+@jwt_required()
+def logout_usuario():
+    session.pop('jwt_token', None)
+    return jsonify({"msg": "Cierre de sesión con éxito"}), 200
+
+# Verificar si existe un usuario con el email proporcionado
+@api.route('/usuarios', methods=['POST'])
+def check_usuario_exists():
+    email = request.json.get('email')
+
+    if not email:
+        return jsonify(message="El correo electrónico es obligatorio"), 400
+
+    existing_usuario = Usuarios.query.filter_by(email=email).first()
+    if existing_usuario:
+        return jsonify(exists=True, message="Ya existe un Usuario registrado con este correo electrónico"), 200
+
+    return jsonify(exists=False), 200
+
+# Eliminar un usuario por ID
+@api.route('/usuarios/<int:usuario_id>', methods=['DELETE'])
+def delete_usuario(usuario_id):
+    usuario = Usuarios.query.filter_by(id=usuario_id).first()
+
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado. Revise que el número de ID introducido corresponda a un usuario existente"}), 404
+
+    db.session.delete(usuario)
+    db.session.commit()
+
+    return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+
 
 
 if __name__ == '__main__':
