@@ -272,16 +272,44 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             checkPartnerExists: (email) => {
-				return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json;charset=UTF-8'
-					},
-					body: JSON.stringify({ email })
-				})
-				.then(response => response.json())
-				.then(data => data.exists);
-			},
+                return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({ email })
+                })
+                    .then(response => response.json())
+                    .then(data => data.exists);
+            },
+
+            loginPartner: (email, password) => {
+                console.log("Login Partner desde flux");
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                    body: JSON.stringify({ "email": email, "password": password })
+                };
+                fetch(process.env.BACKEND_URL + "/api/partner-login", requestOptions)
+                    .then(response => {
+                        if (response.status === 200) {
+                            setStore({ auth: true });
+                            return response.json();
+                        } else {
+                            console.log("El correo electrónico o la contraseña son incorrectos")
+
+                        }
+                    })
+                    .then(data => {
+                        if (data.access_token) {
+                            localStorage.setItem("token", data.access_token);
+                            console.log("Inicio de sesión de Partner correcto", "token", data.access_token);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            },
 
             changeColor: (index, color) => {
                 const store = getStore();
