@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
+             token: null,
             message: null,
             auth: false,
             intereses: [],
@@ -54,7 +55,29 @@ getEntidades: async () => {
         return null; 
     }
 },
+signup: async (email, password) => {
+    try {
+        const response = await fetch("https://obscure-giggle-g4547qvxr79rfxr7-3001.app.github.dev/api/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
 
+        if (!response.ok) {
+            // Manejar el caso de error
+            const errorData = await response.json();
+            console.error("Error en el registro:", errorData);
+            return false;
+        }
+
+        return true; // Registro exitoso
+    } catch (error) {
+        console.error("Error en la solicitud de registro:", error);
+        return false;
+    }
+},
             // Acción para obtener la lista de intereses desde el backend
             getInteres: async () => {
                 try {
