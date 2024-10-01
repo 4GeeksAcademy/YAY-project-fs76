@@ -24,7 +24,8 @@ class Entidad(db.Model):
     __tablename__ = 'entidades' 
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), unique=True, nullable=False)
-    tipo = db.Column(db.String(50), nullable=True)  
+    tipo = db.Column(db.String(50), nullable=True)
+    db.relationship('Eventos', backref='entidad', lazy=True)  
 
     def __repr__(self):
         return f'<Entidad {self.nombre}>'
@@ -92,4 +93,31 @@ class Eventos (db.Model):
             "precio": self.precio,
             "cupo": self.cupo,
             "observaciones": self.observaciones,
+        }
+
+class Partners(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(120), unique=False, nullable=True)
+    nif = db.Column(db.String(120), nullable=True)
+    ciudad = db.Column(db.String(120), nullable=True)
+    sector = db.Column(db.String(120), nullable=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(80), unique=False, nullable=False)
+    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    entidad_id = db.Column(db.Integer, db.ForeignKey('entidades.id'))
+    tipo_entidad = db.relationship('Entidad')
+
+    def __repr__(self):
+        return f'<Partners {self.email}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "NIF": self.nif,
+            "ciudad": self.ciudad,
+            "sector": self.sector,
+            "email": self.email,
+            "entidad_id": self.entidad_id,     
+            # do not serialize the password, its a security breach
         }
