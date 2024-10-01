@@ -290,8 +290,17 @@ def get_usuario(usuario_id):
 @api.route("/private-usuario", methods=["GET"])
 @jwt_required()
 def private_usuario():
-    current_usuario = get_jwt_identity()
-    return jsonify(logged_in_as=current_usuario, message="Has iniciado sesión y tienes acceso a la ruta privada."), 200
+    usuario_id = get_jwt_identity()  # Aquí obtienes el ID del usuario desde el token
+    usuario = Usuarios.query.get(usuario_id)
+
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+
+    return jsonify({
+        "logged_in_as": usuario.nombre,
+        "email": usuario.email,
+        "message": "Has iniciado sesión y tienes acceso a la ruta privada."
+    }), 200
 
 # Cerrar sesión del usuario
 @api.route("/logout-usuario", methods=['POST'])
@@ -326,6 +335,61 @@ def delete_usuario(usuario_id):
     db.session.commit()
 
     return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+@api.route('/signup', methods=['POST'])
+def signup():
+    nombre = request.json.get('nombre')
+    apellidos = request.json.get('apellidos')
+    ciudad = request.json.get('ciudad')
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({"ERROR": "El correo electrónico y la contraseña son obligatorios"}), 400
+
+    existing_usuario = Usuarios.query.filter_by(email=email).first()
+    if existing_usuario:
+        return jsonify({"ERROR": "Ya existe un Usuario con este correo electrónico"}), 409
+
+    hashed_password = generate_password_hash(password)
+    new_usuario = Usuarios(
+        nombre=nombre,
+        apellidos=apellidos,
+        ciudad=ciudad,
+        email=email,
+        password=hashed_password,
+        is_active=True
+    )
+
+    db.session.add(new_usuario)
+    db.session.commit()
+
+    return jsonify({"message": "Usuario registrado con éxito"}), 201
+@api.route('/login', methods=['POST'])
+def login():
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({"ERROR": "Correo electrónico y contraseña son obligatorios"}), 400
+
+    # Buscar el usuario por email
+    usuario = Usuarios.query.filter_by(email=email).first()
+
+    if usuario is None or not check_password_hash(usuario.password, password):
+        return jsonify({"ERROR": "Correo electrónico o contraseña incorrectos"}), 401
+
+    # Crear un token de acceso JWT con el id del usuario como identidad
+    access_token = create_access_token(identity=usuario.id)
+
+    # Devolver información del usuario junto con el token
+    return jsonify({
+        "token": access_token,
+        "usuario_id": usuario.id,
+        "nombre": usuario.nombre,
+        "email": usuario.email
+    }), 200
+
+
 
 
 
