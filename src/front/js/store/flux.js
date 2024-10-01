@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
+            token: null,
             message: null,
             auth: false,
             intereses: [],
@@ -36,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
+
             getEntidades: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
@@ -56,8 +58,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // Acción para obtener la lista de intereses desde el backend
-            getInteres: async () => {
+        // Acción para obtener la lista de intereses desde el backend
+        getInteres: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/interes");
                     const data = await resp.json();
@@ -309,6 +311,28 @@ const getState = ({ getStore, getActions, setStore }) => {
                     .catch(error => {
                         console.error('Error:', error);
                     });
+            },
+
+            signup: async (email, password) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("Error en el registro:", errorData);
+                        return false; // Retorna false en caso de error
+                    }
+                    return true; // Registro exitoso
+                } catch (error) {
+                    console.error("Error en la solicitud de registro:", error);
+                    return false; // Retorna false en caso de excepción
+                }
             },
 
             changeColor: (index, color) => {

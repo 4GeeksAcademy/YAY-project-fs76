@@ -16,6 +16,7 @@ import { Evento_Card } from "./component/evento_card";
 import { Evento_Form } from "./component/evento_form";
 import { Partners } from "./pages/partners";
 import { Footer } from "./component/footer";
+import Signup from "./component/signup";
 
 //create your first component
 const Layout = () => {
@@ -42,6 +43,7 @@ const Layout = () => {
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
+                        <Route path="/signup" element={<Signup />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
