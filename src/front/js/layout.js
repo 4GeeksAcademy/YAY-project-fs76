@@ -18,6 +18,8 @@ import { Partners } from "./pages/partners";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
+import Login from "./component/login";
+import Dashboard from "./component/dashboard";
 
 //create your first component
 const Layout = () => {
@@ -46,6 +48,8 @@ const Layout = () => {
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
