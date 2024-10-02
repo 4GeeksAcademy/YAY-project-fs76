@@ -360,6 +360,7 @@ def delete_usuario(usuario_id):
     db.session.commit()
 
     return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+
 @api.route('/signup', methods=['POST'])
 def signup():
     nombre = request.json.get('nombre')
@@ -389,6 +390,7 @@ def signup():
     db.session.commit()
 
     return jsonify({"message": "Usuario registrado con éxito"}), 201
+
 @api.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
@@ -414,9 +416,11 @@ def login():
         "email": usuario.email
     }), 200
 
-
-
-
+@api.route("/logout", methods=['POST'])
+@jwt_required()
+def logout():
+    session.pop('jwt_token', None) 
+    return jsonify({"msg": "Se ha cerrado sesión correctamente"}), 200
 
 if __name__ == '__main__':
     api.run(debug=True)
