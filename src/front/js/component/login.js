@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+export const Login = () => {
     const { store, actions } = useContext(Context);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,6 +20,7 @@ const Login = () => {
 
     return (
         <div className="login-container">
+            <h2>Iniciar Sesión</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
@@ -45,4 +46,3 @@ const Login = () => {
     );
 };
 
-export default Login;

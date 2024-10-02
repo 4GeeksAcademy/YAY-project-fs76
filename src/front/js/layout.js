@@ -20,7 +20,7 @@ import { Partners_Home } from "./pages/partners_home";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
-import Login from "./component/login";
+import { Login } from "./component/login";
 import Dashboard from "./component/dashboard";
 
 //create your first component
