@@ -15,8 +15,9 @@ import { Eventos } from "./component/eventos";
 import { Evento_Card } from "./component/evento_card";
 import { Evento_Form } from "./component/evento_form";
 import { Partners } from "./pages/partners";
+import { Usuarios } from "./pages/usuarios";
+import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
-import Signup from "./component/signup";
 
 //create your first component
 const Layout = () => {
@@ -42,8 +43,9 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
+                        <Route element={<Usuarios />} path="/usuarios" />
+                        <Route element={<Logout />} path="/logout" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
-                        <Route path="/signup" element={<Signup />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

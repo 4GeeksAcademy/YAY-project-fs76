@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useContext, useState }  from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+	const { store, actions } = useContext(Context);
+	const navigate = useNavigate();
+	const [loggingOut, setLoggingOut] = useState(false);
+
+	function handleLogout() {
+		setLoggingOut(true);
+		actions.logout();
+		navigate("/logout", { state: { from: true } });
+	}
+
 	return (
 		<nav className="navbar navbar-light bg-light">
 			<div className="container">
@@ -21,9 +33,22 @@ export const Navbar = () => {
 					<Link to="/partners">
 						<button className="btn btn-primary me-3">Partners</button>
 					</Link>
-					<Link to="/demo">
-						<button className="btn btn-secondary">Check the Context in action</button>
+					<Link to="/usuarios">
+						<button className="btn btn-primary me-3">Usuarios</button>
 					</Link>
+					{/* <Link to="/demo">
+						<button className="btn btn-secondary">Check the Context in action</button>
+					</Link> */}
+					{store.auth === true ? (
+						<button
+							className="enter btn btn-warning my-auto text-light"
+							onClick={() => handleLogout()}
+						>
+							Cerrar Sesión
+						</button>
+					) : (
+						''
+					)}
 				</div>
 			</div>
 		</nav>

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext"; // Asegúrate de tener acceso al contexto de Flux
 
-const Signup = () => {
+export const Signup = () => {
     const { actions } = useContext(Context); // Acceso a las acciones de Flux
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -64,4 +64,3 @@ const Signup = () => {
     );
 };
 
-export default Signup;
