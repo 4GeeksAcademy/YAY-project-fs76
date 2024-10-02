@@ -271,6 +271,21 @@ def signup_partner():
     access_token = create_access_token(identity=email)
     return jsonify({ "message": "Cuenta de Partner creada exitosamente","access_token": access_token}), 201
 
+@api.route("/partner-login", methods=['POST'])
+def login_partner():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    partner = Partners.query.filter(Partners.email == email).first()
+    
+    if partner is None:
+        return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
+    
+    if partner.password != password:
+        return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
+    
+    access_token = create_access_token(identity=partner.email)
+    return jsonify({"message": "Inicio de sesión de Partner correcto","access_token": access_token}), 200
+
 
 @api.route('/usuarios', methods=['GET'])
 def get_usuarios():

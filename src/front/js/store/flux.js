@@ -1,7 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
-             token: null,
+            token: null,
             message: null,
             auth: false,
             intereses: [],
@@ -37,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
+
             getEntidades: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
@@ -51,42 +52,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                     return data;
 
-             } catch (error) {
-                  console.error("Error loading entidades from backend", error);
-              return null; 
-    }
-},
-          
-signup: async (email, password) => {
-    try {
-        const response = await fetch("https://obscure-giggle-g4547qvxr79rfxr7-3001.app.github.dev/api/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        if (!response.ok) {
-            // Manejar el caso de error
-            const errorData = await response.json();
-            console.error("Error en el registro:", errorData);
-            return false;
-        }
                 } catch (error) {
                     console.error("Error loading entidades from backend", error);
                     return null;
                 }
-            }
+            },
 
-        return true; // Registro exitoso
-    } catch (error) {
-        console.error("Error en la solicitud de registro:", error);
-        return false;
-    }
-},
-            // Acción para obtener la lista de intereses desde el backend
-            getInteres: async () => {
+        // Acción para obtener la lista de intereses desde el backend
+        getInteres: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/interes");
                     const data = await resp.json();
@@ -301,16 +274,66 @@ signup: async (email, password) => {
             },
 
             checkPartnerExists: (email) => {
-				return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json;charset=UTF-8'
-					},
-					body: JSON.stringify({ email })
-				})
-				.then(response => response.json())
-				.then(data => data.exists);
-			},
+                return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    body: JSON.stringify({ email })
+                })
+                    .then(response => response.json())
+                    .then(data => data.exists);
+            },
+
+            loginPartner: (email, password) => {
+                console.log("Login Partner desde flux");
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                    body: JSON.stringify({ "email": email, "password": password })
+                };
+                fetch(process.env.BACKEND_URL + "/api/partner-login", requestOptions)
+                    .then(response => {
+                        if (response.status === 200) {
+                            setStore({ auth: true });
+                            return response.json();
+                        } else {
+                            console.log("El correo electrónico o la contraseña son incorrectos")
+
+                        }
+                    })
+                    .then(data => {
+                        if (data.access_token) {
+                            localStorage.setItem("token", data.access_token);
+                            console.log("Inicio de sesión de Partner correcto", "token", data.access_token);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            },
+
+            signup: async (email, password) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error("Error en el registro:", errorData);
+                        return false; // Retorna false en caso de error
+                    }
+                    return true; // Registro exitoso
+                } catch (error) {
+                    console.error("Error en la solicitud de registro:", error);
+                    return false; // Retorna false en caso de excepción
+                }
+            },
 
             changeColor: (index, color) => {
                 const store = getStore();
