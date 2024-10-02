@@ -36,6 +36,9 @@ export const Navbar = () => {
 					<Link to="/usuarios">
 						<button className="btn btn-primary me-3">Usuarios</button>
 					</Link>
+					<Link to="/login">
+						<button className="btn btn-primary me-3">Login</button>
+					</Link>
 					{/* <Link to="/demo">
 						<button className="btn btn-secondary">Check the Context in action</button>
 					</Link> */}
