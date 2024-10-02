@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
 import { Signup } from "../component/signup";
-// import { Login } from "../component/login";
+import { Login } from "../component/login";
 
 import "../../styles/home.css";
 
@@ -19,9 +19,9 @@ export const Usuarios = () => {
                 <div className="col-3 me-5">
                     <Signup />
                 </div>
-                {/* <div className="col-3 ms-5">
+                <div className="col-3 ms-5">
                     <Login />
-                </div> */}
+                </div>
 
             </div>
 

@@ -348,9 +348,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return response.json()
                     })
                     .then(data => {
-                        console.log(data)
+                        console.log(data);
                         localStorage.setItem("token", data.access_token);
-                        setStore({ auth: true, message: null });
+                        setStore({ message: null, partnerId: data.partner_id });
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -394,6 +394,26 @@ const getState = ({ getStore, getActions, setStore }) => {
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                    });
+            },
+
+            completePartner: (theid, newPartner, onSuccess, onError) => {
+                fetch(`${process.env.BACKEND_URL}/api/completar-perfil-partner/${theid}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newPartner)
+                })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        setStore({auth: true, partners: [...store.partners, data] });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
                     });
             },
 

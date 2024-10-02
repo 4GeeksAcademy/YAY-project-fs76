@@ -39,32 +39,32 @@ export const Partner_Signup = () => {
 
     return (
         <>
-            {store.auth === true ? <Navigate to="/partners_home" /> :
+            {store.partnerId ? <Navigate to={`/partner_completar_perfil/${store.partnerId}`} /> :
                 <form className="container h-100 d-flex flex-column align-items-start my-5" onSubmit={handleSignup}>
                     <div className="card p-5">
                         <h1 className="singup mb-4">Regístrate como Partner</h1>
                         {message && <div className="alert alert-warning d-flex align-items-center mx-2"><i className="fa-solid fa-triangle-exclamation me-2" />{message}
                             <i type="button" className="btn-close float-end ms-1" style={{ fontSize: "10px" }} data-bs-dismiss="alert" aria-label="Close" onClick={() => setAlert(null)}></i></div>}
-    
+
                         <div className="inputBox my-2 mb-4" style={{ position: "relative", textAlign: "left" }}>
                             <span className="user" style={{ position: "absolute", top: "-25px", left: "5px", fontSize: "20px", color: "#666" }}>Email</span>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                required= "required"
-                                style={{ width: "100%" }} // Hacer el input más largo
+                                required="required"
+                                style={{ width: "100%" }}
                             />
                         </div>
-    
+
                         <div className="inputBox my-2 mb-4" style={{ position: "relative", textAlign: "left" }}>
                             <span style={{ position: "absolute", top: "-25px", left: "5px", fontSize: "20px", color: "#666" }}>Contraseña</span>
                             <input
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 type={showPassword ? "text" : "password"}
-                                required="required" 
-                                style={{ width: "100%" }} // Hacer el input más largo
+                                required="required"
+                                style={{ width: "100%" }}
                             />
                             <i
                                 className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}
@@ -72,15 +72,15 @@ export const Partner_Signup = () => {
                                 style={{ cursor: "pointer", position: "absolute", right: "5px", top: "50%", transform: "translateY(-50%)" }} // Ajustar la posición del ícono
                             ></i>
                         </div>
-    
+
                         <div className="inputBox my-2" style={{ position: "relative", textAlign: "left" }}>
                             <span style={{ position: "absolute", top: "-25px", left: "5px", fontSize: "20px", color: "#666" }}>Repetir contraseña</span>
                             <input
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 type={showConfirmPassword ? "text" : "password"}
-                                required="required" 
-                                style={{ width: "100%" }} // Hacer el input más largo
+                                required="required"
+                                style={{ width: "100%" }}
                             />
                             <i
                                 className={`fa-solid ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}
@@ -88,7 +88,7 @@ export const Partner_Signup = () => {
                                 style={{ cursor: "pointer", position: "absolute", right: "5px", top: "50%", transform: "translateY(-50%)" }} // Ajustar la posición del ícono
                             ></i>
                         </div>
-    
+
                         <button type="submit" className="enter btn btn-success mx-auto my-4" onClick={handleSignup}>Registrarse</button>
                         <p>¿Ya tienes cuenta como partner en YAY? <Link to="/partner-login">Inicia Sesión</Link></p>
                     </div>

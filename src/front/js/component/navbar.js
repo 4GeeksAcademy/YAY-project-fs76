@@ -36,15 +36,12 @@ export const Navbar = () => {
 					<Link to="/usuarios">
 						<button className="btn btn-primary me-3">Usuarios</button>
 					</Link>
-					<Link to="/login">
-						<button className="btn btn-primary me-3">Login</button>
-					</Link>
 					{/* <Link to="/demo">
 						<button className="btn btn-secondary">Check the Context in action</button>
 					</Link> */}
 					{store.auth === true ? (
 						<button
-							className="enter btn btn-warning my-auto text-light"
+							className="enter btn btn-warning my-auto"
 							onClick={() => handleLogout()}
 						>
 							Cerrar Sesión
