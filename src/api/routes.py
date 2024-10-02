@@ -279,7 +279,7 @@ def signup_partner():
     db.session.add(new_partner)
     db.session.commit()
     access_token = create_access_token(identity=email)
-    return jsonify({ "message": "Cuenta de Partner creada exitosamente","access_token": access_token}), 201
+    return jsonify({ "message": "Cuenta de Partner creada exitosamente", "access_token": access_token, "partner_id": new_partner.id }), 201
 
 @api.route("/partner-login", methods=['POST'])
 def login_partner():
@@ -296,6 +296,44 @@ def login_partner():
     access_token = create_access_token(identity=partner.email)
     return jsonify({"message": "Inicio de sesión de Partner correcto","access_token": access_token}), 200
 
+@api.route('/completar-perfil-partner/<int:partner_id>', methods=['POST'])
+def complete_partner_profile(partner_id):
+    partner = Partners.query.filter_by(id=partner_id).first()
+    
+    if partner is None:
+        return jsonify({"ERROR": "Partner no encontrado."}), 404
+
+    request_body = request.get_json()
+
+    partner.nombre = request_body.get("nombre", partner.nombre)
+    partner.nif = request_body.get("nif", partner.nif)
+    partner.ciudad = request_body.get("ciudad", partner.ciudad)
+    partner.sector = request_body.get("sector", partner.sector)
+    partner.entidad_id = request_body.get("entidad_id", partner.entidad_id)
+
+    db.session.commit()
+
+    return jsonify(partner.serialize()), 200
+
+@api.route('/partners/<int:partner_id>', methods=['PUT'])
+def update_partner(partner_id):
+    partner = Partners.query.filter_by(id=partner_id).first()
+    
+    if partner is None:
+        return jsonify({"ERROR": "Partner no encontrado. Revise que el número de ID introducido, corresponda a un partner existente"}), 404
+
+    request_body = request.get_json()
+
+    partner.nombre = request_body.get("nombre", partner.nombre)
+    partner.precio = request_body.get("nif", partner.nif)
+    partner.ciudad = request_body.get("ciudad", partner.ciudad)
+    partner.sector = request_body.get("sector", partner.sector)
+    partner.entidad_id = request_body.get("entidad_id", partner.entidad_id)
+    partner.is_active = request_body.get("is_active", partner.is_active)
+
+    db.session.commit()
+
+    return jsonify(partner.serialize()), 200
 
 @api.route('/usuarios', methods=['GET'])
 def get_usuarios():

@@ -15,6 +15,8 @@ import { Eventos } from "./component/eventos";
 import { Evento_Card } from "./component/evento_card";
 import { Evento_Form } from "./component/evento_form";
 import { Partners } from "./pages/partners";
+import { Partner_Completar } from "./component/partner_completar";
+import { Partners_Home } from "./pages/partners_home";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
@@ -43,6 +45,8 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
+                        <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
+                        <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
