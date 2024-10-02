@@ -30,7 +30,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             // Acción para obtener el mensaje desde el backend
             getMessage: async () => {
                 try {
-                    const resp = await fetch(process.env.BACKEND_URL + "api/hello");
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
                     const data = await resp.json();
                     setStore({ message: data.message });
                     return data;
@@ -40,7 +40,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
             getEntidades: async () => {
                 try {
-                  const resp = await fetch(process.env.BACKEND_URL + "api/entidades");
+                  const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
                   if (!resp.ok) {
                     throw new Error("Error fetching entidades, status: " + resp.status);
                   }
@@ -59,7 +59,7 @@ const getState = ({ getStore, getActions, setStore }) => {
          
             updateEntidad: async (id, updatedEntidad) => {
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}api/entidades/${id}`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -81,7 +81,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
               createEntidad: async (newEntidades) => {
                 try {
-                  const resp = await fetch(`${process.env.BACKEND_URL}api/entidades`, {
+                  const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades`, {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json'
@@ -97,7 +97,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
               deleteEntidad: async (id) => {
                 try {
-                  const resp = await fetch(`${process.env.BACKEND_URL}api/entidades/${id}`, {
+                  const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades/${id}`, {
                     method: "DELETE",
                   });
                   if (resp.ok) {
