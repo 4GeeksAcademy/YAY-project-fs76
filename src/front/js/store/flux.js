@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             message: null,
             intereses: [],  // Nueva propiedad para almacenar la lista de intereses
             eventos: [],
+            entidades: [],
             demo: [
                 {
                     title: "FIRST",
@@ -26,7 +27,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             // Acción para obtener el mensaje desde el backend
             getMessage: async () => {
                 try {
-                    const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
+                    const resp = await fetch(process.env.BACKEND_URL + "api/hello");
                     const data = await resp.json();
                     setStore({ message: data.message });
                     return data;
@@ -34,26 +35,104 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
-getEntidades: async () => {
-    try {
-        const resp = await fetch(process.env.BACKEND_URL + "/api/entidades");
-        if (!resp.ok) {
-            throw new Error("Error fetching entidades, status: " + resp.status);
-        }
-        const data = await resp.json();
-        if (!Array.isArray(data)) {
-            throw new Error("Unexpected data format: expected an array of entidades");
-        }
-        setStore({ entidades: data });
+            getEntidades: async () => {
+                try {
+                  const resp = await fetch(process.env.BACKEND_URL + "api/entidades");
+                  if (!resp.ok) {
+                    throw new Error("Error fetching entidades, status: " + resp.status);
+                  }
+                  const data = await resp.json();
+                  if (!Array.isArray(data)) {
+                    throw new Error("Unexpected data format: expected an array of entidades");
+                  }
+                  setStore({ entidades: data });
+                  return data;
+                } catch (error) {
+                  console.error("Error loading entidades from backend", error);
+                  throw error;
+                }
+              },
+    
+         
+            updateEntidad: async (id, updatedEntidad) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}api/entidades/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedEntidad)
+                    });
+                    if (resp.ok) {
+                        // Actualiza la lista de intereses después de la edición
+                        actions.getEntidades(); 
+                    } else {
+                        const data = await resp.json();
+                        console.log("Error: ", data.message);
+                    }
+                } catch (error) {
+                    console.log("Error editing interest from backend", error);
+                }
+            },
 
-        return data;
 
-    } catch (error) {
-        console.error("Error loading entidades from backend", error);
-        return null; 
-    }
-},
+              createEntidad: async (newEntidades) => {
+                try {
+                  const resp = await fetch(`${process.env.BACKEND_URL}api/entidades`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newEntidades)
+                  });
+                  const data = await resp.json();
+                  setStore(store => ({ entidades: [...store.entidades, data] }));
+                } catch (error) {
+                  console.log(error);
+                }
+              },
 
+              deleteEntidad: async (id) => {
+                try {
+                  const resp = await fetch(`${process.env.BACKEND_URL}api/entidades/${id}`, {
+                    method: "DELETE",
+                  });
+                  if (resp.ok) {
+                    setStore(store => ({ entidades: store.entidades.filter(entidad => entidad.id !== id) }));
+                  } else {
+                    const data = await resp.json();
+                    console.log("Error: ", data.message);
+                  }
+                } catch (error) {
+                  console.log("Error deleting entidad from backend", error);
+                }
+              },
+
+
+
+            createInteres: async (newEntidades) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newEntidades)
+                    });
+
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        // Puedes optar por actualizar el store directamente o volver a obtener la lista de intereses
+                        setStore((store) => ({ Entidades: [...store.entidades, data] }));
+                    } else {
+                        const data = await resp.json();
+                        console.log("Error: ", data.message);
+                    }
+                } catch (error) {
+                    console.log("Error creating interest from backend", error);
+                }
+            },
+    
             // Acción para obtener la lista de intereses desde el backend
             getInteres: async () => {
                 try {
@@ -165,18 +244,18 @@ getEntidades: async () => {
                     },
                     body: JSON.stringify(newEvento)
                 })
-                .then(resp => resp.json())
-                .then(data => {
-                    const store = getStore();
-                    setStore({ eventos: [...store.eventos, data] });
-                    onSuccess();
-                })
-                .catch(error => {
-                    console.log(error);
-                    onError();
-                });
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        setStore({ eventos: [...store.eventos, data] });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
+                    });
             },
-        
+
             loadEventos: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos')
                     .then(resp => {
@@ -191,28 +270,28 @@ getEntidades: async () => {
                     })
                     .catch(error => console.log(error));
             },
-        
+
             deleteEvento: (eventoId) => {
                 const store = getStore();
-                const requestOptions = { 
+                const requestOptions = {
                     method: "DELETE",
                     redirect: "follow"
                 };
                 return fetch(`${process.env.BACKEND_URL}/api/eventos/${eventoId}`, requestOptions)
-                .then((resp) => {
-                    console.log('Response:', resp);
-                    return resp.text();
-                })
-                .then((data) => {
-                    console.log('Data:', data);
-                    const eventos = store.eventos.filter((evento) => evento.id !== eventoId);
-                    setStore({ eventos: eventos });
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+                    .then((resp) => {
+                        console.log('Response:', resp);
+                        return resp.text();
+                    })
+                    .then((data) => {
+                        console.log('Data:', data);
+                        const eventos = store.eventos.filter((evento) => evento.id !== eventoId);
+                        setStore({ eventos: eventos });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
             },
-        
+
             updateEvento: (theid, updatedEvento, onSuccess, onError) => {
                 fetch(`${process.env.BACKEND_URL}/api/eventos/${theid}`, {
                     method: 'PUT',
@@ -221,19 +300,19 @@ getEntidades: async () => {
                     },
                     body: JSON.stringify(updatedEvento)
                 })
-                .then(resp => resp.json())
-                .then(data => {
-                    const store = getStore();
-                    const updatedEventos = store.eventos.map(evento => 
-                        evento.id === updatedEvento.id ? updatedEvento : evento
-                    );
-                    setStore({ eventos: updatedEventos });
-                    onSuccess();
-                })
-                .catch(error => {
-                    console.log(error);
-                    onError();
-                });
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        const updatedEventos = store.eventos.map(evento =>
+                            evento.id === updatedEvento.id ? updatedEvento : evento
+                        );
+                        setStore({ eventos: updatedEventos });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
+                    });
             },
 
             changeColor: (index, color) => {
@@ -243,7 +322,6 @@ getEntidades: async () => {
                     if (i === index) elm.background = color;
                     return elm;
                 });
-
                 // Actualiza el store con los nuevos colores
                 setStore({ demo: demo });
             }

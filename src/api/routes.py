@@ -34,24 +34,31 @@ def get_entidades():
 @api.route('/entidades', methods=['POST'])
 def add_entidad():
     data = request.json
-    nueva_entidad = Entidad(nombre=data['nombre'], tipo=data['tipo'])  # Add tipo here
+    nueva_entidad = Entidad(tipo=data['tipo']) 
     db.session.add(nueva_entidad)
     db.session.commit()
     return jsonify(nueva_entidad.serialize()), 201
 
+@api.route('/entidades', methods=['POST'])
+def create_entidad():
+    data = request.get_json()
+    entidad = Entidad(tipo=data['tipo'])
+    db.session.add(entidad)
+    db.session.commit()
+    return jsonify(entidad.serialize())
 
 @api.route('/entidades/<int:id>', methods=['GET'])
 def get_entidad(id):
     entidad = Entidad.query.get_or_404(id)
     return jsonify(entidad.serialize())
 
-
 @api.route('/entidades/<int:id>', methods=['PUT'])
 def update_entidad(id):
-    data = request.json
-    entidad = Entidad.query.get_or_404(id)
-    entidad.nombre = data['nombre']
-    entidad.tipo = data['tipo']  # Add tipo here
+    entidad = Entidad.query.get(id)
+    if entidad is None:
+        return jsonify({'error': 'Entidad no encontrada'}), 404
+    data = request.get_json()
+    entidad.tipo = data['tipo']
     db.session.commit()
     return jsonify(entidad.serialize())
 
@@ -62,6 +69,7 @@ def delete_entidad(id):
     db.session.delete(entidad)
     db.session.commit()
     return jsonify({"message": "Entidad eliminada con éxito"}), 204
+
 
 @api.route('/interes', methods=['GET', 'POST'])
 def handle_intereses():
