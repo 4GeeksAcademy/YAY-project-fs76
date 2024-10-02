@@ -9,6 +9,7 @@ export const Intereses = () => {
     const [descripcion, setDescripcion] = useState("");
     const [nuevoNombre, setNuevoNombre] = useState(""); 
     const [nuevaDescripcion, setNuevaDescripcion] = useState(""); 
+    const [deleteMessage, setDeleteMessage] = useState(null); // Estado para el mensaje de confirmación
 
     useEffect(() => {
         actions.getInteres(); 
@@ -21,8 +22,9 @@ export const Intereses = () => {
         setDescripcion(interes.descripcion);
     };
 
-    const handleDelete = (id) => {
-        actions.deleteInteres(id);
+    const handleDelete = async (id) => {
+        await actions.deleteInteres(id);
+        setDeleteMessage("Interés eliminado exitosamente."); // Mensaje de confirmación
     };
 
     const handleSave = async () => {
@@ -40,22 +42,70 @@ export const Intereses = () => {
         actions.getInteres();
     };
 
+    const handleSelectInteres = (interes) => {
+        setSelectedInteres(interes);
+    };
+
     return (
-		<div className="text-center mt-5">
-            <h1>Lista de Intereses</h1>
-            {store.intereses.length > 0 ? (
-                <ul>
-                    {store.intereses.map((interes, index) => (
-                        <li key={index}>
-                            <h2>{interes.nombre}</h2>
-                            <p>{interes.descripcion}</p>
-                            <button class="btn btn-primary" onClick={() => handleEdit(interes.id)}>Editar</button>
-                            <button class="btn btn-primary" onClick={() => handleDelete(interes.id)}>Borrar</button>
-                        </li>
-                    ))}
-                </ul>
+        <div className="text-center mt-5">
+            <h1>Intereses</h1>
+
+            {/* Mostrar mensaje de confirmación al borrar un interés */}
+            {deleteMessage && (
+                <div className="alert alert-success">
+                    {deleteMessage}
+                    <button 
+                        className="btn btn-primary" 
+                        onClick={() => {
+                            setDeleteMessage(null);
+                            setSelectedInteres(null); // Vuelve a la lista de intereses
+                        }}
+                    >
+                        Aceptar
+                    </button>
+                </div>
+            )}
+
+            {!selectedInteres ? (
+                store.intereses.length > 0 ? (
+                    <ul>
+                        {store.intereses.map((interes, index) => (
+                            <li key={index}>
+                                <button 
+                                    className="btn btn-link" 
+                                    onClick={() => handleSelectInteres(interes)}
+                                >
+                                    {interes.nombre}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>Cargando intereses...</p>  
+                )
             ) : (
-                <p>Cargando intereses...</p>  
+                <div>
+                    <h2>{selectedInteres.nombre}</h2>
+                    <p>{selectedInteres.descripcion}</p>
+                    <button 
+                        className="btn btn-primary" 
+                        onClick={() => handleEdit(selectedInteres.id)}
+                    >
+                        Editar
+                    </button>
+                    <button 
+                        className="btn btn-danger" 
+                        onClick={() => handleDelete(selectedInteres.id)}
+                    >
+                        Borrar
+                    </button>
+                    <button 
+                        className="btn btn-secondary" 
+                        onClick={() => setSelectedInteres(null)}
+                    >
+                        Volver a la lista
+                    </button>
+                </div>
             )}
 
             {selectedInteres && (
@@ -88,11 +138,12 @@ export const Intereses = () => {
                     onChange={(e) => setNuevaDescripcion(e.target.value)} 
                     placeholder="Descripción del nuevo interés" 
                 />
-                <button class="btn btn-primary" onClick={handleCreate}>Crear</button>
+                <button className="btn btn-primary" onClick={handleCreate}>Crear</button>
             </div>
+
             <Link to="/">
-				<button className="btn btn-primary mt-5">Back home</button>
-			</Link>
+                <button className="btn btn-primary mt-5">Back home</button>
+            </Link>
         </div>
     );
 };
