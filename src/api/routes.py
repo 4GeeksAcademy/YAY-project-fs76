@@ -271,15 +271,18 @@ def signup_partner():
         return jsonify(message="La contraseña debe tener al menos 8 caracteres"), 400
     
     # Verificar si el correo electrónico ya existe
-    existing_user = User.query.filter_by(email=email).first()
+    existing_user = Partners.query.filter_by(email=email).first()
     if existing_user:
         return jsonify(message="Ya existe un Partner registrado con este correo electrónico"), 400
     
-    new_partner = Partners(email=email, password=password, is_active=True)
+    # Hashear la contraseña antes de guardarla
+    hashed_password = generate_password_hash(password)
+    new_partner = Partners(email=email, password=hashed_password, is_active=True)
     db.session.add(new_partner)
     db.session.commit()
     access_token = create_access_token(identity=email)
     return jsonify({ "message": "Cuenta de Partner creada exitosamente", "access_token": access_token, "partner_id": new_partner.id }), 201
+
 
 @api.route("/partner-login", methods=['POST'])
 def login_partner():
@@ -287,10 +290,7 @@ def login_partner():
     password = request.json.get("password", None)
     partner = Partners.query.filter(Partners.email == email).first()
     
-    if partner is None:
-        return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
-    
-    if partner.password != password:
+    if partner is None or not check_password_hash(partner.password, password):
         return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
     
     access_token = create_access_token(identity=partner.email)
