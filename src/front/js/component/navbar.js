@@ -41,7 +41,7 @@ export const Navbar = () => {
 					</Link> */}
 					{store.auth === true ? (
 						<button
-							className="enter btn btn-warning my-auto text-light"
+							className="enter btn btn-warning my-auto"
 							onClick={() => handleLogout()}
 						>
 							Cerrar Sesión

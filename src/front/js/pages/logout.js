@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 
+import "../../styles/loading.css";
+
 export const Logout = () => {
   const { store, actions } = useContext(Context);
   const [redirect, setRedirect] = useState(false);

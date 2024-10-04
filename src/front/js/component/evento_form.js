@@ -50,7 +50,7 @@ export const Evento_Form = () => {
         // Validación de campos
         if (!nombre || !fecha || !hora_inicio || !hora_fin || !ciudad || !codigo_postal || !breve_descripcion || !dificultad || !precio || !cupo || !observaciones) {
             if (!alert || alert.type !== 'danger') {
-                setAlert({ type: 'danger', message: ' Please complete all the fields' });
+                setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
             }
         } else {
             // Formatear la fecha

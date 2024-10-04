@@ -24,6 +24,12 @@ const getState = ({ getStore, getActions, setStore }) => {
             ]
         },
         actions: {
+            setStore: (newStore) => {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    ...newStore,
+                }));
+            },
             // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
@@ -344,9 +350,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return response.json()
                     })
                     .then(data => {
-                        console.log(data)
+                        console.log(data);
                         localStorage.setItem("token", data.access_token);
-                        setStore({ auth: true, message: null });
+                        setStore({ message: null, partnerId: data.partner_id });
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -393,6 +399,26 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
             },
 
+            completePartner: (theid, newPartner, onSuccess, onError) => {
+                fetch(`${process.env.BACKEND_URL}/api/completar-perfil-partner/${theid}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newPartner)
+                })
+                    .then(resp => resp.json())
+                    .then(data => {
+                        const store = getStore();
+                        setStore({auth: true, partners: [...store.partners, data] });
+                        onSuccess();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        onError();
+                    });
+            },
+
             signup: async (email, password) => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
@@ -402,18 +428,47 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify({ email, password }),
                     });
-
-                    if (!response.ok) {
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Usuario registrado exitosamente", data);
+                        return true; // Registro exitoso
+                    } else {
                         const errorData = await response.json();
                         console.error("Error en el registro:", errorData);
-                        return false; // Retorna false en caso de error
+                        return false; // Registro fallido
                     }
-                    return true; // Registro exitoso
                 } catch (error) {
                     console.error("Error en la solicitud de registro:", error);
-                    return false; // Retorna false en caso de excepción
+                    return false; // Error en el registro
                 }
             },
+            loginUser: async (email, password) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/login", { // Asegúrate de que esta URL sea correcta
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        sessionStorage.setItem("token", data.access_token); // Guardar el token en sessionStorage
+                        setStore({ token: data.access_token, auth: true }); // Guardar el token y cambiar auth a true
+                        return true; // Indicar que el login fue exitoso
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error en el login:", errorData);
+                        return false; // Indicar que el login falló
+                    }
+                } catch (error) {
+                    console.error("Error en login", error);
+                    return false; // Error en el login
+                }
+            },
+                        
 
             logout: () => {
 				console.log("Logout desde flux")
