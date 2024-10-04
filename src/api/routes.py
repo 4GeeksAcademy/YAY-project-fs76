@@ -398,6 +398,44 @@ def delete_usuario(usuario_id):
     db.session.commit()
 
     return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+@api.route('/usuarios/<int:user_id>', methods=['PUT'])
+def actualizar_usuario(user_id):
+    # Obtén el usuario correspondiente
+    usuario = Usuarios.query.get(user_id)
+    if not usuario:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+
+    # Obtén los datos del cuerpo de la solicitud
+    nombre = request.json.get('nombre')
+    apellidos = request.json.get('apellidos')
+    fecha_nacimiento = request.json.get('fecha_nacimiento')
+    ubicacion = request.json.get('ubicacion')
+    breve_descripcion = request.json.get('breve_descripcion')
+
+    # Validar que al menos uno de los campos es proporcionado
+    if not any([nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion]):
+        return jsonify({"ERROR": "Debe proporcionar al menos un campo para actualizar"}), 400
+
+    # Actualiza los campos del usuario
+    if nombre:
+        usuario.nombre = nombre
+    if apellidos:
+        usuario.apellidos = apellidos
+    if fecha_nacimiento:
+        usuario.fecha_nacimiento = fecha_nacimiento
+    if ubicacion:
+        usuario.ubicacion = ubicacion
+    if breve_descripcion:
+        usuario.breve_descripcion = breve_descripcion
+
+    try:
+        db.session.commit()
+        return jsonify({"message": "Datos del usuario actualizados con éxito"}), 200
+    except Exception as e:
+        db.session.rollback()  # Revierte la sesión en caso de error
+        return jsonify({"ERROR": "Error al actualizar el usuario", "details": str(e)}), 500
+
+
 
 @api.route('/signup', methods=['POST'])
 def signup():
@@ -407,14 +445,23 @@ def signup():
     email = request.json.get('email')
     password = request.json.get('password')
 
+    # Verificar si se han proporcionado ambos campos
     if not email or not password:
         return jsonify({"ERROR": "El correo electrónico y la contraseña son obligatorios"}), 400
 
+    # Verificar si la contraseña tiene una longitud mínima
+    if len(password) < 8:
+        return jsonify({"ERROR": "La contraseña debe tener al menos 8 caracteres"}), 400
+
+    # Verificar si el correo electrónico ya existe
     existing_usuario = Usuarios.query.filter_by(email=email).first()
     if existing_usuario:
         return jsonify({"ERROR": "Ya existe un Usuario con este correo electrónico"}), 409
 
+    # Hashear la contraseña
     hashed_password = generate_password_hash(password)
+    
+    # Crear el nuevo usuario
     new_usuario = Usuarios(
         nombre=nombre,
         apellidos=apellidos,
@@ -427,7 +474,15 @@ def signup():
     db.session.add(new_usuario)
     db.session.commit()
 
-    return jsonify({"message": "Usuario registrado con éxito"}), 201
+    # Crear el token de acceso
+    access_token = create_access_token(identity=email)
+
+    # Retornar el ID del nuevo usuario
+    return jsonify({
+        "message": "Usuario registrado con éxito",
+        "user_id": new_usuario.id,  # Devuelve el ID del nuevo usuario
+        "access_token": access_token
+    }), 201
 
 @api.route('/login', methods=['POST'])
 def login():

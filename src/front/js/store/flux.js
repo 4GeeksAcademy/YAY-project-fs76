@@ -432,7 +432,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Usuario registrado exitosamente", data);
-                        return true; // Registro exitoso
+            
+                        // Verificar si se recibió un token en la respuesta
+                        if (data.access_token) {
+                            sessionStorage.setItem("token", data.access_token);
+                            console.log("Token guardado en sessionStorage:", data.access_token);
+                        } else {
+                            console.error("No se recibió un token en la respuesta", data);
+                            return false; // Registro exitoso, pero sin token
+                        }
+            
+                        // Devolver el ID del usuario junto con el éxito
+                        return {
+                            success: true,
+                            user_id: data.user_id // Devolver el ID del usuario
+                        };
                     } else {
                         const errorData = await response.json();
                         console.error("Error en el registro:", errorData);
@@ -443,6 +457,49 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false; // Error en el registro
                 }
             },
+            
+            
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+                try {
+                    // Construir la URL de la API usando el userId proporcionado
+                    const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
+                    console.log("URL del fetch:", url);
+                    
+                    // Realizar la solicitud PUT para actualizar los datos del usuario
+                    const response = await fetch(url, {
+                        method: "PUT", // Método para actualizar datos
+                        headers: {
+                            "Content-Type": "application/json", // Indicar que el cuerpo es JSON
+                            Authorization: `Bearer ${sessionStorage.getItem('token')}` // Agregar el token en los headers
+                        },
+                        body: JSON.stringify({
+                            nombre,
+                            apellidos,
+                            fecha_nacimiento,
+                            ubicacion,
+                            breve_descripcion
+                        }), // Convertir el objeto a una cadena JSON
+                    });
+            
+                    // Verificar la respuesta del servidor
+                    if (response.ok) {
+                        const data = await response.json(); // Parsear la respuesta a JSON
+                        console.log("Datos del usuario actualizados exitosamente", data);
+                        return true; // Indicar que la actualización fue exitosa
+                    } else {
+                        const errorData = await response.json(); // Obtener datos de error
+                        console.error("Error al actualizar los datos del usuario:", errorData);
+                        return false; // Indicar que la actualización falló
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de actualización de datos:", error);
+                    return false; // Indicar que hubo un error
+                }
+            },
+            
+            
+            
+            
             loginUser: async (email, password) => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/login", { // Asegúrate de que esta URL sea correcta
