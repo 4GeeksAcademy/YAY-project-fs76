@@ -21,6 +21,7 @@ import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
 import { Login } from "./component/login";
+import { Mapa } from "./component/mapa";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
 
@@ -53,6 +54,7 @@ const Layout = () => {
                         <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
+                        <Route element={<Mapa />} path="/mapa" />
                         <Route element={<h1>Not found!</h1>} path="*"/>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
