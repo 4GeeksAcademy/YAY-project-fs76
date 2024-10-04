@@ -152,6 +152,7 @@ export const Evento_Form = () => {
                     <button type="submit" className="btn btn-primary w-100">Guardar</button>
                 </div>
                 <Link to="/eventos">o volver a la lista de eventos</Link>
+                
             </form>
         </>
     );

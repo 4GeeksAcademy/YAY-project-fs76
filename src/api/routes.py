@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios
+from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -422,5 +422,73 @@ def logout():
     session.pop('jwt_token', None) 
     return jsonify({"msg": "Se ha cerrado sesión correctamente"}), 200
 
+
 if __name__ == '__main__':
+    api.run(debug=True)
+
+
+
+@api.route('/inscripciones', methods=['GET'])
+def get_inscripciones():
+    inscripciones = Inscripciones.query.all()
+    output = []
+    for inscripcion in inscripciones:
+        inscripcion_data = {}
+        inscripcion_data['id'] = inscripcion.id
+        inscripcion_data['usuario_id'] = inscripcion.usuario_id
+        inscripcion_data['evento_id'] = inscripcion.evento_id
+        inscripcion_data['fecha_registro'] = inscripcion.fecha_registro
+        output.append(inscripcion_data)
+    return jsonify({'inscripciones': output})
+
+@api.route('/inscripciones/<id>', methods=['GET'])
+def get_inscripcion(id):
+    inscripcion = Inscripciones.query.get_or_404(id)
+    inscripcion_data = {}
+    inscripcion_data['id'] = inscripcion.id
+    inscripcion_data['usuario_id'] = inscripcion.usuario_id
+    inscripcion_data['evento_id'] = inscripcion.evento_id
+    inscripcion_data['fecha_registro'] = inscripcion.fecha_registro
+    return jsonify(inscripcion_data)
+
+
+@api.route('/inscripciones', methods=['POST'])
+def create_inscripcion():
+    data = request.get_json()
+    new_inscripcion = Inscripciones(
+        usuario_id=data['usuario_id'],
+        evento_id=data['evento_id'],
+        fecha_registro=data['fecha_registro']
+    )
+    db.session.add(new_inscripcion)
+    db.session.commit()
+
+    # Devolver el ID y el mensaje en la respuesta
+    return jsonify({
+        'message': 'New inscripcion created!',
+        'id': new_inscripcion.id  # Asegúrate de que el ID esté incluido
+    })
+
+
+
+@api.route('/inscripciones/<id>', methods=['PUT'])
+def update_inscripcion(id):
+    inscripcion = Inscripciones.query.get_or_404(id)
+    data = request.get_json()
+    inscripcion.usuario_id = data['usuario_id']
+    inscripcion.evento_id = data['evento_id']
+    inscripcion.fecha_registro = data['fecha_registro']
+    db.session.commit()
+    return jsonify({'message': 'Inscripcion updated!'})
+
+
+@api.route('inscripciones/<id>', methods=['DELETE'])
+def delete_inscripcion(id):
+    inscripcion = Inscripciones.query.get_or_404(id)
+    db.session.delete(inscripcion)
+    db.session.commit()
+    return jsonify({'message': 'Inscripcion deleted!'})
+
+if __name__ == '__main__':
+
     api.run(debug=True)
