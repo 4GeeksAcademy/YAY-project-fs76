@@ -8,7 +8,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             eventos: [],
             entidades: [],
             partners: [],
+            inscripciones: [],
             demo: [
+        
                 {
                     title: "FIRST",
                     background: "white",
@@ -530,6 +532,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token");
 				setStore({ auth: false })
 			},
+
+            inscribirse: async (usuarioId, eventoId) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/inscripciones`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            usuario_id: usuarioId,
+                            evento_id: eventoId,
+                            fecha_registro: new Date().toISOString(),
+                        }),
+                    });
+                    
+                    const data = await resp.json();
+                    
+                    if (resp.ok) {
+                        console.log('Inscripción creada:', data);
+                        console.log('ID de inscripción:', data.id); // Añadir esto para verificar el ID
+                        return data.id; // Asegúrate de que 'data' contenga el ID
+                    } else {
+                        console.log("Error: ", data.message);
+                        return null; // O lanza un error si prefieres
+                    }
+                } catch (error) {
+                    console.error("Error inscribiendo al usuario:", error);
+                    return null; // O lanza un error si prefieres
+                }
+            },
+        
+            desapuntarse: (inscripcionId) => {
+                fetch(`${process.env.BACKEND_URL}/api/inscripciones/${inscripcionId}`, {
+                    method: 'DELETE',
+                })
+                .then(resp => {
+                    if (resp.ok) {
+                        console.log('Inscripción eliminada');
+                        // Actualiza el store para eliminar la inscripción
+                        setStore(prevStore => ({
+                            ...prevStore,
+                            inscripciones: prevStore.inscripciones.filter(inscripcion => inscripcion.id !== inscripcionId), // Asegúrate de que 'id' sea la propiedad correcta
+                        }));
+                    } else {
+                        return resp.json().then(data => {
+                            console.log("Error: ", data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error desapuntando al usuario:", error);
+                });
+            },
+
 
             changeColor: (index, color) => {
                 const store = getStore();

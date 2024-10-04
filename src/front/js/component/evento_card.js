@@ -57,16 +57,19 @@ export const Evento_Card = () => {
 
 
                             <div className="d-flex justify-content-start align-items-end">
-                            <Link to={`/formulario-evento/${evento.id}`}>
-                                <button className="btn btn-icon">
-                                    <i className="fa-solid fa-pencil" />
-                                </button>
-                            </Link>
+                                <Link to={`/formulario-evento/${evento.id}`}>
+                                    <button className="btn btn-icon">
+                                        <i className="fa-solid fa-pencil" />
+                                    </button>
+                                </Link>
                                 <button className="btn btn-icon" onClick={() => {
                                     actions.deleteEvento(evento.id);
                                 }}>
                                     <i className="fa-solid fa-trash" />
                                 </button>
+                                <Link to="/eventos">
+                                    <button className="btn btn-sm btn-primary">Volver atrás</button>
+                                </Link>
                             </div>
                         </div>
                     </div>

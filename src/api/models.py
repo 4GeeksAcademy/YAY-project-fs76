@@ -64,6 +64,7 @@ class Eventos (db.Model):
     cupo = db.Column(db.Integer, nullable=False)
     observaciones = db.Column(db.String(120), nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    db.relationship('Inscripciones', backref='eventos', lazy=True)
 
     def __repr__(self):
         return f'<Eventos {self.nombre}>'
@@ -131,6 +132,7 @@ class Usuarios(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)  # Aumentar tamaño para almacenar contraseñas hash
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
+    db.relationship('Inscripciones', backref='usuarios', lazy=True)
 
     def __repr__(self):
         return f'<Usuario {self.email}>'
@@ -148,3 +150,13 @@ class Usuarios(db.Model):
             "is_active": self.is_active
             # No serializamos la contraseña por seguridad
         }
+    
+
+class Inscripciones(db.Model):
+    __tablename__ = 'inscripciones'
+    id = db.Column(db.Integer, primary_key=True)
+    fecha_registro = db.Column(db.String(120), nullable=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
+    tipo_usuario = db.relationship('Usuarios') 
+    evento_id = db.Column(db.Integer, db.ForeignKey('eventos.id'))
+    tipo_evento = db.relationship('Eventos')   
