@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones
+from api.models import Imagenes, db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -641,26 +641,43 @@ def upload_image():
     file.seek(0)  # Volver al inicio del archivo
 
     try:
+        # DEBUG: Imprimir el archivo recibido
+        print(f"Archivo recibido: {file.filename}")
+
         # Subir la imagen a Cloudinary
         upload_result = cloudinary.uploader.upload(file)
         
         # Obtener el ID del usuario que está subiendo la imagen
         usuario_id = get_jwt_identity()
         usuario = Usuarios.query.get(usuario_id)
-        
-        # Actualizar el campo foto del usuario con la URL de la imagen subida
-        usuario.foto = upload_result['secure_url']
+
+        # Verificar cuántas imágenes ya tiene el usuario
+        if Imagenes.query.filter_by(usuario_id=usuario_id).count() >= 5:
+            return jsonify({"ERROR": "No se pueden subir más de 5 imágenes por usuario."}), 400
+
+        # Crear una nueva entrada de imagen
+        nueva_imagen = Imagenes(
+            url=upload_result['secure_url'],  # Almacenar la URL de la imagen
+            public_id=upload_result['public_id'],  # Almacenar el public_id
+            usuario_id=usuario_id
+        )
+        db.session.add(nueva_imagen)
         db.session.commit()
         
+        # DEBUG: Imprimir la URL de la imagen subida
+        print(f"Imagen subida con éxito: {upload_result['secure_url']}")
+
         # Devolver la URL de la imagen subida
         return jsonify({
             "message": "Imagen subida con éxito",
             "url": upload_result['secure_url']
         }), 201
     except Exception as e:
+        print(f"Error al subir imagen: {e}")  # Loggear el error exacto
         return jsonify({"error": str(e)}), 500
 
-    
+
+
 @api.route('/fotos/<int:usuario_id>', methods=['GET'])
 def get_fotos(usuario_id):
     usuario = Usuarios.query.get(usuario_id)
@@ -668,13 +685,17 @@ def get_fotos(usuario_id):
     if usuario is None:
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
     
-    # Obtener la URL de la imagen subida del campo foto del usuario
-    foto_url = usuario.foto
+    # Obtener todas las imágenes del usuario
+    imagenes = Imagenes.query.filter_by(usuario_id=usuario_id).all()
     
-    if foto_url is None:
+    if not imagenes:
         return jsonify({"message": "No hay fotos para este usuario."}), 404
     
-    return jsonify({"fotos": [foto_url]}), 200
+    # Crear una lista de URLs de las imágenes
+    fotos_urls = [imagen.url for imagen in imagenes]
+    
+    return jsonify({"fotos": fotos_urls}), 200
+
 
 @api.route('/usuarios/<int:usuario_id>', methods=['PUT'])
 @jwt_required()
@@ -744,29 +765,29 @@ def update_usuario(usuario_id):
 @api.route('/fotos/<int:usuario_id>/<string:public_id>', methods=['DELETE'])
 @jwt_required()
 def delete_foto(usuario_id, public_id):
-    # Obtener el ID del usuario que está haciendo la solicitud
     current_usuario_id = get_jwt_identity()
     
-    # Verificar si el usuario que está haciendo la solicitud es el propietario de la imagen
     if current_usuario_id != usuario_id:
         return jsonify({"ERROR": "No tienes permiso para eliminar esta imagen"}), 403
     
-    usuario = Usuarios.query.get(usuario_id)
-    
-    if usuario is None:
-        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+    # Buscar la imagen en la base de datos por public_id
+    imagen = Imagenes.query.filter_by(public_id=public_id, usuario_id=usuario_id).first()
 
-    # Borrar la foto desde Cloudinary
-    result = cloudinary.uploader.destroy(public_id)
+    if imagen is None:
+        return jsonify({"ERROR": "Imagen no encontrada"}), 404
 
-    if result.get('result') == 'ok':
-        # Eliminar la imagen subida del campo foto del usuario
-        usuario.foto = None
-        db.session.commit()
-        
-        return jsonify({"message": "Foto eliminada con éxito"}), 200
-    else:
-        return jsonify({"message": "Error al eliminar la foto"}), 400
+    try:
+        result = cloudinary.uploader.destroy(public_id)
+
+        if result.get('result') == 'ok':
+            db.session.delete(imagen)  # Elimina la imagen de la base de datos
+            db.session.commit()
+            return jsonify({"message": f"Foto {public_id} eliminada con éxito."}), 200
+        else:
+            return jsonify({"ERROR": "Error al eliminar la foto en Cloudinary."}), 400
+    except Exception as e:
+        return jsonify({"ERROR": str(e)}), 500
+
 
 
 if __name__ == '__main__':

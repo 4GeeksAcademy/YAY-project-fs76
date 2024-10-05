@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Context } from '../store/appContext'; // Importar el contexto de Flux
 
-const ImageUpload = () => {
+const ImageUpload = ({ fetchImages }) => { // Recibimos fetchImages como prop
     const [file, setFile] = useState(null); // Para el archivo seleccionado
-    const [imageUrl, setImageUrl] = useState(""); // Para almacenar la URL de la imagen subida
     const [error, setError] = useState(null); // Para manejar errores
     const [loading, setLoading] = useState(false); // Para manejar el estado de carga
     const { actions } = useContext(Context); // Acceder a las acciones de Flux
@@ -18,35 +17,30 @@ const ImageUpload = () => {
         }
     };
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (file) {
             setLoading(true); // Iniciar carga
-            actions.uploadImage(file)
-                .then((data) => {
-                    setImageUrl(data.url); // Almacenar la URL de la imagen devuelta por el servidor
-                    setLoading(false); // Finalizar carga
-                })
-                .catch((error) => {
-                    setError("Hubo un problema al subir la imagen.");
-                    setLoading(false); // Finalizar carga en caso de error
-                });
+            try {
+                await actions.uploadImage(file); // Subir la imagen
+                fetchImages(); // Refrescar las imágenes después de subir
+                setFile(null); // Limpiar el archivo seleccionado
+            } catch (error) {
+                setError("Hubo un problema al subir la imagen.");
+            } finally {
+                setLoading(false); // Finalizar carga
+            }
         }
     };
 
     return (
         <div>
             <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Subir Imagen</button>
+            <button onClick={handleUpload} disabled={loading}>
+                {loading ? "Subiendo..." : "Subir Imagen"}
+            </button>
 
             {/* Mostrar errores si los hay */}
             {error && <p style={{ color: 'red' }}>{error}</p>}
-
-            {/* Mostrar la imagen subida si existe una URL */}
-            {loading ? (
-                <p>Cargando imagen...</p>
-            ) : (
-                imageUrl && <img src={imageUrl} alt="Imagen subida" style={{ marginTop: '20px', maxWidth: '100%' }} key={imageUrl} />
-            )}
         </div>
     );
 };

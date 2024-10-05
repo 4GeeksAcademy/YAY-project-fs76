@@ -50,7 +50,6 @@ const Profile = () => {
                         <div>
                             {/* Pasa el userId como prop */}
                             <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
-                            <ImageUpload />
                         </div>
                     </div>
                 </>

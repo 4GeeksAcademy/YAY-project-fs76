@@ -444,8 +444,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             
                         // Verificar si se recibió un token en la respuesta
                         if (data.access_token) {
-                            localStorage.setItem("token", data.access_token); // Guardar en localStorage
-                            console.log("Token guardado en localStorage:", data.access_token);
+                            localStorage.setItem("auth", "true");
+                            localStorage.setItem("token", data.token);
+                            localStorage.setItem("user_id", data.user_id);
                         } else {
                             console.error("No se recibió un token en la respuesta", data);
                             return false; // Registro exitoso, pero sin token
@@ -606,10 +607,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             
                         // Actualizar el store con los datos del usuario y token
                         setStore({ auth: true, user_id: data.usuario_id, token: data.token });
-            
-                        // Guardar el token y el ID en localStorage
+
+                        // Guardar auth, token y user_id en localStorage
+                        localStorage.setItem("auth", "true");
                         localStorage.setItem("token", data.token);
-                        localStorage.setItem("user_id", data.usuario_id); // Guardar el ID aquí
+                        localStorage.setItem("user_id", data.usuario_id);
                         return true;
                     } else {
                         const errorData = await response.json();
@@ -625,10 +627,12 @@ const getState = ({ getStore, getActions, setStore }) => {
              
 
             logout: () => {
-				console.log("Logout desde flux")
-				localStorage.removeItem("token");
-				setStore({ auth: false })
-			},
+                console.log("Logout desde flux");
+                localStorage.removeItem("auth");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user_id");
+                setStore({ auth: false, user_id: null, token: null });
+            },
 
             inscribirse: async (usuarioId, eventoId) => {
                 try {
@@ -687,34 +691,90 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const formData = new FormData();
                     formData.append("file", file);
             
-                    // Obtén el token JWT del almacenamiento
-                    const token = localStorage.getItem('token'); // O sessionStorage.getItem('token')
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        console.error("No se encontró el token. Usuario no autenticado.");
+                        return reject(new Error("Usuario no autenticado"));
+                    }
             
-                    fetch(`${process.env.BACKEND_URL}/api/upload-image`, {
+                    fetch(`${process.env.BACKEND_URL}/api/upload-image`, {  // Agregamos barra al final de la URL base
                         method: 'POST',
                         headers: {
-                            Authorization: `Bearer ${token}`, // Agrega el token al encabezado
+                            Authorization: `Bearer ${token}`,
                         },
-                        body: formData
+                        body: formData,
                     })
-                    .then(response => {
+                    .then((response) => {
                         if (!response.ok) {
                             throw new Error("Error en la respuesta del servidor");
                         }
                         return response.json();
                     })
-                    .then(data => {
-                        console.log("Imagen subida:", data);
-                        // Aquí manejamos la URL de la imagen si la devuelve el backend
-                        if (data.url) {
-                            resolve(data);
-                        } else {
-                            reject("No se pudo subir la imagen");
-                        }
+                    .then((data) => {
+                        resolve(data);
                     })
-                    .catch(error => reject(error));
+                    .catch((error) => {
+                        console.error("Error subiendo la imagen:", error);
+                        reject(error);
+                    });
                 });
             },
+            
+            getUserImages: () => {
+                const token = localStorage.getItem('token');
+                const userId = parseInt(localStorage.getItem('user_id'));
+            
+                return fetch(`${process.env.BACKEND_URL}/api/fotos/${userId}`, {  // Agregamos barra al final de la URL base
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta al obtener las imágenes");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.fotos) {
+                        return data;
+                    } else {
+                        throw new Error("No se encontraron imágenes.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error obteniendo imágenes:", error);
+                    throw error;
+                });
+            },
+            
+            deleteImage: async (usuario_id, public_id) => {
+                const token = localStorage.getItem('token'); // Asegurarse de enviar el token si es necesario para la autenticación
+            
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/fotos/${usuario_id}/${public_id}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}` // Token para autenticación
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        throw new Error('Error al eliminar la imagen');
+                    }
+            
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error("Error al eliminar la imagen:", error);
+                    throw error;
+                }
+            },
+            
+            
+            
             
             
 

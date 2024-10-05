@@ -152,6 +152,15 @@ class Usuarios(db.Model):
             # No serializamos la contraseña por seguridad
         }
     
+class Imagenes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(255), nullable=False)  # URL de la imagen
+    public_id = db.Column(db.String(255), nullable=False)  # Public ID de la imagen
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)  # Relación con Usuarios
+
+    def __repr__(self):
+        return f'<Imagen {self.url}>'
+
 
 class Inscripciones(db.Model):
     __tablename__ = 'inscripciones'
