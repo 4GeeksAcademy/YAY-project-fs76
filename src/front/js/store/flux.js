@@ -10,7 +10,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             partners: [],
             inscripciones: [],
             demo: [
-        
                 {
                     title: "FIRST",
                     background: "white",
@@ -24,12 +23,20 @@ const getState = ({ getStore, getActions, setStore }) => {
             ]
         },
         actions: {
+            setUserId: (user_id) => {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    user_id, // Almacenar el user_id en el estado global
+                }));
+            },
+        
             setStore: (newStore) => {
                 setStore((prevStore) => ({
                     ...prevStore,
-                    ...newStore,
+                    ...newStore, // Actualizar el estado global con el nuevo store
                 }));
             },
+
             // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
@@ -496,8 +503,77 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false; // Indicar que hubo un error
                 }
             },
+
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+                try {
+                  // Construir la URL de la API usando el userId proporcionado
+                  const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
+                  console.log("URL del fetch:", url);
+              
+                  // Realizar la solicitud PUT para actualizar los datos del usuario
+                  const response = await fetch(url, {
+                    method: "PUT", // Método para actualizar datos
+                    headers: {
+                      "Content-Type": "application/json", // Indicar que el cuerpo es JSON
+                      Authorization: `Bearer ${sessionStorage.getItem('token')}` // Agregar el token en los headers
+                    },
+                    body: JSON.stringify({
+                      nombre,
+                      apellidos,
+                      fecha_nacimiento,
+                      ubicacion,
+                      breve_descripcion
+                    }), // Convertir el objeto a una cadena JSON
+                  });
+              
+                  // Verificar la respuesta del servidor
+                  if (response.ok) {
+                    const data = await response.json(); // Parsear la respuesta a JSON
+                    console.log("Datos del usuario actualizados exitosamente", data);
+                    return true; // Indicar que la actualización fue exitosa
+                  } else {
+                    const errorData = await response.json(); // Obtener datos de error
+                    console.error("Error al actualizar los datos del usuario:", errorData);
+                    return false; // Indicar que la actualización falló
+                  }
+                } catch (error) {
+                  console.error("Error en la solicitud de actualización de datos:", error);
+                  return false; // Indicar que hubo un error
+                }
+              },
             
+              getProfile: async (userId) => {
+                try {
+                    if (userId) {
+                        const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
+                        console.log("URL del fetch:", url);
             
+                        const response = await fetch(url, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json", // Asegúrate de indicar el tipo de contenido
+                                Authorization: `Bearer ${sessionStorage.getItem('token')}` // Asegúrate de que el token sea válido
+                            }
+                        });
+            
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log("Datos del usuario obtenidos exitosamente", data);
+                            return data;
+                        } else {
+                            const errorData = await response.json();
+                            console.error("Error al obtener los datos del usuario:", errorData);
+                            return null; // Retorna null en caso de error
+                        }
+                    } else {
+                        console.error("userId no fue proporcionado.");
+                        return null; // Retorna null si no se proporciona userId
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de obtener datos del usuario:", error);
+                    return null; // Retorna null en caso de error
+                }
+            },
             
             
             loginUser: async (email, password) => {
@@ -585,7 +661,29 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error desapuntando al usuario:", error);
                 });
             },
-
+            uploadImage: (file) => {
+                return new Promise((resolve, reject) => {
+                  const formData = new FormData();
+                  formData.append("file", file);
+              
+                  fetch(`${process.env.BACKEND_URL}/api/upload-image`, {
+                    method: 'POST',
+                    body: formData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    console.log("Imagen subida:", data);
+                    // Aquí manejamos la URL de la imagen si la devuelve el backend
+                    if (data.url) {
+                      resolve(data);
+                    } else {
+                      reject("No se pudo subir la imagen");
+                    }
+                  })
+                  .catch(error => reject(error));
+                });
+              },
+            
 
             changeColor: (index, color) => {
                 const store = getStore();

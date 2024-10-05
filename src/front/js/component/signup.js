@@ -15,9 +15,9 @@ export const Signup = () => {
         const response = await actions.signup(email, password);
         if (response && response.user_id) {
             alert("Usuario registrado exitosamente");
+            actions.setUserId(response.user_id); // Actualiza el store con el user_id
             console.log("ID del usuario registrado:", response.user_id);
-            // Redirigir a la página para completar datos, incluyendo user_id en la URL
-            navigate(`/completardatos/${response.user_id}`); 
+            navigate(`/completardatos/${response.user_id}`);
         } else {
             alert("Error en el registro, revisa los datos");
         }

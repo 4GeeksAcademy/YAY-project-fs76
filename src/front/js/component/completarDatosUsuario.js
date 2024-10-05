@@ -30,7 +30,7 @@ const CompletarDatosUsuario = () => {
         
         if (result) {
             alert("Datos completados con éxito");
-            navigate("/dashboard");
+            navigate(`/profile/${userId}`);
         } else {
             alert("Error al completar los datos");
         }

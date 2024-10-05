@@ -14,6 +14,14 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
+import cloudinary
+
+# Configuración de Cloudinary
+cloudinary.config(
+  cloud_name = 'dy3hdvics',
+  api_key = '652126365153659',
+  api_secret = 'OSiPkpIQ53iN8pF1uoI2qbJyLiM'
+)
 
 # from models import Person
 

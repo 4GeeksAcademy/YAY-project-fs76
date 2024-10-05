@@ -11,6 +11,9 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+import cloudinary.uploader
+from cloudinary.api import resources_by_tag
+
 
 api = Blueprint('api', __name__)
 
@@ -435,6 +438,19 @@ def actualizar_usuario(user_id):
         db.session.rollback()  # Revierte la sesión en caso de error
         return jsonify({"ERROR": "Error al actualizar el usuario", "details": str(e)}), 500
 
+@api.route('/ruta_protegida', methods=['GET'])
+@jwt_required()
+def ruta_protegida():
+    # Obtener el ID del usuario desde el token JWT
+    user_id = get_jwt_identity()
+
+    # Puedes usar este user_id en tus consultas o lógica de negocio
+    usuario = Usuarios.query.get(user_id)
+
+    if not usuario:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+
+    return jsonify({"message": f"Bienvenido, {usuario.nombre}"}), 200
 
 
 @api.route('/signup', methods=['POST'])
@@ -499,15 +515,16 @@ def login():
         return jsonify({"ERROR": "Correo electrónico o contraseña incorrectos"}), 401
 
     # Crear un token de acceso JWT con el id del usuario como identidad
-    access_token = create_access_token(identity=usuario.id)
+    access_token = create_access_token(identity=usuario.id)  # Aquí usamos el ID en el token
 
     # Devolver información del usuario junto con el token
     return jsonify({
         "token": access_token,
-        "usuario_id": usuario.id,
+        "usuario_id": usuario.id,  # Devolvemos el ID del usuario
         "nombre": usuario.nombre,
         "email": usuario.email
     }), 200
+
 
 @api.route("/logout", methods=['POST'])
 @jwt_required()
@@ -581,6 +598,149 @@ def delete_inscripcion(id):
     db.session.delete(inscripcion)
     db.session.commit()
     return jsonify({'message': 'Inscripcion deleted!'})
+
+
+@api.route('/upload-image', methods=['POST'])
+@jwt_required()
+def upload_image():
+    # Obtener el archivo subido
+    file = request.files['file']
+    
+    # Verificar si el archivo es una imagen
+    if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+        return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
+    
+    # Verificar el tamaño del archivo
+    if file.size > 1024 * 1024 * 5:  # 5MB
+        return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
+    
+    try:
+        # Subir la imagen a Cloudinary
+        upload_result = cloudinary.uploader.upload(file)
+        
+        # Obtener el ID del usuario que está subiendo la imagen
+        usuario_id = get_jwt_identity()
+        usuario = Usuarios.query.get(usuario_id)
+        
+        # Actualizar el campo foto del usuario con la URL de la imagen subida
+        usuario.foto = upload_result['secure_url']
+        db.session.commit()
+        
+        # Devolver la URL de la imagen subida
+        return jsonify({
+            "message": "Imagen subida con éxito",
+            "url": upload_result['secure_url']
+        }), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@api.route('/fotos/<int:usuario_id>', methods=['GET'])
+def get_fotos(usuario_id):
+    usuario = Usuarios.query.get(usuario_id)
+    
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+    
+    # Obtener la URL de la imagen subida del campo foto del usuario
+    foto_url = usuario.foto
+    
+    if foto_url is None:
+        return jsonify({"message": "No hay fotos para este usuario."}), 404
+    
+    return jsonify({"fotos": [foto_url]}), 200
+
+@api.route('/usuarios/<int:usuario_id>', methods=['PUT'])
+@jwt_required()
+def update_usuario(usuario_id):
+    # Obtener el ID del usuario que está haciendo la solicitud
+    current_usuario_id = get_jwt_identity()
+    
+    # Verificar si el usuario que está haciendo la solicitud es el propietario del perfil
+    if current_usuario_id != usuario_id:
+        return jsonify({"ERROR": "No tienes permiso para editar este perfil"}), 403
+    
+    # Obtener el usuario que se va a editar
+    usuario = Usuarios.query.get(usuario_id)
+    
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+    
+    # Obtener los datos del cuerpo de la solicitud
+    nombre = request.json.get('nombre')
+    apellidos = request.json.get('apellidos')
+    fecha_nacimiento = request.json.get('fecha_nacimiento')
+    ubicacion = request.json.get('ubicacion')
+    breve_descripcion = request.json.get('breve_descripcion')
+    foto = request.files.get('foto')
+    
+    # Actualizar la información del usuario
+    if nombre:
+        usuario.nombre = nombre
+    if apellidos:
+        usuario.apellidos = apellidos
+    if fecha_nacimiento:
+        usuario.fecha_nacimiento = fecha_nacimiento
+    if ubicacion:
+        usuario.ubicacion = ubicacion
+    if breve_descripcion:
+        usuario.breve_descripcion = breve_descripcion
+    
+    # Actualizar la imagen de perfil
+    if foto:
+        # Verificar si el archivo es una imagen
+        if not foto.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+            return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
+        
+        # Verificar el tamaño del archivo
+        if foto.size > 1024 * 1024 * 5:  # 5MB
+            return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
+        
+        try:
+            # Subir la imagen a Cloudinary
+            upload_result = cloudinary.uploader.upload(foto)
+            
+            # Actualizar el campo foto del usuario con la URL de la imagen subida
+            usuario.foto = upload_result['secure_url']
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    
+    # Guardar los cambios en la base de datos
+    db.session.commit()
+    
+    # Devolver la información actualizada del usuario
+    return jsonify({
+        "message": "Perfil actualizado con éxito",
+        "usuario": usuario.serialize()
+    }), 200
+
+
+@api.route('/fotos/<int:usuario_id>/<string:public_id>', methods=['DELETE'])
+@jwt_required()
+def delete_foto(usuario_id, public_id):
+    # Obtener el ID del usuario que está haciendo la solicitud
+    current_usuario_id = get_jwt_identity()
+    
+    # Verificar si el usuario que está haciendo la solicitud es el propietario de la imagen
+    if current_usuario_id != usuario_id:
+        return jsonify({"ERROR": "No tienes permiso para eliminar esta imagen"}), 403
+    
+    usuario = Usuarios.query.get(usuario_id)
+    
+    if usuario is None:
+        return jsonify({"ERROR": "Usuario no encontrado"}), 404
+
+    # Borrar la foto desde Cloudinary
+    result = cloudinary.uploader.destroy(public_id)
+
+    if result.get('result') == 'ok':
+        # Eliminar la imagen subida del campo foto del usuario
+        usuario.foto = None
+        db.session.commit()
+        
+        return jsonify({"message": "Foto eliminada con éxito"}), 200
+    else:
+        return jsonify({"message": "Error al eliminar la foto"}), 400
+
 
 if __name__ == '__main__':
 

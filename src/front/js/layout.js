@@ -23,6 +23,10 @@ import { Footer } from "./component/footer";
 import { Login } from "./component/login";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
+import ImageUpload from "./component/imageUpload";
+import EditProfile from "./component/editProfile";
+import ProfilePicture from "./component/profilePicture";
+import Profile from "./component/profile";
 
 
 //create your first component
@@ -57,6 +61,10 @@ const Layout = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
+                        <Route path="/imageUpload" element={<ImageUpload />} />
+                        <Route path="/editProfile" element={<EditProfile />} />
+                        <Route path="/profilePicture" element={<ProfilePicture />} />
+                        <Route path="/profile/:userId" element={<Profile />}/>
                     </Routes>
                     <Footer />
                 </ScrollToTop>
