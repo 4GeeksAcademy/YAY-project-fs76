@@ -13,12 +13,30 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 import cloudinary.uploader
 from cloudinary.api import resources_by_tag
+from flask import Flask
+from flask_cors import CORS
+from flask_cors import CORS
 
+from flask_cors import CORS
+
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Configura Cloudinary
+cloudinary.config(
+    cloud_name='dy3hdvics',
+    api_key='652126365153659',
+    api_secret='OSiPkpIQ53iN8pF1uoI2qbJyLiM'
+)
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -345,7 +363,10 @@ def get_usuarios():
     return jsonify(results), 200
 
 # Obtener un usuario por ID
+
+
 @api.route('/usuarios/<int:usuario_id>', methods=['GET'])
+@jwt_required()
 def get_usuario(usuario_id):
     usuario = Usuarios.query.filter_by(id=usuario_id).first()
     if usuario is None:
@@ -604,16 +625,21 @@ def delete_inscripcion(id):
 @jwt_required()
 def upload_image():
     # Obtener el archivo subido
-    file = request.files['file']
+    file = request.files.get('file')
     
+    if not file:
+        return jsonify({"ERROR": "No se proporcionó un archivo."}), 400
+
     # Verificar si el archivo es una imagen
     if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
         return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
     
     # Verificar el tamaño del archivo
-    if file.size > 1024 * 1024 * 5:  # 5MB
+    file.seek(0, 2)  # Mover el cursor al final del archivo para obtener el tamaño
+    if file.tell() > 1024 * 1024 * 5:  # 5MB
         return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
-    
+    file.seek(0)  # Volver al inicio del archivo
+
     try:
         # Subir la imagen a Cloudinary
         upload_result = cloudinary.uploader.upload(file)
@@ -633,6 +659,7 @@ def upload_image():
         }), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
     
 @api.route('/fotos/<int:usuario_id>', methods=['GET'])
 def get_fotos(usuario_id):

@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             token: null,
             message: null,
             auth: false,
+            user_id: null, // Agrega el user_id aquí
             intereses: [],
             eventos: [],
             entidades: [],
@@ -426,7 +427,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
             },
 
-            signup: async (email, password) => {
+            signup: async (email, password) => { 
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
                         method: "POST",
@@ -439,17 +440,24 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Usuario registrado exitosamente", data);
+                        setStore({ auth: true, user_id: data.usuario_id, token: data.token });
             
                         // Verificar si se recibió un token en la respuesta
                         if (data.access_token) {
-                            sessionStorage.setItem("token", data.access_token);
-                            console.log("Token guardado en sessionStorage:", data.access_token);
+                            localStorage.setItem("token", data.access_token); // Guardar en localStorage
+                            console.log("Token guardado en localStorage:", data.access_token);
                         } else {
                             console.error("No se recibió un token en la respuesta", data);
                             return false; // Registro exitoso, pero sin token
                         }
             
-                        // Devolver el ID del usuario junto con el éxito
+                        // Guarda el ID del usuario en localStorage
+                        if (data.user_id) {
+                            localStorage.setItem("user_id", data.user_id); // Guardar el ID en localStorage
+                            console.log("ID del usuario guardado en localStorage:", data.user_id);
+                        }
+            
+                        // Devolver el éxito del registro
                         return {
                             success: true,
                             user_id: data.user_id // Devolver el ID del usuario
@@ -464,6 +472,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false; // Error en el registro
                 }
             },
+            
             
             
             completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
@@ -544,41 +553,46 @@ const getState = ({ getStore, getActions, setStore }) => {
             
               getProfile: async (userId) => {
                 try {
-                    if (userId) {
-                        const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
-                        console.log("URL del fetch:", url);
-            
-                        const response = await fetch(url, {
-                            method: "GET",
-                            headers: {
-                                "Content-Type": "application/json", // Asegúrate de indicar el tipo de contenido
-                                Authorization: `Bearer ${sessionStorage.getItem('token')}` // Asegúrate de que el token sea válido
-                            }
-                        });
-            
-                        if (response.ok) {
-                            const data = await response.json();
-                            console.log("Datos del usuario obtenidos exitosamente", data);
-                            return data;
-                        } else {
-                            const errorData = await response.json();
-                            console.error("Error al obtener los datos del usuario:", errorData);
-                            return null; // Retorna null en caso de error
-                        }
+                  if (userId) {
+                    console.log("Valor de userId:", userId); // Imprime el valor de userId
+                    const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
+                    console.log("URL del fetch:", url);
+              
+                    const token = localStorage.getItem("token");
+                    const response = await fetch(url, {
+                      method: "GET",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}` // Agrega el token de autenticación
+                      }
+                    });
+              
+                    if (response.ok) {
+                      const data = await response.json();
+                      console.log("Datos del usuario obtenidos exitosamente", data);
+                      return data;
                     } else {
-                        console.error("userId no fue proporcionado.");
-                        return null; // Retorna null si no se proporciona userId
+                      const errorData = await response.json();
+                      console.error("Error al obtener los datos del usuario:", errorData);
+                      return null; // Retorna null en caso de error
                     }
+                  } else {
+                    console.error("userId no fue proporcionado.");
+                    return null; // Retorna null si no se proporciona userId
+                  }
                 } catch (error) {
-                    console.error("Error en la solicitud de obtener datos del usuario:", error);
-                    return null; // Retorna null en caso de error
+                  console.error("Error en la solicitud de obtener datos del usuario:", error);
+                  return null; // Retorna null en caso de error
                 }
-            },
+              },
             
-            
-            loginUser: async (email, password) => {
+            getToken: () => {
+                return localStorage.getItem("token");
+              },
+              
+              loginUser: async (email, password) => {
                 try {
-                    const response = await fetch(process.env.BACKEND_URL + "/api/login", { // Asegúrate de que esta URL sea correcta
+                    const response = await fetch(process.env.BACKEND_URL + "/api/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -588,20 +602,27 @@ const getState = ({ getStore, getActions, setStore }) => {
             
                     if (response.ok) {
                         const data = await response.json();
-                        sessionStorage.setItem("token", data.access_token); // Guardar el token en sessionStorage
-                        setStore({ token: data.access_token, auth: true }); // Guardar el token y cambiar auth a true
-                        return true; // Indicar que el login fue exitoso
+                        console.log("Datos recibidos:", data);
+            
+                        // Actualizar el store con los datos del usuario y token
+                        setStore({ auth: true, user_id: data.usuario_id, token: data.token });
+            
+                        // Guardar el token y el ID en localStorage
+                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("user_id", data.usuario_id); // Guardar el ID aquí
+                        return true;
                     } else {
                         const errorData = await response.json();
                         console.error("Error en el login:", errorData);
-                        return false; // Indicar que el login falló
+                        return false;
                     }
                 } catch (error) {
                     console.error("Error en login", error);
-                    return false; // Error en el login
+                    return false;
                 }
             },
-                        
+            
+             
 
             logout: () => {
 				console.log("Logout desde flux")
@@ -663,26 +684,38 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
-                  const formData = new FormData();
-                  formData.append("file", file);
-              
-                  fetch(`${process.env.BACKEND_URL}/api/upload-image`, {
-                    method: 'POST',
-                    body: formData
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    console.log("Imagen subida:", data);
-                    // Aquí manejamos la URL de la imagen si la devuelve el backend
-                    if (data.url) {
-                      resolve(data);
-                    } else {
-                      reject("No se pudo subir la imagen");
-                    }
-                  })
-                  .catch(error => reject(error));
+                    const formData = new FormData();
+                    formData.append("file", file);
+            
+                    // Obtén el token JWT del almacenamiento
+                    const token = localStorage.getItem('token'); // O sessionStorage.getItem('token')
+            
+                    fetch(`${process.env.BACKEND_URL}/api/upload-image`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Agrega el token al encabezado
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Imagen subida:", data);
+                        // Aquí manejamos la URL de la imagen si la devuelve el backend
+                        if (data.url) {
+                            resolve(data);
+                        } else {
+                            reject("No se pudo subir la imagen");
+                        }
+                    })
+                    .catch(error => reject(error));
                 });
-              },
+            },
+            
             
 
             changeColor: (index, color) => {

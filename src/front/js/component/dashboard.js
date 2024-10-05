@@ -3,9 +3,11 @@ import { Context } from '../store/appContext';
 import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const token = sessionStorage.getItem('token');
-if (!token) {
-        return <Navigate to="/login" />; 
+    const { store } = useContext(Context);
+
+    // Si no está autenticado, redirige al login
+    if (!store.auth) {
+        return <Navigate to="/login" />;
     }
 
     return (
