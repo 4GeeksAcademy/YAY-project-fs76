@@ -37,7 +37,7 @@ const GetUserImages = () => {
             <h3>Imágenes del Usuario</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {images.length >= 5 && (
-                <p style={{ color: 'orange' }}>Has alcanzado el límite de 5 imágenes.</p>
+                <p style={{ color: 'orange' }}>Muy buenas tomas</p>
             )}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 {images.map((url, index) => (

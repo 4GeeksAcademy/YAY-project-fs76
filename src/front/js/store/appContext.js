@@ -1,47 +1,56 @@
 import React, { useState, useEffect } from "react";
 import getState from "./flux.js";
 
-// Don't change, here is where we initialize our context, by default it's just going to be null.
+// Inicializamos el contexto
 export const Context = React.createContext(null);
 
-// This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
-// https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
+// Esta función inyecta el store global en cualquier componente donde quieras usarlo.
 const injectContext = PassedComponent => {
-	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
-		const [state, setState] = useState(
-			getState({
-				getStore: () => state.store,
-				getActions: () => state.actions,
-				setStore: updatedStore =>
-					setState({
-						store: Object.assign(state.store, updatedStore),
-						actions: { ...state.actions }
-					})
-			})
-		);
+    const StoreWrapper = props => {
+        // Se inicializa el estado usando la función getState
+        const [state, setState] = useState(
+            getState({
+                getStore: () => state.store,
+                getActions: () => state.actions,
+                setStore: updatedStore =>
+                    setState({
+                        store: Object.assign(state.store, updatedStore),
+                        actions: { ...state.actions }
+                    })
+            })
+        );
 
-		useEffect(() => {
-			/**
-			 * EDIT THIS!
-			 * This function is the equivalent to "window.onLoad", it only runs once on the entire application lifetime
-			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
-			 * store, instead use actions, like this:
-			 **/
-			state.actions.getMessage(); // <---- calling this function from the flux.js actions
-		
-		}, []);
+        // Este useEffect corre una sola vez cuando la aplicación se carga
+        useEffect(() => {
+            // Comprobamos si el token y el user_id están en localStorage
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("user_id");
 
-		// The initial value for the context is not null anymore, but the current state of this component,
-		// the context will now have a getStore, getActions and setStore functions available, because they were declared
-		// on the state of this component
-		return (
-			<Context.Provider value={state}>
-				<PassedComponent {...props} />
-			</Context.Provider>
-		);
-	};
-	return StoreWrapper;
+            if (token && userId) {
+                // Si existen, actualizamos el store para indicar que el usuario está autenticado
+                state.actions.setAuthState({
+                    auth: true,
+                    token: token,
+                    user_id: userId
+                });
+                console.log("Usuario autenticado automáticamente al cargar la aplicación.");
+            }
+
+            // Llamada a una acción de ejemplo, puedes eliminarla o reemplazarla por otra acción que necesites
+            state.actions.getMessage(); 
+
+        }, []);
+
+        // El valor inicial para el contexto ahora es el estado actual de este componente
+        // con getStore, getActions y setStore disponibles en todo el árbol de componentes
+        return (
+            <Context.Provider value={state}>
+                <PassedComponent {...props} />
+            </Context.Provider>
+        );
+    };
+
+    return StoreWrapper;
 };
 
 export default injectContext;

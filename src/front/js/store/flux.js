@@ -37,6 +37,18 @@ const getState = ({ getStore, getActions, setStore }) => {
                     ...newStore, // Actualizar el estado global con el nuevo store
                 }));
             },
+            setAuthState: ({ auth, token, user_id }) => {
+                setStore({
+                    auth: auth,
+                    token: token,
+                    user_id: user_id,
+                });
+            
+                // También guarda en localStorage si es necesario
+                localStorage.setItem("auth", auth);
+                localStorage.setItem("token", token);
+                localStorage.setItem("user_id", user_id);
+            },
 
             // Ejemplo de función que cambia el color
             exampleFunction: () => {
@@ -440,29 +452,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Usuario registrado exitosamente", data);
-                        setStore({ auth: true, user_id: data.usuario_id, token: data.token });
             
-                        // Verificar si se recibió un token en la respuesta
-                        if (data.access_token) {
+                        // Verificar si se recibió un token y un user_id en la respuesta
+                        if (data.access_token && data.user_id) {
+                            // Guardamos el estado de autenticación y los datos en localStorage
                             localStorage.setItem("auth", "true");
-                            localStorage.setItem("token", data.token);
-                            localStorage.setItem("user_id", data.user_id);
+                            localStorage.setItem("token", data.access_token); // Guardamos el token
+                            localStorage.setItem("user_id", data.user_id);   // Guardamos el ID del usuario
+            
+                            console.log("Token y ID del usuario guardados en localStorage");
+            
+                            // Actualizamos el estado de autenticación en el store global
+                            setStore({
+                                auth: true,  // Cambiamos el estado de auth a true
+                                token: data.access_token,  // Guardamos el token
+                                user_id: data.user_id  // Guardamos el user_id
+                            });
+            
+                            return {
+                                success: true,
+                                user_id: data.user_id
+                            };
                         } else {
-                            console.error("No se recibió un token en la respuesta", data);
-                            return false; // Registro exitoso, pero sin token
+                            console.error("No se recibieron todos los datos necesarios (token o user_id)", data);
+                            return false; // Registro exitoso, pero faltan datos
                         }
-            
-                        // Guarda el ID del usuario en localStorage
-                        if (data.user_id) {
-                            localStorage.setItem("user_id", data.user_id); // Guardar el ID en localStorage
-                            console.log("ID del usuario guardado en localStorage:", data.user_id);
-                        }
-            
-                        // Devolver el éxito del registro
-                        return {
-                            success: true,
-                            user_id: data.user_id // Devolver el ID del usuario
-                        };
                     } else {
                         const errorData = await response.json();
                         console.error("Error en el registro:", errorData);
@@ -473,6 +487,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false; // Error en el registro
                 }
             },
+            
+            
             
             
             
@@ -540,6 +556,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                   if (response.ok) {
                     const data = await response.json(); // Parsear la respuesta a JSON
                     console.log("Datos del usuario actualizados exitosamente", data);
+                    localStorage.setItem("nombre", nombre); // Guardar el nombre en localStorage
                     return true; // Indicar que la actualización fue exitosa
                   } else {
                     const errorData = await response.json(); // Obtener datos de error
