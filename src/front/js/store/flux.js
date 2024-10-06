@@ -106,7 +106,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-
               createEntidad: async (newEntidades) => {
                 try {
                   const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades`, {
@@ -489,11 +488,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            
-            
-            
-            
-            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
                 try {
                     // Construir la URL de la API usando el userId proporcionado
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -510,7 +505,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                             nombre,
                             apellidos,
                             fecha_nacimiento,
-                            ubicacion,
+                            direccion,
                             breve_descripcion
                         }), 
                     });
@@ -531,7 +526,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
                 try {
                   
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -548,7 +543,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                       nombre,
                       apellidos,
                       fecha_nacimiento,
-                      ubicacion,
+                      direccion,
                       breve_descripcion
                     }), 
                   });
@@ -643,8 +638,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-             
-
             logout: () => {
                 console.log("Logout desde flux");
                 localStorage.removeItem("auth");

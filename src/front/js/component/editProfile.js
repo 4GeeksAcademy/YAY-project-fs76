@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext"; // Asegúrate de que la ruta sea correcta
 import { useParams, useNavigate } from "react-router-dom";
+import { MapaUsuario } from "./mapaUsuario";
 
 const EditProfile = () => {
     const { store, actions } = useContext(Context);
@@ -9,7 +10,7 @@ const EditProfile = () => {
         nombre: '',
         apellidos: '',
         fecha_nacimiento: '',
-        ubicacion: '',
+        direccion: '',
         breve_descripcion: ''
     });
 
@@ -42,17 +43,17 @@ const EditProfile = () => {
     };
 
     const handleSubmit = (e) => {
-      e.preventDefault();
-      actions.completarDatos(userId, profile.nombre, profile.apellidos, profile.fecha_nacimiento, profile.ubicacion, profile.breve_descripcion)
-          .then(() => {
-              alert("Perfil actualizado exitosamente");
-              navigate(`/profile/${userId}`); // Redirigir al perfil después de la actualización
-          })
-          .catch((error) => {
-              console.error("Error al actualizar el perfil:", error);
-              alert("Error al actualizar el perfil");
-          });
-  };
+        e.preventDefault();
+        actions.completarDatos(userId, profile.nombre, profile.apellidos, profile.fecha_nacimiento, profile.direccion, profile.breve_descripcion)
+            .then(() => {
+                alert("Perfil actualizado exitosamente");
+                navigate(`/profile/${userId}`); // Redirigir al perfil después de la actualización
+            })
+            .catch((error) => {
+                console.error("Error al actualizar el perfil:", error);
+                alert("Error al actualizar el perfil");
+            });
+    };
 
     return (
         <div>
@@ -87,12 +88,10 @@ const EditProfile = () => {
                     />
                 </div>
                 <div>
-                    <label>Ubicación:</label>
-                    <input
-                        type="text"
-                        name="ubicacion"
-                        value={profile.ubicacion}
-                        onChange={handleChange}
+                <label>Dirección:</label>
+                    <MapaUsuario
+                        setDireccion={(direccion) => setProfile({ ...profile, direccion })} // Actualiza la dirección en el perfil
+                        initialDireccion={profile.direccion} // Pasa la dirección guardada
                     />
                 </div>
                 <div>

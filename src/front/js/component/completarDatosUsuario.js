@@ -2,14 +2,17 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar esto
+import { MapaUsuario } from './mapaUsuario';
 
-const CompletarDatosUsuario = () => { 
+
+const CompletarDatosUsuario = () => {
     const { actions } = useContext(Context);
     const [step, setStep] = useState(1);
     const [nombre, setNombre] = useState("");
     const [apellidos, setApellidos] = useState("");
     const [fecha_nacimiento, setFechaNacimiento] = useState("");
-    const [ubicacion, setUbicacion] = useState("");
+    // const [ubicacion, setUbicacion] = useState("");
+    const [direccion, setDireccion] = useState("");
     const [breve_descripcion, setDescripcion] = useState("");
     const navigate = useNavigate();
 
@@ -27,8 +30,8 @@ const CompletarDatosUsuario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion);
-        
+        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion);
+
         if (result) {
             alert("Datos completados con éxito");
             navigate(`/profile/${userId}`);
@@ -36,6 +39,7 @@ const CompletarDatosUsuario = () => {
             alert("Error al completar los datos");
         }
     };
+    
     return (
         <div className="completar-datos-container">
             <h2>Completa tu Perfil</h2>
@@ -60,24 +64,25 @@ const CompletarDatosUsuario = () => {
                 )}
                 {step === 2 && (
                     <div>
-                        <label>Fecha de Nacimiento (opcional):</label>
-                        <input
-                            type="date"
-                            value={fecha_nacimiento}
-                            onChange={(e) => setFechaNacimiento(e.target.value)}
-                        />
-                        <label>Ubicación (opcional):</label>
+                        <MapaUsuario setDireccion={setDireccion} />
+                        {/* <label>Código Postal (opcional):</label>
                         <input
                             type="text"
                             value={ubicacion}
                             onChange={(e) => setUbicacion(e.target.value)}
-                        />
+                        /> */}
                         <button type="button" onClick={handlePreviousStep}>Anterior</button>
                         <button type="button" onClick={handleNextStep}>Siguiente</button>
                     </div>
                 )}
                 {step === 3 && (
                     <div>
+                        <label>Fecha de Nacimiento (opcional):</label>
+                        <input
+                            type="date"
+                            value={fecha_nacimiento}
+                            onChange={(e) => setFechaNacimiento(e.target.value)}
+                        />
                         <label>Descripción (opcional):</label>
                         <textarea
                             value={breve_descripcion}

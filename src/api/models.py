@@ -125,11 +125,11 @@ class Usuarios(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), nullable=True)
     apellidos = db.Column(db.String(120), nullable=True)
-    ciudad = db.Column(db.String(120), nullable=True)
-    foto = db.Column(db.String(255), nullable=False)
-    foto_perfil = db.Column(db.String(255), nullable=False)
+    foto = db.Column(db.String(255), nullable=True)
+    foto_perfil = db.Column(db.String(255), nullable=True)
     fecha_nacimiento = db.Column(db.Date, nullable=True)  
     breve_descripcion = db.Column(db.String(255), nullable=True)  
+    direccion = db.Column(db.String(255), nullable=True) 
     codigo_postal = db.Column(db.String(10), nullable=True) 
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)  
@@ -144,7 +144,7 @@ class Usuarios(db.Model):
             "id": self.id,
             "nombre": self.nombre,
             "apellidos": self.apellidos,
-            "ciudad": self.ciudad,
+            "direccion": self.direccion,
             "fecha_nacimiento": self.fecha_nacimiento.strftime('%Y-%m-%d') if self.fecha_nacimiento else None,
             "breve_descripcion": self.breve_descripcion,
             "codigo_postal": self.codigo_postal,

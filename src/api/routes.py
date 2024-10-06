@@ -433,11 +433,11 @@ def actualizar_usuario(user_id):
     nombre = request.json.get('nombre')
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
-    ubicacion = request.json.get('ubicacion')
+    direccion = request.json.get('direccion')
     breve_descripcion = request.json.get('breve_descripcion')
 
     # Validar que al menos uno de los campos es proporcionado
-    if not any([nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion]):
+    if not any([nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion]):
         return jsonify({"ERROR": "Debe proporcionar al menos un campo para actualizar"}), 400
 
     # Actualiza los campos del usuario
@@ -447,8 +447,8 @@ def actualizar_usuario(user_id):
         usuario.apellidos = apellidos
     if fecha_nacimiento:
         usuario.fecha_nacimiento = fecha_nacimiento
-    if ubicacion:
-        usuario.ubicacion = ubicacion
+    if direccion:
+        usuario.direccion = direccion
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
 
@@ -478,7 +478,7 @@ def ruta_protegida():
 def signup():
     nombre = request.json.get('nombre')
     apellidos = request.json.get('apellidos')
-    ciudad = request.json.get('ciudad')
+    codigo_postal = request.json.get('codigo_postal')
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -502,7 +502,7 @@ def signup():
     new_usuario = Usuarios(
         nombre=nombre,
         apellidos=apellidos,
-        ciudad=ciudad,
+        codigo_postal=codigo_postal,
         email=email,
         password=hashed_password,
         is_active=True
@@ -717,7 +717,7 @@ def update_usuario(usuario_id):
     nombre = request.json.get('nombre')
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
-    ubicacion = request.json.get('ubicacion')
+    direccion = request.json.get('direccion')
     breve_descripcion = request.json.get('breve_descripcion')
     foto = request.files.get('foto')
     
@@ -728,8 +728,8 @@ def update_usuario(usuario_id):
         usuario.apellidos = apellidos
     if fecha_nacimiento:
         usuario.fecha_nacimiento = fecha_nacimiento
-    if ubicacion:
-        usuario.ubicacion = ubicacion
+    if direccion:
+        usuario.direccion = direccion
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
     
