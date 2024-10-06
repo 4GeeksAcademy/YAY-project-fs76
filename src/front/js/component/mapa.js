@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
 
 const libraries = ["places", "geometry"];
@@ -9,6 +9,7 @@ export const Mapa = () => {
     const [markerPosition, setMarkerPosition] = useState({ lat: 40.1402000, lng: -3.4226700 });
     const [center, setCenter] = useState({ lat: 40.1402000, lng: -3.4226700 });
 
+    const mapRef = React.useRef();
 
     const onPlaceChanged = () => {
         if (autocomplete) {
@@ -30,12 +31,27 @@ export const Mapa = () => {
         }
     };
 
-    const mapContainerStyle = {
-        height: "400px",
-        width: "800px"
+    const onMapClick = (event) => {
+        const newPosition = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        setMarkerPosition(newPosition);
+        setCenter(newPosition); // Actualiza el centro del mapa
+        // Aquí puedes usar el servicio de geocodificación para obtener la dirección
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: newPosition }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                setAddress(results[0].formatted_address); // Actualiza el estado de la dirección
+            }
+        });
     };
 
-    const mapRef = React.useRef();
+    const mapContainerStyle = {
+        height: "400px",
+        width: "800px",
+        cursor: 'pointer' 
+    };
 
     return (
         <LoadScript
@@ -47,6 +63,7 @@ export const Mapa = () => {
                 mapContainerStyle={mapContainerStyle}
                 center={center}
                 zoom={10}
+                onClick={onMapClick} // Agrega el manejador aquí
             >
                 <Autocomplete
                     onLoad={autocomplete => setAutocomplete(autocomplete)}
