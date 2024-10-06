@@ -458,7 +458,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                             // Guardamos el estado de autenticación y los datos en localStorage
                             localStorage.setItem("auth", "true");
                             localStorage.setItem("token", data.access_token); // Guardamos el token
-                            localStorage.setItem("user_id", data.user_id);   // Guardamos el ID del usuario
+                            localStorage.setItem("user_id", data.user_id); 
+                            localStorage.setItem("usuario_id", data.user_id); 
             
                             console.log("Token y ID del usuario guardados en localStorage");
             
@@ -742,7 +743,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 const token = localStorage.getItem('token');
                 const userId = parseInt(localStorage.getItem('user_id'));
             
-                return fetch(`${process.env.BACKEND_URL}/api/fotos/${userId}`, {  // Agregamos barra al final de la URL base
+                return fetch(`${process.env.BACKEND_URL}/api/fotos/${userId}`, { 
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -9,6 +9,7 @@ const Profile = () => {
     const { userId } = useParams();
     const [profile, setProfile] = useState({});
 
+
     useEffect(() => {
        
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;

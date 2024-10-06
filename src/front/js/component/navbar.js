@@ -7,6 +7,11 @@ export const Navbar = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [loggingOut, setLoggingOut] = useState(false);
+    console.log(store.token)
+    console.log(store.auth)
+    console.log(store.user_id
+        
+    )
 
  
    

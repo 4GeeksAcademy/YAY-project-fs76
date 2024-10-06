@@ -7,6 +7,7 @@ const GetUserImages = () => {
     const [error, setError] = useState(null);
     const { store, actions } = useContext(Context);
 
+
     const fetchImages = async () => {
         try {
             const response = await actions.getUserImages();
@@ -18,11 +19,12 @@ const GetUserImages = () => {
 
     const handleDeleteClick = async (image) => {
         const usuario_id = store.user_id; 
-        const public_id = image.split('/').pop().split('.')[0]; // Obtiene el public_id
+        const public_id = image.split('/').pop().split('.')[0]; 
+        
 
         try {
-            await actions.deleteImage(usuario_id, public_id); // Llama a la acción para eliminar la imagen
-            setImages(images.filter((img) => img !== image)); // Actualiza el estado de las imágenes
+            await actions.deleteImage(usuario_id, public_id); 
+            setImages(images.filter((img) => img !== image)); 
         } catch (error) {
             setError("No se pudo eliminar la imagen.");
         }
