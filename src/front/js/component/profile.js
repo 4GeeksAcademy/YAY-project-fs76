@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import { useParams, Link } from "react-router-dom"; // Importa Link para la navegación
-import ImageUpload from "./imageUpload";
+import { useParams, Link } from "react-router-dom"; 
 import GetUserImages from "./getUserImagens";
+import GetUserPerfilImage from "./getUserPerfilImage";
 
 const Profile = () => {
     const { store, actions } = useContext(Context);
@@ -10,7 +10,7 @@ const Profile = () => {
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
-        // Verifica si el userId está en los parámetros, si no, obténlo de localStorage
+       
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
 
         if (idToUse) {
@@ -30,7 +30,7 @@ const Profile = () => {
         }
     }, [userId, store.user_id]);
 
-    // Renderiza el perfil
+   
     return (
         <div>
             <h2>Perfil del usuario</h2>
@@ -38,6 +38,7 @@ const Profile = () => {
                 <> 
                     <div className="d-flex flex-row">
                         <div>
+                            <GetUserPerfilImage />
                             <p>Nombre: {profile.nombre}</p>
                             <p>Apellidos: {profile.apellidos}</p>
                             <p>Fecha de nacimiento: {profile.fecha_nacimiento}</p>

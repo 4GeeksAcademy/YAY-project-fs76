@@ -498,12 +498,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
                     console.log("URL del fetch:", url);
                     
-                    // Realizar la solicitud PUT para actualizar los datos del usuario
+                 
                     const response = await fetch(url, {
-                        method: "PUT", // Método para actualizar datos
+                        method: "PUT", 
                         headers: {
-                            "Content-Type": "application/json", // Indicar que el cuerpo es JSON
-                            Authorization: `Bearer ${sessionStorage.getItem('token')}` // Agregar el token en los headers
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${sessionStorage.getItem('token')}` 
                         },
                         body: JSON.stringify({
                             nombre,
@@ -511,28 +511,28 @@ const getState = ({ getStore, getActions, setStore }) => {
                             fecha_nacimiento,
                             ubicacion,
                             breve_descripcion
-                        }), // Convertir el objeto a una cadena JSON
+                        }), 
                     });
             
-                    // Verificar la respuesta del servidor
+                  
                     if (response.ok) {
                         const data = await response.json(); // Parsear la respuesta a JSON
                         console.log("Datos del usuario actualizados exitosamente", data);
-                        return true; // Indicar que la actualización fue exitosa
+                        return true; 
                     } else {
-                        const errorData = await response.json(); // Obtener datos de error
+                        const errorData = await response.json(); 
                         console.error("Error al actualizar los datos del usuario:", errorData);
-                        return false; // Indicar que la actualización falló
+                        return false; 
                     }
                 } catch (error) {
                     console.error("Error en la solicitud de actualización de datos:", error);
-                    return false; // Indicar que hubo un error
+                    return false; 
                 }
             },
 
             updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
                 try {
-                  // Construir la URL de la API usando el userId proporcionado
+                  
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
                   console.log("URL del fetch:", url);
               
@@ -549,15 +549,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                       fecha_nacimiento,
                       ubicacion,
                       breve_descripcion
-                    }), // Convertir el objeto a una cadena JSON
+                    }), 
                   });
               
-                  // Verificar la respuesta del servidor
+                
                   if (response.ok) {
-                    const data = await response.json(); // Parsear la respuesta a JSON
+                    const data = await response.json(); 
                     console.log("Datos del usuario actualizados exitosamente", data);
-                    localStorage.setItem("nombre", nombre); // Guardar el nombre en localStorage
-                    return true; // Indicar que la actualización fue exitosa
+                    localStorage.setItem("nombre", nombre)
+                   
+                    return true;
                   } else {
                     const errorData = await response.json(); // Obtener datos de error
                     console.error("Error al actualizar los datos del usuario:", errorData);
@@ -789,9 +790,105 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error;
                 }
             },
+
+            uploadPerfilImage: (file) => {
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    formData.append("es_perfil", true); // Indicar que la imagen es de perfil
             
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        console.error("No se encontró el token. Usuario no autenticado.");
+                        return reject(new Error("Usuario no autenticado"));
+                    }
             
+                    fetch(`${process.env.BACKEND_URL}/api/perfil/upload-image`, {  // Cambiamos la URL para la ruta de perfil
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: formData,
+                    })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        resolve(data);
+                    })
+                    .catch((error) => {
+                        console.error("Error subiendo la imagen de perfil:", error);
+                        reject(error);
+                    });
+                });
+            },
             
+            getUserPerfilImage: () => {
+                const token = localStorage.getItem('token');
+                const userId = parseInt(localStorage.getItem('user_id'));
+                
+                return fetch(`${process.env.BACKEND_URL}/api/perfil/image`, {  
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta al obtener la imagen de perfil");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.foto_perfil) {
+                        setStore({ response: data.foto_perfil }); // Guarda la imagen de perfil en el store
+                        return data; // Retorna los datos si es necesario
+                    } else {
+                        throw new Error("No se encontró la imagen de perfil.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error obteniendo la imagen de perfil:", error);
+                    throw error;
+                });
+            },
+            
+            deletePerfilImage: async (usuario_id, public_id) => {
+                const token = localStorage.getItem('token');
+                const userId = parseInt(localStorage.getItem('user_id')); // Revisar si el userId se obtiene correctamente
+            
+                // Imprimir los valores para verificar que no son undefined
+                console.log("Usuario ID:", usuario_id, "Public ID:", public_id, "User ID desde localStorage:", userId);
+                
+                if (!usuario_id || !public_id) {
+                    console.error("Faltan parámetros: usuario_id o public_id están undefined");
+                    return;
+                }
+            
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/perfil/image/${usuario_id}/${public_id}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al eliminar la imagen de perfil');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al eliminar la imagen de perfil:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
+                }
+            },
             
             
 

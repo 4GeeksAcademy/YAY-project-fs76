@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+   
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     const [loggingOut, setLoggingOut] = useState(false);
 
+ 
    
     function handleLogout() {
         setLoggingOut(true);
@@ -17,13 +19,14 @@ export const Navbar = () => {
         navigate("/logout", { state: { from: true } });
     }
 
-  
+    
     const userId = localStorage.getItem("user_id"); 
     const nombre = localStorage.getItem("nombre"); 
 
 
 
     return (
+        
         <nav className="navbar navbar-light bg-light">
             {store.auth ? (
                 <p>Bienvenido a YAY</p> 

@@ -127,11 +127,12 @@ class Usuarios(db.Model):
     apellidos = db.Column(db.String(120), nullable=True)
     ciudad = db.Column(db.String(120), nullable=True)
     foto = db.Column(db.String(255), nullable=True)
-    fecha_nacimiento = db.Column(db.Date, nullable=True)  # Cambié a nullable=True si no es obligatorio
-    breve_descripcion = db.Column(db.String(255), nullable=True)  # Ampliado para descripciones más largas
-    codigo_postal = db.Column(db.String(10), nullable=True)  # Limitar a 10 caracteres (5 para el CP, más espacio si se usa en otros países)
+    foto_perfil = db.Column(db.String(255), nullable=True)
+    fecha_nacimiento = db.Column(db.Date, nullable=True)  
+    breve_descripcion = db.Column(db.String(255), nullable=True)  
+    codigo_postal = db.Column(db.String(10), nullable=True) 
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)  # Aumentar tamaño para almacenar contraseñas hash
+    password = db.Column(db.String(255), nullable=False)  
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     db.relationship('Inscripciones', backref='usuarios', lazy=True)
 
@@ -154,9 +155,10 @@ class Usuarios(db.Model):
     
 class Imagenes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(255), nullable=False)  # URL de la imagen
-    public_id = db.Column(db.String(255), nullable=False)  # Public ID de la imagen
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)  # Relación con Usuarios
+    url = db.Column(db.String(255), nullable=False)  
+    public_id = db.Column(db.String(255), nullable=False)  
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False) 
+    es_perfil = db.Column(db.Boolean, default=False) 
 
     def __repr__(self):
         return f'<Imagen {self.url}>'
