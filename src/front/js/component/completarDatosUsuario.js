@@ -1,10 +1,9 @@
 // CompletarDatosUsuario.js
-import React, { useState, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom"; // Importa useParams
-import { Context } from "../store/appContext";
+import React, { useContext, useState } from 'react';
+import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom'; // Asegúrate de importar esto
 
 const CompletarDatosUsuario = () => { 
-    const { userId } = useParams(); // Obtén userId de los parámetros de la URL
     const { actions } = useContext(Context);
     const [step, setStep] = useState(1);
     const [nombre, setNombre] = useState("");
@@ -13,6 +12,9 @@ const CompletarDatosUsuario = () => {
     const [ubicacion, setUbicacion] = useState("");
     const [breve_descripcion, setDescripcion] = useState("");
     const navigate = useNavigate();
+
+    // Obtén el userId del sessionStorage
+    const userId = sessionStorage.getItem('userId');
 
     const handleNextStep = () => {
         setStep(step + 1);
@@ -25,17 +27,15 @@ const CompletarDatosUsuario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Llamada a la función de completar datos
         const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion);
         
         if (result) {
             alert("Datos completados con éxito");
-            navigate("/dashboard");
+            navigate(`/profile/${userId}`);
         } else {
             alert("Error al completar los datos");
         }
     };
-
     return (
         <div className="completar-datos-container">
             <h2>Completa tu Perfil</h2>
