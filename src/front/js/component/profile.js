@@ -43,7 +43,7 @@ const Profile = () => {
                             <p>Nombre: {profile.nombre}</p>
                             <p>Apellidos: {profile.apellidos}</p>
                             <p>Fecha de nacimiento: {profile.fecha_nacimiento}</p>
-                            <p>Ubicación: {profile.ubicacion}</p>
+                            <p>Dirección: {profile.direccion}</p>
                             <p>Breve descripción: {profile.breve_descripcion}</p>
                             <Link to={`/editProfile/${userId}`}>
                                 <button>Editar perfil</button>
