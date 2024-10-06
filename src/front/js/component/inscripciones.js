@@ -18,7 +18,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         if (id) {
             console.log('ID de inscripción:', id);
             setInscripcionId(id);
-            setIsInscrito(true); // Cambiar estado a inscrito
+            setIsInscrito(true);
         } else {
             console.error('No se pudo obtener el ID de inscripción');
         }
@@ -34,7 +34,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         if (result) {
             console.log('Inscripción eliminada con éxito');
             setInscripcionId(null);
-            setIsInscrito(false); // Cambiar estado a no inscrito
+            setIsInscrito(false);
         } else {
             console.log('Error al eliminar la inscripción');
         }
@@ -42,8 +42,11 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
 
     return (
         <div>
-            <button onClick={isInscrito ? handleDesapuntarse : handleInscribirse}>
-                {isInscrito ? 'Desapuntarse' : 'Inscribirse'}
+            <button 
+                className={`btn ${isInscrito ? 'btn-danger' : 'btn-success'} mt-5`} 
+                onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
+            >
+                {isInscrito ? 'Me desapunto' : 'Me apunto'}
             </button>
         </div>
     ); 

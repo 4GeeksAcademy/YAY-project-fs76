@@ -664,8 +664,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     
                     if (resp.ok) {
                         console.log('Inscripción creada:', data);
-                        console.log('ID de inscripción:', data.id); // Añadir esto para verificar el ID
-                        return data.id; // Asegúrate de que 'data' contenga el ID
+                        return data.id; // Retorna el ID de la inscripción
                     } else {
                         console.log("Error: ", data.message);
                         return null; // O lanza un error si prefieres
@@ -676,28 +675,30 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
         
-            desapuntarse: (inscripcionId) => {
-                fetch(`${process.env.BACKEND_URL}/api/inscripciones/${inscripcionId}`, {
-                    method: 'DELETE',
-                })
-                .then(resp => {
+            desapuntarse: async (inscripcionId) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/inscripciones/${inscripcionId}`, {
+                        method: 'DELETE',
+                    });
                     if (resp.ok) {
                         console.log('Inscripción eliminada');
                         // Actualiza el store para eliminar la inscripción
                         setStore(prevStore => ({
                             ...prevStore,
-                            inscripciones: prevStore.inscripciones.filter(inscripcion => inscripcion.id !== inscripcionId), // Asegúrate de que 'id' sea la propiedad correcta
+                            inscripciones: prevStore.inscripciones.filter(inscripcion => inscripcion.id !== inscripcionId),
                         }));
+                        return true; // Retorna true si la eliminación fue exitosa
                     } else {
-                        return resp.json().then(data => {
-                            console.log("Error: ", data.message);
-                        });
+                        const data = await resp.json();
+                        console.log("Error: ", data.message);
+                        return false; // Retorna false si hubo un error
                     }
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error("Error desapuntando al usuario:", error);
-                });
+                    return false; // Retorna false en caso de error
+                }
             },
+            
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
