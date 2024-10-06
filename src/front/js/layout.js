@@ -17,6 +17,7 @@ import { Evento_Form } from "./component/evento_form";
 import { Partners } from "./pages/partners";
 import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
+import UserInterest from "./component/userInterest";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
@@ -31,7 +32,7 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
@@ -43,6 +44,7 @@ const Layout = () => {
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Intereses />} path="/interes" />
                         <Route element={<Eventos />} path="/eventos" />
+                        <Route element={<UserInterest/>} path="/userInterest" />
                         <Route element={<Evento_Card />} path="/evento/:theid" />
                         <Route element={<Evento_Form />} path="/formulario-evento" />
                         <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
@@ -53,7 +55,7 @@ const Layout = () => {
                         <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
-                        <Route element={<h1>Not found!</h1>} path="*"/>
+                        {/* <Route element={<h1>Not found!</h1>} path="*" /> */}
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />

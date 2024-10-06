@@ -1,4 +1,4 @@
-import React, { useContext, useState }  from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
@@ -36,6 +36,9 @@ export const Navbar = () => {
 					<Link to="/usuarios">
 						<button className="btn btn-primary me-3">Usuarios</button>
 					</Link>
+					<Link to="/UserInterest">
+  						<button className="btn btn-primary me-3">Intereses Usuario</button>
+						</Link>
 					{/* <Link to="/demo">
 						<button className="btn btn-secondary">Check the Context in action</button>
 					</Link> */}

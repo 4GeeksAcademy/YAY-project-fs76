@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones
+from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones , UsuariosIntereses
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -584,4 +584,67 @@ def delete_inscripcion(id):
 
 if __name__ == '__main__':
 
+    @api.route('/usuarios_intereses', methods=['GET'])
+    def get(self):
+        usuarios_intereses = UsuariosIntereses.query.all()
+        output = []
+        for usuario_interes in usuarios_intereses:
+            usuario_interes_data = {}
+            usuario_interes_data['id'] = usuario_interes.id
+            usuario_interes_data['usuario_id'] = usuario_interes.usuario_id
+            usuario_interes_data['interes_id'] = usuario_interes.interes_id
+            usuario_interes_data['usuario'] = usuario_interes.tipo_usuario.username
+            usuario_interes_data['interes'] = usuario_interes.tipo_interes.nombre
+            output.append(usuario_interes_data)
+
+        return {'usuarios_intereses': output}
+
+@api.route('/usuarios_intereses/<int:id>', methods=['GET'])
+def get_usuario_interes(id):
+    usuario_interes = UsuariosIntereses.query.get(id)
+    if usuario_interes is None:
+        return {'message': 'No usuario_interes found'}
+    usuario_interes_data = {}
+    usuario_interes_data['id'] = usuario_interes.id
+    usuario_interes_data['usuario_id'] = usuario_interes.usuario_id
+    usuario_interes_data['interes_id'] = usuario_interes.interes_id
+    usuario_interes_data['usuario'] = usuario_interes.tipo_usuario.username
+    usuario_interes_data['interes'] = usuario_interes.tipo_interes.nombre
+    return {'usuario_interes': usuario_interes_data}
+
+
+@api.route('/usuarios_intereses/<int:id>', methods=['PUT'])
+def update_usuario_interes(id):
+    usuario_interes = UsuariosIntereses.query.get(id)
+    if usuario_interes is None:
+        return {'message': 'No usuario_interes found'}
+    data = request.get_json()
+    usuario_interes.usuario_id = data.get('usuario_id', usuario_interes.usuario_id)
+    usuario_interes.interes_id = data.get('interes_id', usuario_interes.interes_id)
+    db.session.commit()
+    return {'message': 'Usuario_interes updated'}
+
+
+@api.route('/usuarios_intereses/<int:id>', methods=['DELETE'])
+def delete_usuario_interes(id):
+    usuario_interes = UsuariosIntereses.query.get(id)
+    if usuario_interes is None:
+        return {'message': 'No usuario_interes found'}
+    db.session.delete(usuario_interes)
+    db.session.commit()
+    return {'message': 'Usuario_interes deleted'}
+
+
+@api.route('/usuarios_intereses', methods=['POST'])
+def create_usuario_interes():
+    data = request.get_json()
+    new_usuario_interes = UsuariosIntereses(
+        usuario_id=data['usuario_id'],
+        interes_id=data['interes_id']
+    )
+    db.session.add(new_usuario_interes)
+    db.session.commit()
+    return {'message': 'New usuario_interes created'}
+
+if __name__ == '__main__':
     api.run(debug=True)

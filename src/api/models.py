@@ -160,3 +160,15 @@ class Inscripciones(db.Model):
     tipo_usuario = db.relationship('Usuarios') 
     evento_id = db.Column(db.Integer, db.ForeignKey('eventos.id'))
     tipo_evento = db.relationship('Eventos')   
+
+
+class UsuariosIntereses(db.Model):
+    
+    __tablename__ = 'usuarios_intereses'
+    id = db.Column(db.Integer, primary_key=True)
+
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
+    intereses_id = db.Column(db.Integer, db.ForeignKey('intereses.id'))
+
+    # Define las relaciones con las tablas Usuarios e Intereses
+    tipo_usuario = db.relationship('Usuarios')
