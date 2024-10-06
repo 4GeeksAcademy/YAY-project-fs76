@@ -6,38 +6,13 @@ import { Inscripciones } from "./inscripciones";
 export const Eventos = () => {
     const { store, actions } = useContext(Context);
     const [loading, setLoading] = useState(true);
-    const [apuntados, setApuntados] = useState({});
     const [inscripcionId, setInscripcionId] = useState(null);
 
     useEffect(() => {
-        actions.loadEventos().then((eventos) => {
+        actions.loadEventos().then(() => {
             setLoading(false);
         });
     }, [actions.loadEventos]);
-
-    const handleApuntar = (eventoId) => {
-        setApuntados((prevApuntados) => ({ ...prevApuntados, [eventoId]: true }));
-
-        const userId = store.currentUser?.id; 
-        fetch('https://fantastic-happiness-7vrv7r46p4wj2xp6v-3001.app.github.dev/api/inscripciones', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            usuario_id: userId,
-            evento_id: eventoId,
-            fecha_registro: new Date().toISOString()
-          })
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
-    };
-
-    const handleDesapuntar = (eventoId) => {
-        setApuntados((prevApuntados) => ({ ...prevApuntados, [eventoId]: false }));
-    };
 
     return (
         <div className="container m-5 mx-auto w-75">
@@ -56,7 +31,6 @@ export const Eventos = () => {
                                 className="rounded-circle my-auto ms-4"
                                 style={{ height: '100%', maxHeight: '100px' }}
                             />
-
                             <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
                                 <li className="fs-3 ">{evento.nombre}</li>
                                 <li className="text-muted fs-5">
@@ -84,11 +58,11 @@ export const Eventos = () => {
                             }}>
                                 <i className="fa-solid fa-trash" />
                             </button>
-                            <Inscripciones 
-                                usuarioId={1} 
-                                eventoId={evento.id} 
-                                inscripcionId={inscripcionId} 
-                                setInscripcionId={setInscripcionId} 
+                            <Inscripciones
+                                usuarioId={1}
+                                eventoId={evento.id}
+                                inscripcionId={inscripcionId}
+                                setInscripcionId={setInscripcionId}
                             />
                         </div>
                     </li>
