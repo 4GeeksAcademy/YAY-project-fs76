@@ -72,7 +72,7 @@ export const Evento_Form = () => {
                 actions.updateEvento(theid, eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento updated successfully' });
                     setTimeout(() => {
-                        navigate('/eventos');
+                        navigate(store.auth ? '/partners-eventos' : '/eventos');
                     }, 1000);
                 });
             } else {
@@ -80,7 +80,7 @@ export const Evento_Form = () => {
                 actions.addEvento(eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento created successfully' });
                     setTimeout(() => {
-                        navigate('/eventos');
+                        navigate(store.auth ? '/partners-eventos' : '/eventos');
                     }, 1000);
                 }, () => {
                     setAlert({ type: 'danger', message: ' Error creating event' });

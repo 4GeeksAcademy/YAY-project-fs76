@@ -34,18 +34,18 @@ export const Navbar = () => {
 					<Link to="/entidades">
 						<button className="btn btn-primary me-3">Lista de Entidades</button>
 					</Link>
-					<Link to="/eventos">
+					{/* <Link to="/eventos">
 						<button className="btn btn-primary me-3">Lista de Eventos</button>
-					</Link>
+					</Link> */}
 					<Link to="/partners">
 						<button className="btn btn-primary me-3">Partners</button>
 					</Link>
 					<Link to="/usuarios">
 						<button className="btn btn-primary me-3">Usuarios</button>
 					</Link>
-					<Link to="/mapa">
+					{/* <Link to="/mapa">
 						<button className="btn btn-primary me-3">Mapa</button>
-					</Link>
+					</Link> */}
 					{/* <Link to="/demo">
 						<button className="btn btn-secondary">Check the Context in action</button>
 					</Link> */}

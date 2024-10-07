@@ -48,6 +48,9 @@ const Profile = () => {
                             <Link to={`/editProfile/${userId}`}>
                                 <button>Editar perfil</button>
                             </Link>
+                            <Link to="/eventos">
+						<button className="btn btn-primary ms-3">Lista de Eventos</button>
+					</Link>
                         </div>
                         <div>
                             {/* Pasa el userId como prop */}

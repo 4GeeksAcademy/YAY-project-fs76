@@ -3,14 +3,10 @@ import { Context } from '../store/appContext';
 
 export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripcionId }) => {
     const { actions } = useContext(Context);
-    const [isInscrito, setIsInscrito] = useState(false);
+    const [isInscrito, setIsInscrito] = useState(!!inscripcionId); // Inicializa con true si hay un inscripcionId
 
     useEffect(() => {
-        if (inscripcionId) {
-            setIsInscrito(true);
-        } else {
-            setIsInscrito(false); 
-        }
+        setIsInscrito(!!inscripcionId); // Actualiza el estado cuando cambia el inscripcionId
     }, [inscripcionId]);
 
     const handleInscribirse = async () => {
@@ -49,5 +45,5 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
                 {isInscrito ? 'Me desapunto' : 'Me apunto'}
             </button>
         </div>
-    ); 
+    );  
 };

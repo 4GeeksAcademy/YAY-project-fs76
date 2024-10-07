@@ -504,9 +504,9 @@ def ruta_protegida():
 
 @api.route('/signup', methods=['POST'])
 def signup():
-    nombre = request.json.get('nombre')
-    apellidos = request.json.get('apellidos')
-    codigo_postal = request.json.get('codigo_postal')
+    # nombre = request.json.get('nombre')
+    # apellidos = request.json.get('apellidos')
+    # ciudad = request.json.get('ciudad')
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -528,9 +528,9 @@ def signup():
     
     # Crear el nuevo usuario
     new_usuario = Usuarios(
-        nombre=nombre,
-        apellidos=apellidos,
-        codigo_postal=codigo_postal,
+        # nombre=nombre,
+        # apellidos=apellidos,
+        # ciudad=ciudad,
         email=email,
         password=hashed_password,
         is_active=True
@@ -540,7 +540,8 @@ def signup():
     db.session.commit()
 
     # Crear el token de acceso
-    access_token = create_access_token(identity=email)
+   # access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=new_usuario.id)
 
     # Retornar el ID del nuevo usuario
     return jsonify({

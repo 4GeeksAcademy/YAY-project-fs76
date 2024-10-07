@@ -67,7 +67,7 @@ export const Evento_Card = () => {
                                 }}>
                                     <i className="fa-solid fa-trash" />
                                 </button>
-                                <Link to="/eventos">
+                                <Link to={store.auth ? "/partners-eventos" : "/eventos"}>
                                     <button className="btn btn-sm btn-primary">Volver atrás</button>
                                 </Link>
                             </div>

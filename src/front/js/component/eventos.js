@@ -6,7 +6,7 @@ import { Inscripciones } from "./inscripciones";
 export const Eventos = () => {
     const { store, actions } = useContext(Context);
     const [loading, setLoading] = useState(true);
-    const [inscripcionId, setInscripcionId] = useState(null);
+    const [inscripcionIds, setInscripcionIds] = useState({}); // Cambia a un objeto para manejar múltiples inscripciones
 
     useEffect(() => {
         actions.loadEventos().then(() => {
@@ -14,13 +14,12 @@ export const Eventos = () => {
         });
     }, [actions.loadEventos]);
 
+    const setInscripcionIdForEvento = (eventoId, id) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+    };
+
     return (
         <div className="container m-5 mx-auto w-75">
-            <div className="d-flex justify-content-end mb-3">
-                <Link to="/formulario-evento">
-                    <button className="btn btn-primary">Crear nuevo evento</button>
-                </Link>
-            </div>
             <ul className="list-group">
                 {Array.isArray(store.eventos) && store.eventos.map((evento) => (
                     <li key={evento.id} className="list-group-item d-flex justify-content-between">
@@ -48,21 +47,21 @@ export const Eventos = () => {
                             </ul>
                         </div>
                         <div className="d-flex justify-content-end align-items-start">
-                            <Link to={`/formulario-evento/${evento.id}`}>
+                            {/* <Link to={`/formulario-evento/${evento.id}`}>
                                 <button className="btn btn-icon">
                                     <i className="fa-solid fa-pencil" />
                                 </button>
-                            </Link>
-                            <button className="btn btn-icon" onClick={() => {
+                            </Link> */}
+                            {/* <button className="btn btn-icon" onClick={() => {
                                 actions.deleteEvento(evento.id);
                             }}>
                                 <i className="fa-solid fa-trash" />
-                            </button>
+                            </button> */}
                             <Inscripciones
                                 usuarioId={1}
                                 eventoId={evento.id}
-                                inscripcionId={inscripcionId}
-                                setInscripcionId={setInscripcionId}
+                                inscripcionId={inscripcionIds[evento.id]} // Pasa el inscripcionId específico para el evento
+                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)} // Actualiza el inscripcionId para el evento específico
                             />
                         </div>
                     </li>
