@@ -509,10 +509,10 @@ def signup():
     )
 
     db.session.add(new_usuario)
-    db.session.commit()
+    db.session.commit()  # Commit para que el ID del nuevo usuario esté disponible
 
-    # Crear el token de acceso
-    access_token = create_access_token(identity=email)
+    # Crear el token de acceso usando el ID del nuevo usuario
+    access_token = create_access_token(identity=new_usuario.id)
 
     # Retornar el ID del nuevo usuario
     return jsonify({
