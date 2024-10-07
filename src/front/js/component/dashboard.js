@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Context } from '../store/appContext';
 import { Navigate } from 'react-router-dom';
+import { Eventos } from './eventos';
 
 const Dashboard = () => {
     const { store } = useContext(Context);
@@ -13,7 +14,7 @@ const Dashboard = () => {
     return (
         <div>
             <h1>Dashboard</h1>
-            {/* Contenido del dashboard */}
+            <Eventos />
         </div>
     );
 };

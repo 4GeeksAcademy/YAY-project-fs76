@@ -96,7 +96,7 @@ def delete_entidad(id):
 @api.route('/interes', methods=['GET', 'POST'])
 def handle_intereses():
     if request.method == 'GET':
-        # Obtener todos los intereses
+
         intereses = Intereses.query.all()
         all_intereses = [interes.serialize() for interes in intereses]
         return jsonify(all_intereses), 200
@@ -148,29 +148,53 @@ def get_eventos():
     return jsonify(results), 200
 
 @api.route('/eventos', methods=['POST'])
+@jwt_required(optional=True)  
 def add_evento():
     request_body = request.get_json()
+    
+    if "nombre" not in request_body:
+        return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
+
+    partner_id = get_jwt_identity()  
 
     nuevo_evento = Eventos(
-        nombre=request_body["nombre"],
-        fecha=request_body["fecha"],
-        hora_inicio=request_body["hora_inicio"],
-        hora_fin=request_body["hora_fin"],
-        ciudad=request_body["ciudad"],
-        codigo_postal=request_body["codigo_postal"],
-        breve_descripcion=request_body["breve_descripcion"],
-        accesibilidad=request_body["accesibilidad"],
-        dificultad=request_body["dificultad"],
-        precio=request_body["precio"],
-        cupo=request_body["cupo"],
-        observaciones=request_body["observaciones"],
-        is_active=True,                 
+        nombre=request_body.get("nombre"),  
+        fecha=request_body.get("fecha"), 
+        hora_inicio=request_body.get("hora_inicio"),  
+        hora_fin=request_body.get("hora_fin"),  
+        ciudad=request_body.get("ciudad"), 
+        codigo_postal=request_body.get("codigo_postal"),  
+        breve_descripcion=request_body.get("breve_descripcion"),  
+        accesibilidad=request_body.get("accesibilidad"),  
+        dificultad=request_body.get("dificultad"),  
+        precio=request_body.get("precio"), 
+        cupo=request_body.get("cupo"), 
+        observaciones=request_body.get("observaciones"),  
+        is_active=True,
+        partner_id=partner_id  
     )
 
     db.session.add(nuevo_evento)
     db.session.commit()
 
     return jsonify(nuevo_evento.serialize()), 200
+
+@api.route('/eventos/con-usuarios', methods=['GET'])
+def get_eventos_con_usuarios():
+    eventos = Eventos.query.all()
+    output = []
+    
+    for evento in eventos:
+        inscripciones = Inscripciones.query.filter_by(evento_id=evento.id).all()
+        usuario_ids = [inscripcion.usuario_id for inscripcion in inscripciones]
+        usuarios = Usuarios.query.filter(Usuarios.id.in_(usuario_ids)).all()
+        usuarios_nombres = [usuario.nombre for usuario in usuarios]
+        
+        evento_data = evento.serialize()
+        evento_data['usuarios'] = usuarios_nombres 
+        output.append(evento_data)
+    
+    return jsonify(output), 200
 
 @api.route('/eventos/<int:evento_id>', methods=['GET'])
 def get_evento(evento_id):
@@ -188,6 +212,9 @@ def update_evento(evento_id):
         return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
 
     request_body = request.get_json()
+
+    if "nombre" not in request_body:
+        return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
 
     evento.nombre = request_body.get("nombre", evento.nombre)
     evento.fecha = request_body.get("fecha", evento.fecha)
@@ -422,6 +449,7 @@ def delete_usuario(usuario_id):
     db.session.commit()
 
     return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+
 @api.route('/usuarios/<int:user_id>', methods=['PUT'])
 def actualizar_usuario(user_id):
     # Obtén el usuario correspondiente
@@ -433,11 +461,11 @@ def actualizar_usuario(user_id):
     nombre = request.json.get('nombre')
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
-    ubicacion = request.json.get('ubicacion')
+    direccion = request.json.get('direccion')
     breve_descripcion = request.json.get('breve_descripcion')
 
     # Validar que al menos uno de los campos es proporcionado
-    if not any([nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion]):
+    if not any([nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion]):
         return jsonify({"ERROR": "Debe proporcionar al menos un campo para actualizar"}), 400
 
     # Actualiza los campos del usuario
@@ -447,8 +475,8 @@ def actualizar_usuario(user_id):
         usuario.apellidos = apellidos
     if fecha_nacimiento:
         usuario.fecha_nacimiento = fecha_nacimiento
-    if ubicacion:
-        usuario.ubicacion = ubicacion
+    if direccion:
+        usuario.direccion = direccion
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
 
@@ -476,9 +504,9 @@ def ruta_protegida():
 
 @api.route('/signup', methods=['POST'])
 def signup():
-    nombre = request.json.get('nombre')
-    apellidos = request.json.get('apellidos')
-    ciudad = request.json.get('ciudad')
+    # nombre = request.json.get('nombre')
+    # apellidos = request.json.get('apellidos')
+    # ciudad = request.json.get('ciudad')
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -500,9 +528,9 @@ def signup():
     
     # Crear el nuevo usuario
     new_usuario = Usuarios(
-        nombre=nombre,
-        apellidos=apellidos,
-        ciudad=ciudad,
+        # nombre=nombre,
+        # apellidos=apellidos,
+        # ciudad=ciudad,
         email=email,
         password=hashed_password,
         is_active=True
@@ -512,7 +540,8 @@ def signup():
     db.session.commit()
 
     # Crear el token de acceso
-    access_token = create_access_token(identity=email)
+   # access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=new_usuario.id)
 
     # Retornar el ID del nuevo usuario
     return jsonify({
@@ -554,23 +583,20 @@ def logout():
     return jsonify({"msg": "Se ha cerrado sesión correctamente"}), 200
 
 
-if __name__ == '__main__':
-    api.run(debug=True)
-
-
-
 @api.route('/inscripciones', methods=['GET'])
 def get_inscripciones():
     inscripciones = Inscripciones.query.all()
     output = []
     for inscripcion in inscripciones:
-        inscripcion_data = {}
-        inscripcion_data['id'] = inscripcion.id
-        inscripcion_data['usuario_id'] = inscripcion.usuario_id
-        inscripcion_data['evento_id'] = inscripcion.evento_id
-        inscripcion_data['fecha_registro'] = inscripcion.fecha_registro
+        inscripcion_data = {
+            'id': inscripcion.id,
+            'usuario_id': inscripcion.usuario_id,
+            'evento_id': inscripcion.evento_id,
+            'fecha_registro': inscripcion.fecha_registro
+        }
         output.append(inscripcion_data)
-    return jsonify({'inscripciones': output})
+    
+    return jsonify(output), 200 
 
 
 @api.route('/inscripciones/<id>', methods=['GET'])
@@ -587,6 +613,15 @@ def get_inscripcion(id):
 @api.route('/inscripciones', methods=['POST'])
 def create_inscripcion():
     data = request.get_json()
+    
+    existing_inscripcion = Inscripciones.query.filter_by(
+        usuario_id=data['usuario_id'],
+        evento_id=data['evento_id']
+    ).first()
+    
+    if existing_inscripcion:
+        return jsonify({"message": "El usuario ya está inscrito en este evento."}), 400
+
     new_inscripcion = Inscripciones(
         usuario_id=data['usuario_id'],
         evento_id=data['evento_id'],
@@ -595,13 +630,10 @@ def create_inscripcion():
     db.session.add(new_inscripcion)
     db.session.commit()
 
-    # Devolver el ID y el mensaje en la respuesta
     return jsonify({
-        'message': 'New inscripcion created!',
-        'id': new_inscripcion.id  # Asegúrate de que el ID esté incluido
-    })
-
-
+        'message': 'Nueva inscripción creada!',
+        'id': new_inscripcion.id  
+    }), 201
 
 @api.route('/inscripciones/<id>', methods=['PUT'])
 def update_inscripcion(id):
@@ -620,8 +652,6 @@ def delete_inscripcion(id):
     db.session.delete(inscripcion)
     db.session.commit()
     return jsonify({'message': 'Inscripcion deleted!'})
-
-
 
 @api.route('/upload-image', methods=['POST'])
 @jwt_required()
@@ -679,7 +709,6 @@ def upload_image():
         return jsonify({"error": str(e)}), 500
 
 
-
 @api.route('/fotos/<int:usuario_id>', methods=['GET'])
 def get_fotos(usuario_id):
     usuario = Usuarios.query.get(usuario_id)
@@ -719,7 +748,7 @@ def update_usuario(usuario_id):
     nombre = request.json.get('nombre')
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
-    ubicacion = request.json.get('ubicacion')
+    direccion = request.json.get('direccion')
     breve_descripcion = request.json.get('breve_descripcion')
     foto = request.files.get('foto')
     
@@ -730,8 +759,8 @@ def update_usuario(usuario_id):
         usuario.apellidos = apellidos
     if fecha_nacimiento:
         usuario.fecha_nacimiento = fecha_nacimiento
-    if ubicacion:
-        usuario.ubicacion = ubicacion
+    if direccion:
+        usuario.direccion = direccion
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
     

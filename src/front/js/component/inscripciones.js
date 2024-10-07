@@ -3,14 +3,10 @@ import { Context } from '../store/appContext';
 
 export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripcionId }) => {
     const { actions } = useContext(Context);
-    const [isInscrito, setIsInscrito] = useState(false);
+    const [isInscrito, setIsInscrito] = useState(!!inscripcionId); // Inicializa con true si hay un inscripcionId
 
     useEffect(() => {
-        if (inscripcionId) {
-            setIsInscrito(true);
-        } else {
-            setIsInscrito(false); 
-        }
+        setIsInscrito(!!inscripcionId); // Actualiza el estado cuando cambia el inscripcionId
     }, [inscripcionId]);
 
     const handleInscribirse = async () => {
@@ -18,7 +14,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         if (id) {
             console.log('ID de inscripción:', id);
             setInscripcionId(id);
-            setIsInscrito(true); // Cambiar estado a inscrito
+            setIsInscrito(true);
         } else {
             console.error('No se pudo obtener el ID de inscripción');
         }
@@ -34,7 +30,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         if (result) {
             console.log('Inscripción eliminada con éxito');
             setInscripcionId(null);
-            setIsInscrito(false); // Cambiar estado a no inscrito
+            setIsInscrito(false);
         } else {
             console.log('Error al eliminar la inscripción');
         }
@@ -42,9 +38,12 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
 
     return (
         <div>
-            <button onClick={isInscrito ? handleDesapuntarse : handleInscribirse}>
-                {isInscrito ? 'Desapuntarse' : 'Inscribirse'}
+            <button 
+                className={`btn ${isInscrito ? 'btn-danger' : 'btn-success'} mt-5`} 
+                onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
+            >
+                {isInscrito ? 'Me desapunto' : 'Me apunto'}
             </button>
         </div>
-    ); 
+    );  
 };

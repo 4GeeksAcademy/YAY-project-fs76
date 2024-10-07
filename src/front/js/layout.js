@@ -17,11 +17,14 @@ import { Evento_Form } from "./component/evento_form";
 import { Partners } from "./pages/partners";
 import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
+import { Partner_Eventos } from "./component/partner_eventos";
 import UserInterest from "./component/userInterest";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
 import { Login } from "./component/login";
+import { MapaUsuario } from "./component/mapaUsuario";
+import { NotFound } from "./pages/notFound";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
 import ImageUpload from "./component/imageUpload";
@@ -55,9 +58,11 @@ function Layout() {
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
                         <Route element={<Partners_Home />} path="/partners_home" />
+                        <Route element={<Partner_Eventos />} path="/partners-eventos" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
-                        <Route element={<h1>Not found!</h1>} path="*"/>
+                        <Route element={<MapaUsuario />} path="/mapa" />
+                        <Route element={<NotFound />} path="*"/>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />

@@ -106,7 +106,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-
               createEntidad: async (newEntidades) => {
                 try {
                   const resp = await fetch(`${process.env.BACKEND_URL}/api/entidades`, {
@@ -489,11 +488,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            
-            
-            
-            
-            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
                 try {
                     // Construir la URL de la API usando el userId proporcionado
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -510,7 +505,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                             nombre,
                             apellidos,
                             fecha_nacimiento,
-                            ubicacion,
+                            direccion,
                             breve_descripcion
                         }), 
                     });
@@ -531,7 +526,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, ubicacion, breve_descripcion) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
                 try {
                   
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -548,7 +543,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                       nombre,
                       apellidos,
                       fecha_nacimiento,
-                      ubicacion,
+                      direccion,
                       breve_descripcion
                     }), 
                   });
@@ -643,8 +638,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-             
-
             logout: () => {
                 console.log("Logout desde flux");
                 localStorage.removeItem("auth");
@@ -671,8 +664,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     
                     if (resp.ok) {
                         console.log('Inscripción creada:', data);
-                        console.log('ID de inscripción:', data.id); // Añadir esto para verificar el ID
-                        return data.id; // Asegúrate de que 'data' contenga el ID
+                        return data.id; // Retorna el ID de la inscripción
                     } else {
                         console.log("Error: ", data.message);
                         return null; // O lanza un error si prefieres
@@ -683,28 +675,30 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
         
-            desapuntarse: (inscripcionId) => {
-                fetch(`${process.env.BACKEND_URL}/api/inscripciones/${inscripcionId}`, {
-                    method: 'DELETE',
-                })
-                .then(resp => {
+            desapuntarse: async (inscripcionId) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/inscripciones/${inscripcionId}`, {
+                        method: 'DELETE',
+                    });
                     if (resp.ok) {
                         console.log('Inscripción eliminada');
                         // Actualiza el store para eliminar la inscripción
                         setStore(prevStore => ({
                             ...prevStore,
-                            inscripciones: prevStore.inscripciones.filter(inscripcion => inscripcion.id !== inscripcionId), // Asegúrate de que 'id' sea la propiedad correcta
+                            inscripciones: prevStore.inscripciones.filter(inscripcion => inscripcion.id !== inscripcionId),
                         }));
+                        return true; // Retorna true si la eliminación fue exitosa
                     } else {
-                        return resp.json().then(data => {
-                            console.log("Error: ", data.message);
-                        });
+                        const data = await resp.json();
+                        console.log("Error: ", data.message);
+                        return false; // Retorna false si hubo un error
                     }
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error("Error desapuntando al usuario:", error);
-                });
+                    return false; // Retorna false en caso de error
+                }
             },
+            
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
@@ -915,6 +909,23 @@ const getState = ({ getStore, getActions, setStore }) => {
             
             
     
+            
+            loadEventosConUsuarios: () => {
+                return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Error fetching eventos con usuarios, status: " + resp.status);
+                        }
+                        return resp.json();
+                    })
+                    .then(data => {
+                        console.log(data); 
+                        setStore({ eventos: data });
+                    })
+                    .catch(error => {
+                        console.error("Error loading eventos con usuarios from backend", error);
+                    });
+            },
 
             changeColor: (index, color) => {
                 const store = getStore();

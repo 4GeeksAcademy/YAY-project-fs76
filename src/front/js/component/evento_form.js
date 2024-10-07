@@ -20,7 +20,7 @@ export const Evento_Form = () => {
     });
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
-    const { theid } = useParams(); 
+    const { theid } = useParams();
 
     useEffect(() => {
         // Cargar el evento si el ID está presente
@@ -32,13 +32,13 @@ export const Evento_Form = () => {
                 const mes = new Date(Date.parse(fechaParts[2] + " " + fechaParts[1] + " 1")).getMonth() + 1; // Convertir el mes a número
                 const anio = fechaParts[4];
                 const formattedDate = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`; // Formato 'YYYY-MM-DD'
-    
+
                 setNuevoEvento({
                     ...evento,
                     fecha: formattedDate, // Asignar la fecha formateada
-                    hora_inicio: evento.horario.split(' - ')[0], 
+                    hora_inicio: evento.horario.split(' - ')[0],
                     hora_fin: evento.horario.split(' - ')[1]
-                }); 
+                });
             }
         }
     }, [theid, store.eventos]);
@@ -46,7 +46,7 @@ export const Evento_Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { nombre, fecha, hora_inicio, hora_fin, ciudad, codigo_postal, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
-    
+
         // Validación de campos
         if (!nombre || !fecha || !hora_inicio || !hora_fin || !ciudad || !codigo_postal || !breve_descripcion || !dificultad || !precio || !cupo || !observaciones) {
             if (!alert || alert.type !== 'danger') {
@@ -57,7 +57,7 @@ export const Evento_Form = () => {
             const formattedDate = new Date(fecha).toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
             const formattedStartTime = hora_inicio; // formato 'HH:MM'
             const formattedEndTime = hora_fin; // formato 'HH:MM'
-    
+
             // Crear un nuevo objeto con los datos formateados
             const eventoData = {
                 ...nuevoEvento,
@@ -65,14 +65,14 @@ export const Evento_Form = () => {
                 hora_inicio: formattedStartTime,
                 hora_fin: formattedEndTime,
             };
-    
+
             // Enviar los datos al backend
             if (theid) {
                 // Si theid está presente, actualiza el evento
                 actions.updateEvento(theid, eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento updated successfully' });
                     setTimeout(() => {
-                        navigate('/eventos');
+                        navigate(store.auth ? '/partners-eventos' : '/eventos');
                     }, 1000);
                 });
             } else {
@@ -80,7 +80,7 @@ export const Evento_Form = () => {
                 actions.addEvento(eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento created successfully' });
                     setTimeout(() => {
-                        navigate('/eventos');
+                        navigate(store.auth ? '/partners-eventos' : '/eventos');
                     }, 1000);
                 }, () => {
                     setAlert({ type: 'danger', message: ' Error creating event' });
@@ -151,8 +151,10 @@ export const Evento_Form = () => {
                 <div className="d-grid gap-2">
                     <button type="submit" className="btn btn-primary w-100">Guardar</button>
                 </div>
-                <Link to="/eventos">o volver a la lista de eventos</Link>
-                
+                <Link to={store.auth ? "/partners-eventos" : "/eventos"}>
+                    o volver a la lista de eventos
+                </Link>
+
             </form>
         </>
     );

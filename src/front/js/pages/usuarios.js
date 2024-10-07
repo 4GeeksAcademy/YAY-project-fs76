@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React from "react";
 
 import { Signup } from "../component/signup";
 import { Login } from "../component/login";
@@ -8,7 +7,6 @@ import "../../styles/home.css";
 
 
 export const Usuarios = () => {
-    const { store, actions } = useContext(Context);
 
     return (
         <>
