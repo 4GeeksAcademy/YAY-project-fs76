@@ -3,10 +3,25 @@ import { Context } from "../store/appContext";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+import "../../styles/loading.css";
+
 export const NotFound = () => {
-
+    const { store, actions } = useContext(Context);
+    const [redirect, setRedirect] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
+    useEffect(() => {
+        const redirectTimeout = setTimeout(() => {
+            setRedirect(true);
+        }, 3000);
+
+        return () => clearTimeout(redirectTimeout);
+    }, []);
+
+    if (redirect) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <>
@@ -24,18 +39,16 @@ export const NotFound = () => {
             }}></div>
             <div className="container text-center">
                 <div className="row align-items-start mt-5">
-                    <div className="col">
-
-                    </div>
+                    <div className="col"></div>
                     <div className="col-10">
-                        <h2 className="display-6 mb-4"><b>Ups!Aquí no era</b></h2>
-                        <Link to="/interes">
-                            <button className="btn btn-success me-3 mb-4">Volver a casa</button>
+                        <h2 className="display-6 mb-4"><b>Ups! Aquí no era</b></h2>
+                        <Link to="/">
+                            <button className="btn btn-warning btn-lg mx-auto mb-4 border border-black">Volver a casa</button>
                         </Link>
+                        <br></br>
+                        <div className="loader mx-auto "></div>
                     </div>
-                    <div className="col">
-
-                    </div>
+                    <div className="col"></div>
                 </div>
             </div>
         </>
