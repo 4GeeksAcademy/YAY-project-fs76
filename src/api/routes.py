@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import Imagenes, db, User, Intereses, Eventos, Entidad, Partners, Usuarios , Inscripciones
+from api.models import db, User, Intereses, Eventos, Entidad, Partners,Usuarios,Inscripciones,UsuariosIntereses,Imagenes
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -598,6 +598,7 @@ def get_inscripciones():
     
     return jsonify(output), 200 
 
+
 @api.route('/inscripciones/<id>', methods=['GET'])
 def get_inscripcion(id):
     inscripcion = Inscripciones.query.get_or_404(id)
@@ -910,7 +911,6 @@ def delete_perfil_image(usuario_id, public_id):
             return jsonify({"ERROR": str(e)}), 500
     else:
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
-
 
 
 

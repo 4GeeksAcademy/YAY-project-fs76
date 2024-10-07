@@ -884,6 +884,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
+
+            getUserInscripciones: async (userId) => {
+                try {
+                    const response = await fetch(`{process.env.BACKEND_URL}/inscripciones/{userId}`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            // Incluir token o cualquier otra cabecera necesaria si aplica
+                        },
+                    });
+            
+                    if (!response.ok) {
+                        throw new Error("Error fetching inscripciones");
+                    }
+            
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error("Error fetching user inscripciones:", error);
+                    return null;
+                }
+            },
+            
+            
+    
             
             loadEventosConUsuarios: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')

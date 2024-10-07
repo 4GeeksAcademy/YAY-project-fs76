@@ -31,6 +31,9 @@ export const Navbar = () => {
 					<Link to="/interes">
 						<button className="btn btn-primary me-3">Lista de Intereses</button>
 					</Link>
+                    {/* <Link to="/userInterest">
+                        <button className="btn btn-primary me-3">Intereses usuario</button>
+                    </Link> */}
 					<Link to="/entidades">
 						<button className="btn btn-primary me-3">Lista de Entidades</button>
 					</Link>

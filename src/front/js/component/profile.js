@@ -3,15 +3,21 @@ import { Context } from "../store/appContext";
 import { useParams, Link } from "react-router-dom"; 
 import GetUserImages from "./getUserImagens";
 import GetUserPerfilImage from "./getUserPerfilImage";
+import UserInterest from "./userInterest";
 
 const Profile = () => {
     const { store, actions } = useContext(Context);
     const { userId } = useParams();
-    const [profile, setProfile] = useState({});
+    const [profile, setProfile] = useState({
+        selectedInterests: [], 
+      });
 
+    const handleInterestSelect = (selectedInterests) => {
+        setProfile((prevProfile) => ({ ...prevProfile, selectedInterests }));
+        localStorage.setItem('selectedInterests', JSON.stringify(selectedInterests));
+    };
 
     useEffect(() => {
-       
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
 
         if (idToUse) {
@@ -19,6 +25,10 @@ const Profile = () => {
                 .then((data) => {
                     if (data) {
                         setProfile(data);
+                        const storedInterests = localStorage.getItem('selectedInterests');
+                        if (storedInterests) {
+                            setProfile((prevProfile) => ({ ...prevProfile, selectedInterests: JSON.parse(storedInterests) }));
+                        }
                     } else {
                         console.error("No se pudo obtener el perfil");
                     }
@@ -30,8 +40,7 @@ const Profile = () => {
             console.error("No se proporcionó userId");
         }
     }, [userId, store.user_id]);
-
-   
+    
     return (
         <div>
             <h2>Perfil del usuario</h2>
@@ -48,15 +57,17 @@ const Profile = () => {
                             <Link to={`/editProfile/${userId}`}>
                                 <button>Editar perfil</button>
                             </Link>
-                            <Link to="/eventos">
-						<button className="btn btn-primary ms-3">Lista de Eventos</button>
-					</Link>
+                            {/* Vincula el botón de inscripciones */}
+                            <Link to={`/inscripciones/${userId}`}>
+                                <button>Tus eventos</button>
+                            </Link>
                         </div>
                         <div>
                             {/* Pasa el userId como prop */}
                             <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
                         </div>
                     </div>
+                    <UserInterest />
                 </>
             ) : (
                 <p>Cargando perfil...</p>

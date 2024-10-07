@@ -18,6 +18,7 @@ import { Partners } from "./pages/partners";
 import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
 import { Partner_Eventos } from "./component/partner_eventos";
+import UserInterest from "./component/userInterest";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
@@ -30,13 +31,10 @@ import ImageUpload from "./component/imageUpload";
 import ProfilePicture from "./component/profilePicture";
 import Profile from "./component/profile";
 import EditProfile from "./component/editProfile";
+import UserInscripciones from "./component/userInscripciones";
 
-
-
-//create your first component
 function Layout() {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
+ 
     const basename = process.env.BASENAME || "";
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
@@ -51,6 +49,7 @@ function Layout() {
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Intereses />} path="/interes" />
                         <Route element={<Eventos />} path="/eventos" />
+                        <Route element={<UserInterest/>} path="/userInterest" />
                         <Route element={<Evento_Card />} path="/evento/:theid" />
                         <Route element={<Evento_Form />} path="/formulario-evento" />
                         <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
@@ -72,7 +71,7 @@ function Layout() {
                         <Route path="/profilePicture" element={<ProfilePicture />} />
                         <Route path="/profile/:userId" element={<Profile />} />
                         <Route path="/editProfile/:userId" element={<EditProfile />} />
-
+                        <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
