@@ -39,7 +39,7 @@ export const Partner_Signup = () => {
 
     return (
         <>
-            {store.partnerId ? <Navigate to={`/partner_completar_perfil/${store.partnerId}`} /> :
+            {store.ƒ ? <Navigate to={`/partner_completar_perfil/${store.partnerId}`} /> :
                 <form className="container h-100 d-flex flex-column align-items-start my-5" onSubmit={handleSignup}>
                     <div className="card p-5">
                         <h1 className="singup mb-4">Regístrate como Partner</h1>

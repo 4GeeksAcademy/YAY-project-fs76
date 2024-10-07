@@ -885,7 +885,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            
+            loadEventosConUsuarios: () => {
+                return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Error fetching eventos con usuarios, status: " + resp.status);
+                        }
+                        return resp.json();
+                    })
+                    .then(data => {
+                        console.log(data); 
+                        setStore({ eventos: data });
+                    })
+                    .catch(error => {
+                        console.error("Error loading eventos con usuarios from backend", error);
+                    });
+            },
 
             changeColor: (index, color) => {
                 const store = getStore();

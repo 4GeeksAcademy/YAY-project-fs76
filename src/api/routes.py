@@ -96,7 +96,7 @@ def delete_entidad(id):
 @api.route('/interes', methods=['GET', 'POST'])
 def handle_intereses():
     if request.method == 'GET':
-        # Obtener todos los intereses
+
         intereses = Intereses.query.all()
         all_intereses = [interes.serialize() for interes in intereses]
         return jsonify(all_intereses), 200
@@ -178,6 +178,23 @@ def add_evento():
     db.session.commit()
 
     return jsonify(nuevo_evento.serialize()), 200
+
+@api.route('/eventos/con-usuarios', methods=['GET'])
+def get_eventos_con_usuarios():
+    eventos = Eventos.query.all()
+    output = []
+    
+    for evento in eventos:
+        inscripciones = Inscripciones.query.filter_by(evento_id=evento.id).all()
+        usuario_ids = [inscripcion.usuario_id for inscripcion in inscripciones]
+        usuarios = Usuarios.query.filter(Usuarios.id.in_(usuario_ids)).all()
+        usuarios_nombres = [usuario.nombre for usuario in usuarios]
+        
+        evento_data = evento.serialize()
+        evento_data['usuarios'] = usuarios_nombres 
+        output.append(evento_data)
+    
+    return jsonify(output), 200
 
 @api.route('/eventos/<int:evento_id>', methods=['GET'])
 def get_evento(evento_id):
