@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: acc61ea2ae32
+Revision ID: 3dce0116bf65
 Revises: 
-Create Date: 2024-10-04 16:53:26.452177
+Create Date: 2024-10-06 15:05:18.706146
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'acc61ea2ae32'
+revision = '3dce0116bf65'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -60,6 +60,8 @@ def upgrade():
     sa.Column('nombre', sa.String(length=120), nullable=True),
     sa.Column('apellidos', sa.String(length=120), nullable=True),
     sa.Column('ciudad', sa.String(length=120), nullable=True),
+    sa.Column('foto', sa.String(length=255), nullable=False),
+    sa.Column('foto_perfil', sa.String(length=255), nullable=False),
     sa.Column('fecha_nacimiento', sa.Date(), nullable=True),
     sa.Column('breve_descripcion', sa.String(length=255), nullable=True),
     sa.Column('codigo_postal', sa.String(length=10), nullable=True),
@@ -68,6 +70,15 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
+    )
+    op.create_table('imagenes',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('url', sa.String(length=255), nullable=False),
+    sa.Column('public_id', sa.String(length=255), nullable=False),
+    sa.Column('usuario_id', sa.Integer(), nullable=False),
+    sa.Column('es_perfil', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['usuario_id'], ['usuarios.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('inscripciones',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -108,6 +119,7 @@ def downgrade():
     op.drop_table('usuarios_intereses')
     op.drop_table('partners')
     op.drop_table('inscripciones')
+    op.drop_table('imagenes')
     op.drop_table('usuarios')
     op.drop_table('user')
     op.drop_table('intereses')

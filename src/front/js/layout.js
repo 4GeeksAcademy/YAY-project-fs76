@@ -24,12 +24,14 @@ import { Footer } from "./component/footer";
 import { Login } from "./component/login";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
+import ImageUpload from "./component/imageUpload";
+import ProfilePicture from "./component/profilePicture";
+import Profile from "./component/profile";
+import EditProfile from "./component/editProfile";
+import UserInscripciones from "./component/userInscripciones";
 
-
-//create your first component
-const Layout = () => {
-    //the basename is used when your project is published in a subdirectory and not in the root of the domain
-    // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
+function Layout() {
+ 
     const basename = process.env.BASENAME || "";
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
@@ -55,16 +57,22 @@ const Layout = () => {
                         <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
-                        {/* <Route element={<h1>Not found!</h1>} path="*" /> */}
+                        <Route element={<h1>Not found!</h1>} path="*"/>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
+                        <Route path="/imageUpload" element={<ImageUpload />} />
+                        <Route path="/editProfile" element={<EditProfile />} />
+                        <Route path="/profilePicture" element={<ProfilePicture />} />
+                        <Route path="/profile/:userId" element={<Profile />} />
+                        <Route path="/editProfile/:userId" element={<EditProfile />} />
+                        <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>
         </div>
     );
-};
+}
 
 export default injectContext(Layout);

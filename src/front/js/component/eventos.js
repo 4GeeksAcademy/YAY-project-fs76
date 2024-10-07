@@ -19,7 +19,7 @@ export const Eventos = () => {
         setApuntados((prevApuntados) => ({ ...prevApuntados, [eventoId]: true }));
 
         const userId = store.currentUser?.id; 
-        fetch('https://fantastic-happiness-7vrv7r46p4wj2xp6v-3001.app.github.dev/api/inscripciones', {
+        fetch('process.env.BACKEND_URL + "/api/inscripciones', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

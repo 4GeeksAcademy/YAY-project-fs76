@@ -13,6 +13,7 @@ const UserInterest = () => {
   ]); // store the list of interests
   const [selectedInterests, setSelectedInterests] = useState([]); 
   const [columns, setColumns] = useState(2); 
+    const storedInterests = localStorage.getItem('selectedInterests');
 
   const handleInterestSelect = (interestId) => {
     const isSelected = selectedInterests.includes(interestId);
@@ -21,6 +22,7 @@ const UserInterest = () => {
     } else {
       setSelectedInterests([...selectedInterests, interestId]);
     }
+    props.onInterestSelect(selectedInterests);
   };
 
   const chunkInterests = () => {
