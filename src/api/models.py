@@ -24,7 +24,7 @@ class Entidad(db.Model):
     __tablename__ = 'entidades' 
     id = db.Column(db.Integer, primary_key=True)
     tipo = db.Column(db.String(50), nullable=True)
-    db.relationship('Eventos', backref='entidad', lazy=True)  
+    db.relationship('Partners', backref='entidad', lazy=True)  
 
     def __repr__(self):
         return f'<Entidad {self.tipo}>'
@@ -49,22 +49,23 @@ class Intereses(db.Model):
             "descripcion": self.descripcion,
         }
 
-class Eventos (db.Model):
+class Eventos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), nullable=False)
-    fecha = db.Column(db.Date, nullable=False)
-    hora_inicio = db.Column(db.Time, nullable=False)
-    hora_fin = db.Column(db.Time, nullable=False) 
-    ciudad = db.Column(db.String(120), nullable=False)
-    codigo_postal = db.Column(db.Integer, nullable=False)
-    breve_descripcion = db.Column(db.String(120), nullable=False)
-    accesibilidad = db.Column(db.Boolean(120), nullable=False)
-    dificultad = db.Column(db.String(120), nullable=False)
-    precio = db.Column(db.Integer, nullable=False)
-    cupo = db.Column(db.Integer, nullable=False)
-    observaciones = db.Column(db.String(120), nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    db.relationship('Inscripciones', backref='eventos', lazy=True)
+    fecha = db.Column(db.Date, nullable=True)
+    hora_inicio = db.Column(db.Time, nullable=True)
+    hora_fin = db.Column(db.Time, nullable=True) 
+    ciudad = db.Column(db.String(120), nullable=True)
+    codigo_postal = db.Column(db.Integer, nullable=True)
+    breve_descripcion = db.Column(db.String(120), nullable=True)
+    accesibilidad = db.Column(db.Boolean(), nullable=True)
+    dificultad = db.Column(db.String(120), nullable=True)
+    precio = db.Column(db.Integer, nullable=True)
+    cupo = db.Column(db.Integer, nullable=True)
+    observaciones = db.Column(db.String(120), nullable=True)
+    is_active = db.Column(db.Boolean(), default=True, nullable=False)
+    partner_id = db.Column(db.Integer, db.ForeignKey('partners.id'), nullable=True)
+    partner = db.relationship('Partners', backref='eventos', lazy=True)
 
     def __repr__(self):
         return f'<Eventos {self.nombre}>'
@@ -76,14 +77,17 @@ class Eventos (db.Model):
             9: "Septiembre", 10: "Octubre", 11: "Noviembre", 12: "Diciembre"
         }
         
-        mes = meses[self.fecha.month]
-        fecha_formateada = f"{self.fecha.day} de {mes} de {self.fecha.year}"
+        if self.fecha is None:
+            fecha_formateada = "Fecha no disponible"
+        else:
+            mes = meses[self.fecha.month]
+            fecha_formateada = f"{self.fecha.day} de {mes} de {self.fecha.year}"
 
         return {
             "id": self.id,
             "nombre": self.nombre,
             "fecha": fecha_formateada,
-            "horario": f"{self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}",
+            "horario": f"{self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}" if self.hora_inicio and self.hora_fin else "Horario no disponible",
             "ciudad": self.ciudad,
             "codigo_postal": self.codigo_postal,
             "breve_descripcion": self.breve_descripcion,
@@ -92,6 +96,7 @@ class Eventos (db.Model):
             "precio": self.precio,
             "cupo": self.cupo,
             "observaciones": self.observaciones,
+            "partner_id": self.partner_id
         }
 
 class Partners(db.Model):
@@ -105,6 +110,7 @@ class Partners(db.Model):
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     entidad_id = db.Column(db.Integer, db.ForeignKey('entidades.id'))
     tipo_entidad = db.relationship('Entidad')
+    db.relationship('Eventos', backref='partners', lazy=True)  
 
     def __repr__(self):
         return f'<Partners {self.email}>'
