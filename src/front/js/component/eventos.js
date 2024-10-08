@@ -55,6 +55,7 @@ export const Eventos = () => {
                             <Inscripciones
                                 usuarioId={actions.getUserId()}
                                 eventoId={evento.id}
+                                nombreEvento={evento.nombre}
                                 inscripcionId={inscripcionIds[evento.id]} // Pasa el inscripcionId específico para el evento
                                 setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)} // Actualiza el inscripcionId para el evento específico
                             />
