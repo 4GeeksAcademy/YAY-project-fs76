@@ -9,13 +9,18 @@ export const Eventos = () => {
     const [inscripcionIds, setInscripcionIds] = useState({}); // Cambia a un objeto para manejar múltiples inscripciones
 
     useEffect(() => {
-        actions.loadEventos().then(() => {
-            setLoading(false);
-        });
-    }, [actions.loadEventos]);
+        actions.loadEventosConUsuarios()
+            .then(() => setLoading(false))
+            .catch(err => {
+                setLoading(false);
+                setError("Error al cargar eventos");
+            });
+    }, [actions.loadEventosConUsuarios]);
+
 
     const setInscripcionIdForEvento = (eventoId, id) => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+        console.log('Inscripcion IDs:', inscripcionIds);
     };
 
     return (
@@ -47,18 +52,8 @@ export const Eventos = () => {
                             </ul>
                         </div>
                         <div className="d-flex justify-content-end align-items-start">
-                            {/* <Link to={`/formulario-evento/${evento.id}`}>
-                                <button className="btn btn-icon">
-                                    <i className="fa-solid fa-pencil" />
-                                </button>
-                            </Link> */}
-                            {/* <button className="btn btn-icon" onClick={() => {
-                                actions.deleteEvento(evento.id);
-                            }}>
-                                <i className="fa-solid fa-trash" />
-                            </button> */}
                             <Inscripciones
-                                usuarioId={1}
+                                usuarioId={actions.getUserId()}
                                 eventoId={evento.id}
                                 inscripcionId={inscripcionIds[evento.id]} // Pasa el inscripcionId específico para el evento
                                 setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)} // Actualiza el inscripcionId para el evento específico

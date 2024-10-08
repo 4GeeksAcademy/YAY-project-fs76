@@ -16,9 +16,9 @@ export const Home = () => {
 			backgroundColor: '#de8f79',
 			zIndex: -1
 		}}></div>
-			<div className="text-center my-5">
-				<h1>Bienvenido/a a <b>YAY</b></h1>
-			</div>
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '75vh'}}>
+        <h1 className="text-center" style={{ fontSize: '100px', color: '#7c488f' }}>Bienvenido/a a <b>YAY</b></h1>
+      </div>
 		</>
 	);
 };

@@ -11,8 +11,8 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
 
     const handleInscribirse = async () => {
         const id = await actions.inscribirse(usuarioId, eventoId);
+        console.log('ID devuelto de inscribirse:', id); // Verifica el ID devuelto
         if (id) {
-            console.log('ID de inscripción:', id);
             setInscripcionId(id);
             setIsInscrito(true);
         } else {
