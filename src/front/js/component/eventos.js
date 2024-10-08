@@ -6,8 +6,9 @@ import { Inscripciones } from "./inscripciones";
 export const Eventos = () => {
     const { store, actions } = useContext(Context);
     const [loading, setLoading] = useState(true);
-    const [inscripcionIds, setInscripcionIds] = useState({}); // Cambia a un objeto para manejar múltiples inscripciones
-
+    const [inscripcionIds, setInscripcionIds] = useState({}); 
+    const [error, setError] = useState(null);
+    
     useEffect(() => {
         actions.loadEventosConUsuarios()
             .then(() => setLoading(false))
@@ -16,7 +17,6 @@ export const Eventos = () => {
                 setError("Error al cargar eventos");
             });
     }, [actions.loadEventosConUsuarios]);
-
 
     const setInscripcionIdForEvento = (eventoId, id) => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
@@ -36,18 +36,18 @@ export const Eventos = () => {
                                 style={{ height: '100%', maxHeight: '100px' }}
                             />
                             <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
-                                <li className="fs-3 ">{evento.nombre}</li>
+                                <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                 <li className="text-muted fs-5">
-                                    <i className="fa-solid fa-calendar-days"></i> {evento.fecha}
+                                    <i className="fa-solid fa-calendar-days"  style={{ color: '#7c488f' }}></i> {evento.fecha}
                                 </li>
                                 <li className="text-muted fs-6">
-                                    <i className="fa-solid fa-clock"></i> {evento.horario}
+                                    <i className="fa-solid fa-clock"  style={{ color: '#7c488f' }}></i> {evento.horario}
                                 </li>
                                 <li className="text-muted fs-7">
-                                    <i className="fa-solid fa-location-dot"></i>  {evento.ciudad}
+                                    <i className="fa-solid fa-location-dot"  style={{ color: '#7c488f' }}></i>  {evento.ciudad}
                                 </li>
                                 <li>
-                                    <Link to={`/evento/${evento.id}`} className="btn btn-sm btn-primary">Saber más</Link>
+                                <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Saber más</Link>
                                 </li>
                             </ul>
                         </div>
@@ -56,16 +56,14 @@ export const Eventos = () => {
                                 usuarioId={actions.getUserId()}
                                 eventoId={evento.id}
                                 nombreEvento={evento.nombre}
-                                inscripcionId={inscripcionIds[evento.id]} // Pasa el inscripcionId específico para el evento
-                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)} // Actualiza el inscripcionId para el evento específico
+                                inscripcionId={inscripcionIds[evento.id]} 
+                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
                             />
                         </div>
                     </li>
                 ))}
             </ul>
-            <Link to="/">
-                <button className="btn btn-primary mt-5">Back home</button>
-            </Link>
+
         </div>
     );
 };

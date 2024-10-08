@@ -5,3 +5,11 @@
     one more css for each page that will contain the selected used 
     on that page only (the ones not reused in other pages).
 */
+
+.btn {
+    transition: transform 0.2s; /* Transición suave */
+}
+
+.btn:hover {
+    transform: scale(1.03); /* Aumenta el tamaño al pasar el mouse */
+}

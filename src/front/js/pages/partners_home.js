@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import { Partner_Eventos } from "../component/partner_eventos";
+import { Navigate } from "react-router-dom";
 import "../../styles/home.css";
 
 
