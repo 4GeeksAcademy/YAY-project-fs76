@@ -645,6 +645,24 @@ def update_inscripcion(id):
     db.session.commit()
     return jsonify({'message': 'Inscripcion updated!'})
 
+@api.route('/inscripciones/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_inscripciones_por_usuario(user_id):
+    inscripciones = Inscripciones.query.filter_by(usuario_id=user_id).all()
+    output = []
+    for inscripcion in inscripciones:
+        inscripcion_data = {
+            'id': inscripcion.id,
+            'evento_id': inscripcion.evento_id,
+            'fecha_registro': inscripcion.fecha_registro
+        }
+        output.append(inscripcion_data)
+    
+    if not output:
+        return jsonify({"message": "No hay inscripciones para este usuario."}), 404
+    
+    return jsonify(output), 200
+
 
 @api.route('inscripciones/<id>', methods=['DELETE'])
 def delete_inscripcion(id):
@@ -652,6 +670,7 @@ def delete_inscripcion(id):
     db.session.delete(inscripcion)
     db.session.commit()
     return jsonify({'message': 'Inscripcion deleted!'})
+
 
 @api.route('/upload-image', methods=['POST'])
 @jwt_required()

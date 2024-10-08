@@ -50,6 +50,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                 localStorage.setItem("user_id", user_id);
             },
 
+            getUserId: () => {
+                const store = getStore(); // Obtiene el estado global
+                return store.user_id; // Retorna el user_id almacenado
+            },
+
             // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
@@ -648,6 +653,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             inscribirse: async (usuarioId, eventoId) => {
                 try {
+                    console.log(usuarioId, eventoId) 
                     const resp = await fetch(`${process.env.BACKEND_URL}/api/inscripciones`, {
                         method: 'POST',
                         headers: {
@@ -886,12 +892,14 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             getUserInscripciones: async (userId) => {
+                const token = localStorage.getItem('token');
                 try {
-                    const response = await fetch(`{process.env.BACKEND_URL}/inscripciones/{userId}`, {
+                    const response = await fetch(`${process.env.BACKEND_URL}/inscripciones/${userId}`, {                       
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
-                            // Incluir token o cualquier otra cabecera necesaria si aplica
+                            "Authorization": `Bearer ${token}`
+           
                         },
                     });
             
@@ -907,9 +915,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            
-    
-            
+
             loadEventosConUsuarios: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
                     .then(resp => {

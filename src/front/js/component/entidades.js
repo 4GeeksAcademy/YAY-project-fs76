@@ -44,10 +44,14 @@ export const Entidades = () => {
             value={newEntity.tipo}
             onChange={(e) => setNewEntity({ tipo: e.target.value })}
           >
-            <option value="">Seleccione un tipo</option>
-            <option value="Privado">Privado</option>
-            <option value="Público">Público</option>
-            <option value="ONG">ONG</option>
+            <option value="" disabled >Seleccione una entidad</option>
+            <option value="Empresa Privada">Empresa Privada</option>
+            <option value="Organismo Público">Organismo Público</option>
+            <option value="Asociación sin ánimo de lucro">Asociación sin ánimo de lucro</option>
+            <option value="Agrupación social y/o comunitaria">Agrupación social y/o comunitaria</option>
+            <option value="Autónomo/a">Autónomo/a</option>
+            <option value="Voluntario/a">Voluntario/a</option>
+
           </select>
           <button className="btn btn-primary" onClick={handleCreateEntity}>
             Crear
@@ -63,9 +67,13 @@ export const Entidades = () => {
                       value={tipo[entidad.id] || entidad.tipo}
                       onChange={(e) => setTipo({ ...tipo, [entidad.id]: e.target.value })}
                     >
-                      <option value="Privado">Privado</option>
-                      <option value="Público">Público</option>
-                      <option value="ONG">ONG</option>
+                      <option value="Empresa Privada">Empresa Privada</option>
+                      <option value="Organismo Público">Organismo Público</option>
+                      <option value="Asociación sin ánimo de lucro">Asociación sin ánimo de lucro</option>
+                      <option value="Agrupación social y/o comunitaria">Agrupación social y/o comunitaria</option>
+                      <option value="Autónomo/a">Autónomo/a</option>
+                      <option value="Voluntario/a">Voluntario/a</option>
+
                     </select>
                     <button className="btn btn-primary" onClick={() => handleSave(entidad.id)}>
                       Guardar

@@ -10,27 +10,18 @@ const UserInscripciones = () => {
     useEffect(() => {
 
         const fetchInscripciones = async () => {
-    
             try {
-    
                 const response = await actions.getUserInscripciones(userId);
     
                 if (!response.ok) {
-    
                     throw new Error('Error fetching user inscripciones');
-    
                 }
-    
                 const result = await response.json();
-    
+
                 if (result) {
-    
                     setInscripciones(result.inscripciones);
-    
                 } else {
-    
                     console.error("No se pudieron obtener las inscripciones");
-    
                 }
             } catch (error) {
                 console.error('Error fetching user inscripciones:', error);
