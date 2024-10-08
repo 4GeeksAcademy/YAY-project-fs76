@@ -39,9 +39,9 @@ export const Navbar = () => {
 					{/* <Link to="/userInterest">
                         <button className="btn btn-primary me-3">Intereses usuario</button>
                     </Link> */}
-					<Link to="/entidades">
+					{/* <Link to="/entidades">
 					<button className="btn me-3 text-light" style={{backgroundColor: '#7c488f'}}>Lista de Entidades</button>
-					</Link>
+					</Link> */}
 					{/* <Link to="/eventos">
 						<button className="btn btn-primary me-3">Lista de Eventos</button>
 					</Link> */}
