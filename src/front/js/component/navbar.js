@@ -62,6 +62,7 @@ export const Navbar = () => {
 						<button
 							className="btn btn-info me-3"
 							onClick={() => navigate(`/profile/${userId}`)}
+							style={{backgroundColor: '#A7D0CD'}}
 						>
 							Mi Perfil
 						</button>
