@@ -8,12 +8,13 @@ import "../../styles/home.css";
 
 export const Partners_Home = () => {
 	const { store, actions } = useContext(Context);
+	const userId = localStorage.getItem("user_id");
 
-	// const isAuthenticated = store.auth;
+	const isAuthenticated = store.auth;
 
-	// if (!isAuthenticated) {
-	// 	return <Navigate to="/" />;
-	// }
+	if (!isAuthenticated || userId) {
+		return <Navigate to="/" />;
+	}
 
 	return (
 		<>		

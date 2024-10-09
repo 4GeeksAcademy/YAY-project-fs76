@@ -16,9 +16,9 @@ export const Partner_Eventos = () => {
     const [eventoAEliminar, setEventoAEliminar] = useState(null);
     const [showModalWarning, setShowModalWarning] = useState(false);
 
-    // if (!isAuthenticated) {
-    //     return <Navigate to="/notFound" />;
-    // }
+    if (!isAuthenticated) {
+        return <Navigate to="/notFound" />;
+    }
 
     useEffect(() => {
         actions.loadEventosConUsuarios()
@@ -90,18 +90,18 @@ export const Partner_Eventos = () => {
                                         <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.ciudad}
                                     </li>
                                     <li>
-                                        <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Saber más</Link>
+                                        <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Ver detalles</Link>
                                     </li>
                                 </ul>
                             </div>
                             <div className="d-flex justify-content-end align-items-start">
                                 <button className="btn btn-icon"
                                     onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabindex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabindex="-1"/>
+                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabindex="-1" />
                                 </button>
 
                                 <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabindex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabindex="-1"/>
+                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabindex="-1" />
                                 </button>
                             </div>
                             <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
@@ -122,8 +122,8 @@ export const Partner_Eventos = () => {
                                                 </div>
                                             ))}
                                             {evento.usuarios.length > 4 && (
-                                                <div
-                                                    className="mb-1"
+                                                <button
+                                                    className="btn mb-1"
                                                     style={{
                                                         display: 'flex',
                                                         alignItems: 'center',
@@ -138,7 +138,7 @@ export const Partner_Eventos = () => {
                                                     onClick={() => handleShowModal(evento.usuarios)}
                                                 >
                                                     +{evento.usuarios.length - 4}
-                                                </div>
+                                                </button>
                                             )}
                                         </>
                                     ) : (

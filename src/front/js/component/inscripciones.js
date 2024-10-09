@@ -43,7 +43,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
     return (
         <div>
             <button
-                className="btn mt-5 text-black"
+                className="btn text-black btn-lg"
                 style={{ backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD', color: '#494949' }} 
                 onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
             >

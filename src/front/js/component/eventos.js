@@ -51,7 +51,8 @@ export const Eventos = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className="d-flex justify-content-end align-items-start">
+                        <div className="d-flex justify-content-end align-items-start mt-5">
+                            
                             <Inscripciones
                                 usuarioId={actions.getUserId()}
                                 eventoId={evento.id}

@@ -2,31 +2,39 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Inscripciones } from "./inscripciones";
 
 export const Evento_Card = () => {
     const { store, actions } = useContext(Context);
+        const [inscripcionIds, setInscripcionIds] = useState({});
 
     const params = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.loadEventos();
+        actions.loadEventosConUsuarios()
+
     }, []);
 
     const evento = store.eventos.find((evento) => evento.id === parseInt(params.theid));
+    const inscripcion = evento && store.inscripciones.find((inscripcion) => inscripcion.eventoId === evento.id && inscripcion.usuarioId === actions.getUserId());
+    console.log(inscripcion)
 
-
+    const setInscripcionIdForEvento = (eventoId, id) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+        console.log('Inscripcion IDs:', inscripcionIds);
+    };
 
     return (
         <>
             {evento ? (
                 <div className="container w-100 d-flex justify-content-center">
-                    <div className="card my-5 d-flex flex-row w-100" key={evento.id}>
+                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ borderColor: '#ffc107' }}>
                         <div className="profile me-3 col-6">
-                            <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75" />
+                            <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75 m-4" />
                         </div>
-                        <div className="my-5">
-                            <h4 className="mb-2">{evento.nombre}</h4>
+                        <div className="my-5 w-100">
+                            <h2 className="mb-3" style={{ color: '#7c488f' }}>{evento.nombre}</h2>
                             <span className="text-muted d-block mb-3">
                                 <b>Fecha</b>: {evento.fecha}
                             </span>
@@ -55,20 +63,17 @@ export const Evento_Card = () => {
                                 <b>Descripción</b>: {evento.breve_descripcion}
                             </span>
 
-
-                            <div className="d-flex justify-content-start align-items-end">
-                                <Link to={`/formulario-evento/${evento.id}`}>
-                                    <button className="btn btn-icon">
-                                        <i className="fa-solid fa-pencil" />
-                                    </button>
-                                </Link>
-                                <button className="btn btn-icon" onClick={() => {
-                                    actions.deleteEvento(evento.id);
-                                }}>
-                                    <i className="fa-solid fa-trash" />
-                                </button>
-                                <Link to={store.auth ? "/partners-eventos" : "/eventos"}>
-                                    <button className="btn btn-sm btn-primary">Volver atrás</button>
+                            <div className="d-flex justify-content-between align-items-end">
+                            <Inscripciones
+                            className='mt-3'
+                                usuarioId={actions.getUserId()}
+                                eventoId={evento.id}
+                                nombreEvento={evento.nombre}
+                                inscripcionId={inscripcionIds[evento.id]} 
+                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
+                            />
+                                <Link to={store.auth ? "/eventos" : "/eventos"}>
+                                    <button className="btn btn-secondary me-5 mt-3">Volver atrás</button>
                                 </Link>
                             </div>
                         </div>
