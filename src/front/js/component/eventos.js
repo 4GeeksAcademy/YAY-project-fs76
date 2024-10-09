@@ -11,15 +11,15 @@ export const Eventos = () => {
     
     useEffect(() => {
         actions.loadEventosConUsuarios()
-            .then(() => setLoading(false))
+            .then(() => setLoading(false), actions.loadInscripciones())
             .catch(err => {
                 setLoading(false);
                 setError("Error al cargar eventos");
             });
     }, [actions.loadEventosConUsuarios]);
 
-    const setInscripcionIdForEvento = (eventoId, id) => {
-        setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+    const setInscripcionIdForEvento = (eventoId, id, userId) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id, [userId]: id }));
         console.log('Inscripcion IDs:', inscripcionIds);
     };
 
@@ -51,13 +51,14 @@ export const Eventos = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className="d-flex justify-content-end align-items-start">
+                        <div className="d-flex justify-content-end align-items-start mt-5">
+                            
                             <Inscripciones
                                 usuarioId={actions.getUserId()}
                                 eventoId={evento.id}
                                 nombreEvento={evento.nombre}
                                 inscripcionId={inscripcionIds[evento.id]} 
-                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
+                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id, actions.getUserId())}
                             />
                         </div>
                     </li>

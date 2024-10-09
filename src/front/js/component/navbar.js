@@ -61,13 +61,13 @@ export const Navbar = () => {
 						<button
 							className="btn me-3"
 							onClick={() => navigate(`/profile/${userId}`)}
-							style={{ backgroundColor: '#A7D0CD', color: '#646464' }}
+							style={{ backgroundColor: '#A7D0CD', color: '#494949' }}
 						>
 							Mi Perfil
 						</button>
 					)}
 					{store.auth && userId && (
-						<button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#A7D0CD', color: '#646464' }}>
+						<button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>
 							Eventos Disponibles
 						</button>
 					)}

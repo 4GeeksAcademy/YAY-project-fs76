@@ -2,16 +2,29 @@ import React, { useState, useContext, useEffect } from "react";
 import { Context } from '../store/appContext';
 
 export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripcionId, nombreEvento }) => {
-    const { actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
     const [isInscrito, setIsInscrito] = useState(inscripcionId);
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        setIsInscrito(inscripcionId); 
-    }, [inscripcionId]);
+        const inscripcion = store.inscripciones.find(ins => ins.evento_id === eventoId && ins.usuario_id === usuarioId);
+        if (inscripcion) {
+            setInscripcionId(inscripcion.id); 
+            setIsInscrito(true);
+        } else {
+            setInscripcionId(null);
+            setIsInscrito(false);
+        }
+    }, [store.inscripciones, usuarioId, eventoId]);
+
+    useEffect(() => {
+        actions.loadInscripciones()
+        actions.getUserId()
+
+    }, []);
 
     const handleInscribirse = async () => {
-        const id = await actions.inscribirse(usuarioId, eventoId);
+        const id = await actions.inscribirse(usuarioId, eventoId, inscripcionId);
         if (id) {
             setInscripcionId(id);
             setIsInscrito(true);
@@ -43,8 +56,8 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
     return (
         <div>
             <button
-                className="btn mt-5 text-black"
-                style={{ backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD', color: '#494949' }} 
+                className="btn text-black btn-lg"
+                style={{ color: '#494949', backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD'}} 
                 onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
             >
                 {isInscrito ? 'Me desapunto' : 'Me apunto'}
