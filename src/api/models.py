@@ -55,7 +55,7 @@ class Eventos(db.Model):
     fecha = db.Column(db.Date, nullable=True)
     hora_inicio = db.Column(db.Time, nullable=True)
     hora_fin = db.Column(db.Time, nullable=True) 
-    ciudad = db.Column(db.String(120), nullable=True)
+    direccion = db.Column(db.String(255), nullable=True) 
     codigo_postal = db.Column(db.Integer, nullable=True)
     breve_descripcion = db.Column(db.String(120), nullable=True)
     accesibilidad = db.Column(db.Boolean(), nullable=True)
@@ -88,7 +88,7 @@ class Eventos(db.Model):
             "nombre": self.nombre,
             "fecha": fecha_formateada,
             "horario": f"{self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}" if self.hora_inicio and self.hora_fin else "Horario no disponible",
-            "ciudad": self.ciudad,
+            "direccion": self.direccion,
             "codigo_postal": self.codigo_postal,
             "breve_descripcion": self.breve_descripcion,
             "accesibilidad": self.accesibilidad,

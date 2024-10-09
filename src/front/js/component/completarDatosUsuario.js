@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar esto
-import { MapaUsuario } from './mapaUsuario';
+import { Mapa } from './mapa';
 
 
 const CompletarDatosUsuario = () => {
@@ -64,7 +64,7 @@ const CompletarDatosUsuario = () => {
                 )}
                 {step === 2 && (
                     <div>
-                        <MapaUsuario setDireccion={setDireccion} />
+                        <Mapa setDireccion={setDireccion} />
                         {/* <label>Código Postal (opcional):</label>
                         <input
                             type="text"

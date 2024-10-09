@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/
 
 const libraries = ["places", "geometry"];
 
-export const MapaUsuario = ({ setDireccion, initialDireccion }) => {
+export const Mapa = ({ setDireccion, initialDireccion }) => {
     const [autocomplete, setAutocomplete] = useState(null);
     const [address, setAddress] = useState('');
     const [markerPosition, setMarkerPosition] = useState(initialDireccion || { lat: 40.1402000, lng: -3.4226700 });

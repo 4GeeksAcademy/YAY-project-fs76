@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext"; // Asegúrate de que la ruta sea correcta
 import { useParams, useNavigate } from "react-router-dom";
-import { MapaUsuario } from "./mapaUsuario";
+import { Mapa } from "./mapa";
 
 const EditProfile = () => {
     const { store, actions } = useContext(Context);
@@ -89,7 +89,7 @@ const EditProfile = () => {
                 </div>
                 <div>
                 <label>Dirección:</label>
-                    <MapaUsuario
+                    <Mapa
                         setDireccion={(direccion) => setProfile({ ...profile, direccion })} // Actualiza la dirección en el perfil
                         initialDireccion={profile.direccion} // Pasa la dirección guardada
                     />

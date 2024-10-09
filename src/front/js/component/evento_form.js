@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../store/appContext';
+import { Mapa } from './mapa';
 
 export const Evento_Form = () => {
     const { store, actions } = useContext(Context);
@@ -9,8 +10,7 @@ export const Evento_Form = () => {
         fecha: '',
         hora_inicio: '',
         hora_fin: '',
-        ciudad: '',
-        codigo_postal: '',
+        direccion: '',
         breve_descripcion: '',
         accesibilidad: false,
         dificultad: '',
@@ -18,6 +18,7 @@ export const Evento_Form = () => {
         cupo: '',
         observaciones: ''
     });
+    const [direccion, setDireccion] = useState("");
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
     const { theid } = useParams();
@@ -27,6 +28,7 @@ export const Evento_Form = () => {
         if (theid) {
             const evento = store.eventos.find(evento => evento.id === parseInt(theid));
             if (evento) {
+                
                 const fechaParts = evento.fecha.split(' '); // Suponiendo que la fecha está en formato "DD de Mes de YYYY"
                 const dia = fechaParts[0];
                 const mes = new Date(Date.parse(fechaParts[2] + " " + fechaParts[1] + " 1")).getMonth() + 1; // Convertir el mes a número
@@ -39,16 +41,20 @@ export const Evento_Form = () => {
                     hora_inicio: evento.horario.split(' - ')[0],
                     hora_fin: evento.horario.split(' - ')[1]
                 });
+                setTimeout(() => {
+                    setDireccion(evento.direccion);
+                    setMapaLoaded(true);
+                }, 500);
             }
         }
     }, [theid, store.eventos]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nombre, fecha, hora_inicio, hora_fin, ciudad, codigo_postal, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
+        const { nombre, fecha, hora_inicio, hora_fin, direccion, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
 
         // Validación de campos
-        if (!nombre || !fecha || !hora_inicio || !hora_fin || !ciudad || !codigo_postal || !breve_descripcion || !dificultad || !precio || !cupo || !observaciones) {
+        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones) {
             if (!alert || alert.type !== 'danger') {
                 setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
             }
@@ -58,7 +64,6 @@ export const Evento_Form = () => {
             const formattedStartTime = hora_inicio; // formato 'HH:MM'
             const formattedEndTime = hora_fin; // formato 'HH:MM'
 
-            // Crear un nuevo objeto con los datos formateados
             const eventoData = {
                 ...nuevoEvento,
                 fecha: formattedDate,
@@ -66,21 +71,18 @@ export const Evento_Form = () => {
                 hora_fin: formattedEndTime,
             };
 
-            // Enviar los datos al backend
             if (theid) {
-                // Si theid está presente, actualiza el evento
                 actions.updateEvento(theid, eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento updated successfully' });
                     setTimeout(() => {
-                        navigate(store.auth ? '/partners-eventos' : '/eventos');
+                        navigate(-1);
                     }, 1000);
                 });
             } else {
-                // Si theid no está presente, crea un nuevo evento
                 actions.addEvento(eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento created successfully' });
                     setTimeout(() => {
-                        navigate(store.auth ? '/partners-eventos' : '/eventos');
+                        navigate(-1);
                     }, 1000);
                 }, () => {
                     setAlert({ type: 'danger', message: ' Error creating event' });
@@ -117,13 +119,17 @@ export const Evento_Form = () => {
                     <input type="time" value={nuevoEvento.hora_fin} onChange={(e) => setNuevoEvento({ ...nuevoEvento, hora_fin: e.target.value })} className="form-control" id="hora_finInput" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="ciudadInput" className="form-label">Ciudad</label>
-                    <input type="text" value={nuevoEvento.ciudad} onChange={(e) => setNuevoEvento({ ...nuevoEvento, ciudad: e.target.value })} className="form-control" id="ciudadInput" placeholder="Introduzca ciudad..." />
+                    <label htmlFor="direccionInput" className="form-label">Ubicacion</label>
+                    {/* <input type="text" value={nuevoEvento.direccion} onChange={(e) => setNuevoEvento({ ...nuevoEvento, direccion: e.target.value })} className="form-control" id="direccionInput" placeholder="Introduzca direccion..." /> */}
+                    <Mapa setDireccion={(newDireccion) => {
+                        setDireccion(newDireccion);
+                        setNuevoEvento({ ...nuevoEvento, direccion: newDireccion });
+                    }} initialDireccion={direccion} />
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                     <label htmlFor="codigo_postalInput" className="form-label">Código Postal</label>
                     <input type="text" value={nuevoEvento.codigo_postal} onChange={(e) => setNuevoEvento({ ...nuevoEvento, codigo_postal: e.target.value })} className="form-control" id="codigo_postalInput" placeholder="Introduzca código postal..." />
-                </div>
+                </div> */}
                 <div className="mb-3">
                     <label htmlFor="breve_descripcionInput" className="form-label">Breve Descripción</label>
                     <input type="text" value={nuevoEvento.breve_descripcion} onChange={(e) => setNuevoEvento({ ...nuevoEvento, breve_descripcion: e.target.value })} className="form-control" id="breve_descripcionInput" placeholder="Introduzca breve descripción..." />
@@ -149,7 +155,7 @@ export const Evento_Form = () => {
                     <input type="text" value={nuevoEvento.observaciones} onChange={(e) => setNuevoEvento({ ...nuevoEvento, observaciones: e.target.value })} className="form-control" id="observacionesInput" placeholder="Introduzca observaciones..." />
                 </div>
                 <div className="d-grid gap-2">
-                <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                 </div>
                 <Link to="/partners-eventos" style={{ color: '#7c488f' }}>
                     o volver a la lista de eventos

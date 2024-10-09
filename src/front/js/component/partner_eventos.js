@@ -87,7 +87,7 @@ export const Partner_Eventos = () => {
                                         <i className="fa-solid fa-clock" style={{ color: '#7c488f' }}></i> {evento.horario}
                                     </li>
                                     <li className="text-muted fs-7">
-                                        <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.ciudad}
+                                        <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.direccion}
                                     </li>
                                     <li>
                                         <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Ver detalles</Link>
@@ -96,12 +96,12 @@ export const Partner_Eventos = () => {
                             </div>
                             <div className="d-flex justify-content-end align-items-start">
                                 <button className="btn btn-icon"
-                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabindex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabindex="-1" />
+                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
                                 </button>
 
-                                <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabindex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabindex="-1" />
+                                <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
+                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
                                 </button>
                             </div>
                             <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">

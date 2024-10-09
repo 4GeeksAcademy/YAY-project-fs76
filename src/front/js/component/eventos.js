@@ -44,7 +44,7 @@ export const Eventos = () => {
                                     <i className="fa-solid fa-clock"  style={{ color: '#7c488f' }}></i> {evento.horario}
                                 </li>
                                 <li className="text-muted fs-7">
-                                    <i className="fa-solid fa-location-dot"  style={{ color: '#7c488f' }}></i>  {evento.ciudad}
+                                    <i className="fa-solid fa-location-dot"  style={{ color: '#7c488f' }}></i>  {evento.direccion}
                                 </li>
                                 <li>
                                 <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Saber más</Link>

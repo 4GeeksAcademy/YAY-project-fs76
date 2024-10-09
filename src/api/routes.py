@@ -162,7 +162,7 @@ def add_evento():
         fecha=request_body.get("fecha"), 
         hora_inicio=request_body.get("hora_inicio"),  
         hora_fin=request_body.get("hora_fin"),  
-        ciudad=request_body.get("ciudad"), 
+        direccion=request_body.get("direccion"), 
         codigo_postal=request_body.get("codigo_postal"),  
         breve_descripcion=request_body.get("breve_descripcion"),  
         accesibilidad=request_body.get("accesibilidad"),  
@@ -194,7 +194,8 @@ def get_eventos_con_usuarios():
             {
                 "id": usuario.id,
                 "nombre": usuario.nombre,
-                "foto_perfil": usuario.foto_perfil
+                "foto_perfil": usuario.foto_perfil,
+                "direccion":usuario.direccion
             } for usuario in usuarios
         ]
         
@@ -228,7 +229,7 @@ def update_evento(evento_id):
     evento.fecha = request_body.get("fecha", evento.fecha)
     evento.hora_inicio = request_body.get("hora_inicio", evento.hora_inicio)
     evento.hora_fin = request_body.get("hora_fin", evento.hora_fin)
-    evento.ciudad = request_body.get("ciudad", evento.ciudad)
+    evento.direccion = request_body.get("direccion", evento.direccion)
     evento.codigo_postal = request_body.get("codigo_postal", evento.codigo_postal)
     evento.breve_descripcion = request_body.get("breve_descripcion", evento.breve_descripcion)
     evento.accesibilidad = request_body.get("accesibilidad", evento.accesibilidad)

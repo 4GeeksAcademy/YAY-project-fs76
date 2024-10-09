@@ -32,9 +32,9 @@ export const Navbar = () => {
 					/>
 				</Link>
 				<div className="ml-auto">
-					<Link to="/interes">
+					{/* <Link to="/interes">
 						<button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Lista de Intereses</button>
-					</Link>
+					</Link> */}
 					{/* <Link to="/userInterest">
                         <button className="btn btn-primary me-3">Intereses usuario</button>
                     </Link> */}

@@ -63,7 +63,7 @@ export const Partner_Evento_Card = () => {
                                 <b>Horario</b>: {evento.horario}
                             </span>
                             <span className="text-muted d-block mb-3">
-                                <b>Ciudad</b>: {evento.ciudad}
+                                <b>Ubicacion</b>: {evento.direccion}
                             </span>
                             <span className="text-muted d-block mb-3">
                                 <b>Plazas</b>: {evento.cupo}

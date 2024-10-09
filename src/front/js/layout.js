@@ -24,7 +24,7 @@ import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
 import { Login } from "./component/login";
-import { MapaUsuario } from "./component/mapaUsuario";
+import { Mapa } from "./component/mapa";
 import { NotFound } from "./pages/notFound";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
@@ -63,7 +63,7 @@ function Layout() {
                         <Route element={<Partner_Evento_Card />} path="/partner-evento/:theid" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
-                        <Route element={<MapaUsuario />} path="/mapa" />
+                        <Route element={<Mapa />} path="/mapa" />
                         <Route element={<NotFound />} path="*"/>
                         <Route element={<NotFound />} path="/notFound"/>
                         <Route path="/login" element={<Login />} />
