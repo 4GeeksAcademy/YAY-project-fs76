@@ -18,6 +18,7 @@ import { Partners } from "./pages/partners";
 import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
 import { Partner_Eventos } from "./component/partner_eventos";
+import { Partner_Evento_Card } from "./component/partner_evento_card";
 import UserInterest from "./component/userInterest";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
@@ -59,10 +60,12 @@ function Layout() {
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
                         <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
+                        <Route element={<Partner_Evento_Card />} path="/partner-evento/:theid" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<MapaUsuario />} path="/mapa" />
                         <Route element={<NotFound />} path="*"/>
+                        <Route element={<NotFound />} path="/notFound"/>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />

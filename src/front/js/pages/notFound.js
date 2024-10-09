@@ -43,7 +43,7 @@ export const NotFound = () => {
                     <div className="col-10">
                         <h2 className="display-6 mb-4"><b>Ups! Aquí no era</b></h2>
                         <Link to="/">
-                            <button className="btn btn-warning btn-lg mx-auto mb-4 border border-black">Volver a casa</button>
+                            <button className="btn btn-lg mx-auto mb-4" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>Volver a casa</button>
                         </Link>
                         <br></br>
                         <div className="loader mx-auto "></div>
