@@ -17,6 +17,12 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         }
     }, [store.inscripciones, usuarioId, eventoId]);
 
+    useEffect(() => {
+        actions.loadInscripciones()
+        actions.getUserId()
+
+    }, []);
+
     const handleInscribirse = async () => {
         const id = await actions.inscribirse(usuarioId, eventoId, inscripcionId);
         if (id) {
@@ -51,7 +57,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         <div>
             <button
                 className="btn text-black btn-lg"
-                style={{ backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD', color: '#494949' }} 
+                style={{ color: '#494949', backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD'}} 
                 onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
             >
                 {isInscrito ? 'Me desapunto' : 'Me apunto'}

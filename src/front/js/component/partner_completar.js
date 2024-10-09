@@ -85,7 +85,7 @@ export const Partner_Completar = () => {
                         </select>
                     </div>
                     <div className="d-grid gap-2">
-                        <button type="submit" className="btn btn-primary w-100">Guardar</button>
+                        <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                     </div>
 
                 </form>

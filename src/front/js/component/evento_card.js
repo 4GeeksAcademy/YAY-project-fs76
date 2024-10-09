@@ -81,7 +81,7 @@ export const Evento_Card = () => {
                                     inscripcionId={inscripcionIds[evento.id]}
                                     setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
                                 />
-                                <Link to={store.auth ? "/eventos" : "/eventos"}>
+                                <Link to={"/eventos"}>
                                     <button className="btn btn-secondary me-5 mt-3">Volver atrás</button>
                                 </Link>
                             </div>
