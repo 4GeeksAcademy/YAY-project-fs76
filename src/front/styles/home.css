@@ -13,3 +13,8 @@
 .btn:hover {
     transform: scale(1.03); /* Aumenta el tamaño al pasar el mouse */
 }
+
+.btn:focus {
+    outline: none; /* Elimina el borde */
+    box-shadow: none; /* Elimina la sombra */
+}
