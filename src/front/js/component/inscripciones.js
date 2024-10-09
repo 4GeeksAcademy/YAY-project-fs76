@@ -2,16 +2,23 @@ import React, { useState, useContext, useEffect } from "react";
 import { Context } from '../store/appContext';
 
 export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripcionId, nombreEvento }) => {
-    const { actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
     const [isInscrito, setIsInscrito] = useState(inscripcionId);
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        setIsInscrito(inscripcionId); 
-    }, [inscripcionId]);
+        const inscripcion = store.inscripciones.find(ins => ins.evento_id === eventoId && ins.usuario_id === usuarioId);
+        if (inscripcion) {
+            setInscripcionId(inscripcion.id); 
+            setIsInscrito(true);
+        } else {
+            setInscripcionId(null);
+            setIsInscrito(false);
+        }
+    }, [store.inscripciones, usuarioId, eventoId]);
 
     const handleInscribirse = async () => {
-        const id = await actions.inscribirse(usuarioId, eventoId);
+        const id = await actions.inscribirse(usuarioId, eventoId, inscripcionId);
         if (id) {
             setInscripcionId(id);
             setIsInscrito(true);

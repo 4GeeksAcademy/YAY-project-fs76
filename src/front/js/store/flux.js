@@ -716,6 +716,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
+            loadInscripciones: () => {
+                fetch(`${process.env.BACKEND_URL}/api/inscripciones`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Error fetching inscripciones, status: " + resp.status);
+                        }
+                        return resp.json();
+                    })
+                    .then(data => {
+                        setStore({ inscripciones: data }); // Actualiza el store con las inscripciones
+                    })
+                    .catch(error => {
+                        console.error("Error loading inscripciones from backend", error);
+                    });
+            },
+
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();

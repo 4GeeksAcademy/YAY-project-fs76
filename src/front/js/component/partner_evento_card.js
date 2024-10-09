@@ -13,7 +13,7 @@ export const Partner_Evento_Card = () => {
 
     useEffect(() => {
         actions.loadEventosConUsuarios().then(() => {
-            console.log(store.eventos); // Verifica que los eventos se carguen correctamente
+            console.log(store.eventos); 
         });
     }, []);
 

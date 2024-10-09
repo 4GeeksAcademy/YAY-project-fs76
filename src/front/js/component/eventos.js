@@ -11,7 +11,7 @@ export const Eventos = () => {
     
     useEffect(() => {
         actions.loadEventosConUsuarios()
-            .then(() => setLoading(false))
+            .then(() => setLoading(false),         actions.loadInscripciones())
             .catch(err => {
                 setLoading(false);
                 setError("Error al cargar eventos");

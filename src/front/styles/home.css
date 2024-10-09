@@ -18,3 +18,7 @@
     outline: none; /* Elimina el borde */
     box-shadow: none; /* Elimina la sombra */
 }
+
+h1, h2 {
+    color:  #7c488f !important;
+}

@@ -6,19 +6,28 @@ import { Inscripciones } from "./inscripciones";
 
 export const Evento_Card = () => {
     const { store, actions } = useContext(Context);
-        const [inscripcionIds, setInscripcionIds] = useState({});
+    const [inscripcionIds, setInscripcionIds] = useState([]);
 
     const params = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
         actions.loadEventosConUsuarios()
-
+        actions.loadInscripciones()
+        actions.getUserId()
     }, []);
 
+    
     const evento = store.eventos.find((evento) => evento.id === parseInt(params.theid));
-    const inscripcion = evento && store.inscripciones.find((inscripcion) => inscripcion.eventoId === evento.id && inscripcion.usuarioId === actions.getUserId());
-    console.log(inscripcion)
+    console.log('Evento:', evento);
+    console.log('Inscripciones:', store.inscripciones);
+    console.log('Usuario ID:', actions.getUserId());
+
+    const inscripcion = store.inscripciones.find((inscripcion) =>
+        inscripcion.evento_id === evento.id && inscripcion.usuario_id === actions.getUserId() && inscripcion.id === inscripcionIds
+    );
+
+    console.log('Inscripciones:', inscripcionIds);
 
     const setInscripcionIdForEvento = (eventoId, id) => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
@@ -64,14 +73,14 @@ export const Evento_Card = () => {
                             </span>
 
                             <div className="d-flex justify-content-between align-items-end">
-                            <Inscripciones
-                            className='mt-3'
-                                usuarioId={actions.getUserId()}
-                                eventoId={evento.id}
-                                nombreEvento={evento.nombre}
-                                inscripcionId={inscripcionIds[evento.id]} 
-                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
-                            />
+                                <Inscripciones
+                                    className='mt-3'
+                                    usuarioId={actions.getUserId()}
+                                    eventoId={evento.id}
+                                    nombreEvento={evento.nombre}
+                                    inscripcionId={inscripcionIds[evento.id]}
+                                    setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
+                                />
                                 <Link to={store.auth ? "/eventos" : "/eventos"}>
                                     <button className="btn btn-secondary me-5 mt-3">Volver atrás</button>
                                 </Link>
