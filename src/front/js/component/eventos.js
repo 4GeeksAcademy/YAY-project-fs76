@@ -27,7 +27,7 @@ export const Eventos = () => {
         <div className="container m-5 mx-auto w-75">
             <ul className="list-group">
                 {Array.isArray(store.eventos) && store.eventos.map((evento) => (
-                    <li key={evento.id} className="list-group-item d-flex justify-content-between">
+                    <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
                         <div className="d-flex justify-content-between flex-grow-1">
                             <img
                                 src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"

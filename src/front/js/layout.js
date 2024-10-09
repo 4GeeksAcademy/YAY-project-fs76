@@ -32,7 +32,7 @@ import ImageUpload from "./component/imageUpload";
 import ProfilePicture from "./component/profilePicture";
 import Profile from "./component/profile";
 import EditProfile from "./component/editProfile";
-import UserInscripciones from "./component/userInscripciones";
+import { UserInscripciones } from "./component/userInscripciones";
 
 function Layout() {
  
