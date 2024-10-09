@@ -902,31 +902,27 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            getUserInscripciones: async (userId) => {
+            getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
-                try {
-                    const response = await fetch(`${process.env.BACKEND_URL}/inscripciones/${userId}`, {                       
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                       
-                        },
-                    });
-                    
+                return fetch(`${process.env.BACKEND_URL}/inscripciones?usuario_id=${usuarioId}`, {                       
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                })
+                .then(response => {
                     if (!response.ok) {
                         throw new Error("Error fetching inscripciones");
                     }
-                    
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
+                    return response.json();
+                })
+                .catch(error => {
                     console.error("Error fetching user inscripciones:", error);
                     return null;
-                }
+                });
             },
             
-
             loadEventosConUsuarios: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
                     .then(resp => {
