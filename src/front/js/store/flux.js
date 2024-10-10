@@ -1120,7 +1120,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
-            
 
             getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
@@ -1143,7 +1142,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
             },
             
-            loadEventosConUsuarios: () => {
+            loadEventosConUsuarios: () => { 
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
                     .then(resp => {
                         if (!resp.ok) {
@@ -1160,6 +1159,29 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
             },
 
+            getInscripcionUsuarioEventoInscrito: async (usuarioId, eventoId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/inscripciones/usuario/${usuarioId}/evento/${eventoId}/inscrito`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        return { inscrito: data.inscrito, id: data.id }; // Retorna el estado y el ID
+                    
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error:", errorData);
+                        return { inscrito: false, id: null };
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    return { inscrito: false, id: null }; // Retorna false y null en caso de error
+                }
+            },
             changeColor: (index, color) => {
                 const store = getStore();
 

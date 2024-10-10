@@ -636,7 +636,7 @@ def get_inscripciones():
 
 
 @api.route('/inscripciones/<id>', methods=['GET'])
-def get_inscripcion(id):
+def get_inscripcion(id): 
     inscripcion = Inscripciones.query.get_or_404(id)
     inscripcion_data = {
         'id': inscripcion.id,
@@ -1061,6 +1061,13 @@ def delete_partner_image(image_id):
     else:
         return jsonify({"ERROR": "Imagen no encontrada o no tienes permiso para eliminarla"}), 404
 
+@api.route('/inscripciones/usuario/<int:usuario_id>/evento/<int:evento_id>/inscrito', methods=['GET'])
+def get_inscripcion_usuario_evento_inscrito(usuario_id, evento_id):
+    inscripcion = Inscripciones.query.filter_by(usuario_id=usuario_id, evento_id=evento_id).first()
+    if inscripcion:
+        return jsonify({'inscrito': True, 'id': inscripcion.id}), 200
+    else:
+        return jsonify({'inscrito': False}), 200
 
 
 if __name__ == '__main__':

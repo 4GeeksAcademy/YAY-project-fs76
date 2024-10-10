@@ -3,31 +3,36 @@ import { Context } from '../store/appContext';
 
 export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripcionId, nombreEvento }) => {
     const { store, actions } = useContext(Context);
-    const [isInscrito, setIsInscrito] = useState(inscripcionId);
+    const [isInscrito, setIsInscrito] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [inscripcionIds, setInscripcionIds] = useState({});
 
     useEffect(() => {
-        const inscripcion = store.inscripciones.find(ins => ins.evento_id === eventoId && ins.usuario_id === usuarioId);
-        if (inscripcion) {
-            setInscripcionId(inscripcion.id); 
-            setIsInscrito(true);
-        } else {
-            setInscripcionId(null);
-            setIsInscrito(false);
-        }
-    }, [store.inscripciones, usuarioId, eventoId]);
+        const obtenerInscripcion = async () => {
+            const inscripcion = await actions.getInscripcionUsuarioEventoInscrito(usuarioId, eventoId);
+            console.log(inscripcion); 
+            if (inscripcion && inscripcion.inscrito) {
+                setIsInscrito(true);
+                setInscripcionId(inscripcion.id); 
+            } else {
+                setIsInscrito(false);
+                setInscripcionId(null); 
+            }
+        };
+        obtenerInscripcion();
+    }, [usuarioId, eventoId, actions.getInscripcionUsuarioEventoInscrito]);
 
-    useEffect(() => {
-        actions.loadInscripciones()
-        actions.getUserId()
 
-    }, []);
+    const setInscripcionIdForEvento = (eventoId, id, userId) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id, [userId]: id }));
+        console.log('Inscripcion IDs:', inscripcionIds);
+    };
 
     const handleInscribirse = async () => {
-        const id = await actions.inscribirse(usuarioId, eventoId, inscripcionId);
+        const id = await actions.inscribirse(usuarioId, eventoId);
         if (id) {
-            setInscripcionId(id);
             setIsInscrito(true);
+            setInscripcionId(id); 
         } else {
             console.error('No se pudo obtener el ID de inscripción');
         }
@@ -45,8 +50,8 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
 
         const result = await actions.desapuntarse(inscripcionId);
         if (result) {
-            setInscripcionId(null);
             setIsInscrito(false);
+            setInscripcionId(null); 
         } else {
             console.log('Error al eliminar la inscripción');
         }
@@ -56,13 +61,13 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
     return (
         <div>
             <button
+                key={eventoId}
                 className="btn text-black btn-lg"
-                style={{ color: '#494949', backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD'}} 
+                style={{ color: '#494949', backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD' }}
                 onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
             >
                 {isInscrito ? 'Me desapunto' : 'Me apunto'}
             </button>
-
 
             {showModal && (
                 <div className="modal show" style={{ display: 'block' }}>
@@ -82,7 +87,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar solicitud</button>
-                                <button type="button" className="btn text-white" style={{backgroundColor: "#de8f79"}} onClick={confirmDesapuntarse}>Sí, quiero desapuntarme</button>
+                                <button type="button" className="btn text-white" style={{ backgroundColor: "#de8f79" }} onClick={confirmDesapuntarse}>Sí, quiero desapuntarme</button>
                             </div>
                         </div>
                     </div>
