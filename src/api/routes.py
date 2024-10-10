@@ -162,8 +162,9 @@ def add_evento():
         fecha=request_body.get("fecha"), 
         hora_inicio=request_body.get("hora_inicio"),  
         hora_fin=request_body.get("hora_fin"),  
-        ciudad=request_body.get("ciudad"), 
-        codigo_postal=request_body.get("codigo_postal"),  
+        direccion=request_body.get("direccion"), 
+        latitud=request_body.get("latitud"), 
+        longitud=request_body.get("longitud"),   
         breve_descripcion=request_body.get("breve_descripcion"),  
         accesibilidad=request_body.get("accesibilidad"),  
         dificultad=request_body.get("dificultad"),  
@@ -194,7 +195,10 @@ def get_eventos_con_usuarios():
             {
                 "id": usuario.id,
                 "nombre": usuario.nombre,
-                "foto_perfil": usuario.foto_perfil
+                "foto_perfil": usuario.foto_perfil,
+                "direccion": usuario.direccion,
+                "latitud":usuario.latitud,
+                "longitud":usuario.longitud,
             } for usuario in usuarios
         ]
         
@@ -228,8 +232,9 @@ def update_evento(evento_id):
     evento.fecha = request_body.get("fecha", evento.fecha)
     evento.hora_inicio = request_body.get("hora_inicio", evento.hora_inicio)
     evento.hora_fin = request_body.get("hora_fin", evento.hora_fin)
-    evento.ciudad = request_body.get("ciudad", evento.ciudad)
-    evento.codigo_postal = request_body.get("codigo_postal", evento.codigo_postal)
+    evento.direccion = request_body.get("direccion", evento.direccion)
+    evento.latitud = request_body.get("latitud", evento.latitud)
+    evento.longitud = request_body.get("longitud", evento.longitud)
     evento.breve_descripcion = request_body.get("breve_descripcion", evento.breve_descripcion)
     evento.accesibilidad = request_body.get("accesibilidad", evento.accesibilidad)
     evento.dificultad = request_body.get("dificultad", evento.dificultad)
@@ -486,10 +491,13 @@ def actualizar_usuario(user_id):
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
     direccion = request.json.get('direccion')
+    latitud = request.json.get('latitud')
+    longitud = request.json.get('longitud')
     breve_descripcion = request.json.get('breve_descripcion')
+    
 
     # Validar que al menos uno de los campos es proporcionado
-    if not any([nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion]):
+    if not any([nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion]):
         return jsonify({"ERROR": "Debe proporcionar al menos un campo para actualizar"}), 400
 
     # Actualiza los campos del usuario
@@ -501,6 +509,10 @@ def actualizar_usuario(user_id):
         usuario.fecha_nacimiento = fecha_nacimiento
     if direccion:
         usuario.direccion = direccion
+    if latitud:
+        usuario.latitud = latitud
+    if longitud:
+        usuario.longitud = longitud
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
 
@@ -793,6 +805,8 @@ def update_usuario(usuario_id):
     apellidos = request.json.get('apellidos')
     fecha_nacimiento = request.json.get('fecha_nacimiento')
     direccion = request.json.get('direccion')
+    latitud = request.json.get('latitud')
+    longitud = request.json.get('longitud')
     breve_descripcion = request.json.get('breve_descripcion')
     foto = request.files.get('foto')
     
@@ -805,6 +819,10 @@ def update_usuario(usuario_id):
         usuario.fecha_nacimiento = fecha_nacimiento
     if direccion:
         usuario.direccion = direccion
+    if latitud:
+        usuario.latitud = latitud
+    if longitud:
+        usuario.longitud = longitud
     if breve_descripcion:
         usuario.breve_descripcion = breve_descripcion
     

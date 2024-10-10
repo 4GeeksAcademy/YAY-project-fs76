@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5df15010c229
+Revision ID: 1998ceb353d8
 Revises: 
-Create Date: 2024-10-09 10:36:00.422145
+Create Date: 2024-10-10 10:22:12.318403
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5df15010c229'
+revision = '1998ceb353d8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,7 +47,8 @@ def upgrade():
     sa.Column('fecha_nacimiento', sa.Date(), nullable=True),
     sa.Column('breve_descripcion', sa.String(length=255), nullable=True),
     sa.Column('direccion', sa.String(length=255), nullable=True),
-    sa.Column('codigo_postal', sa.String(length=10), nullable=True),
+    sa.Column('latitud', sa.Float(), nullable=True),
+    sa.Column('longitud', sa.Float(), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
@@ -91,8 +92,9 @@ def upgrade():
     sa.Column('fecha', sa.Date(), nullable=True),
     sa.Column('hora_inicio', sa.Time(), nullable=True),
     sa.Column('hora_fin', sa.Time(), nullable=True),
-    sa.Column('ciudad', sa.String(length=120), nullable=True),
-    sa.Column('codigo_postal', sa.Integer(), nullable=True),
+    sa.Column('direccion', sa.String(length=255), nullable=True),
+    sa.Column('latitud', sa.Float(), nullable=True),
+    sa.Column('longitud', sa.Float(), nullable=True),
     sa.Column('breve_descripcion', sa.String(length=120), nullable=True),
     sa.Column('accesibilidad', sa.Boolean(), nullable=True),
     sa.Column('dificultad', sa.String(length=120), nullable=True),

@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar esto
-import { MapaUsuario } from './mapaUsuario';
+import { Mapa } from './mapa';
 
 
 const CompletarDatosUsuario = () => {
@@ -13,6 +13,8 @@ const CompletarDatosUsuario = () => {
     const [fecha_nacimiento, setFechaNacimiento] = useState("");
     // const [ubicacion, setUbicacion] = useState("");
     const [direccion, setDireccion] = useState("");
+    const [latitud, setLatitud] = useState(null);
+    const [longitud, setLongitud] = useState(null);
     const [breve_descripcion, setDescripcion] = useState("");
     const navigate = useNavigate();
 
@@ -27,10 +29,15 @@ const CompletarDatosUsuario = () => {
         setStep(step - 1);
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (latitud === null || longitud === null) {
+            alert("Por favor, selecciona una ubicación en el mapa.");
+            return;
+        }
 
-        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion);
+        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion);
 
         if (result) {
             alert("Datos completados con éxito");
@@ -39,7 +46,7 @@ const CompletarDatosUsuario = () => {
             alert("Error al completar los datos");
         }
     };
-    
+
     return (
         <div className="completar-datos-container">
             <h2>Completa tu Perfil</h2>
@@ -64,13 +71,13 @@ const CompletarDatosUsuario = () => {
                 )}
                 {step === 2 && (
                     <div>
-                        <MapaUsuario setDireccion={setDireccion} />
-                        {/* <label>Código Postal (opcional):</label>
-                        <input
-                            type="text"
-                            value={ubicacion}
-                            onChange={(e) => setUbicacion(e.target.value)}
-                        /> */}
+                        <Mapa
+                            setDireccion={(direccion, latitud, longitud) => {
+                                setDireccion(direccion);
+                                setLatitud(latitud); // Guardar latitud
+                                setLongitud(longitud); // Guardar longitud
+                            }}
+                        />
                         <button type="button" onClick={handlePreviousStep}>Anterior</button>
                         <button type="button" onClick={handleNextStep}>Siguiente</button>
                     </div>

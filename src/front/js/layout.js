@@ -19,12 +19,13 @@ import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
 import { Partner_Eventos } from "./component/partner_eventos";
 import { Partner_Evento_Card } from "./component/partner_evento_card";
+import { Partner_Login } from "./component/partner_login";
 import UserInterest from "./component/userInterest";
 import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
 import { Footer } from "./component/footer";
 import { Login } from "./component/login";
-import { MapaUsuario } from "./component/mapaUsuario";
+import { Mapa } from "./component/mapa";
 import { NotFound } from "./pages/notFound";
 import Dashboard from "./component/dashboard";
 import CompletarDatosUsuario from "./component/completarDatosUsuario";
@@ -35,6 +36,7 @@ import PartnerProfile from "./component/parnetProfile";
 import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
+import { EventosMapa } from "./component/eventosMapa";
 
 function Layout() {
  
@@ -61,11 +63,13 @@ function Layout() {
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
                         <Route element={<Partners_Home />} path="/partners_home" />
+                        <Route element={<Partner_Login />} path="/partners-login" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
                         <Route element={<Partner_Evento_Card />} path="/partner-evento/:theid" />
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
-                        <Route element={<MapaUsuario />} path="/mapa" />
+                        <Route element={<Mapa />} path="/mapa" />
+                        <Route element={<EventosMapa />} path="/eventos-mapa" />
                         <Route element={<NotFound />} path="*"/>
                         <Route element={<NotFound />} path="/notFound"/>
                         <Route path="/login" element={<Login />} />

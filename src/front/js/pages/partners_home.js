@@ -12,7 +12,7 @@ export const Partners_Home = () => {
 	useEffect(() => {
 		// Si el usuario no está autenticado o no tiene un partner_id, redirigir a la página de login
 		if (!store.auth || !localStorage.getItem("token")) {
-			navigate("/login"); // Redirigir a la página de login si no está autenticado
+			navigate("/partner-login"); // Redirigir a la página de login si no está autenticado
 		}
 	}, [store.auth, navigate]);
 
@@ -22,7 +22,7 @@ export const Partners_Home = () => {
 				<h1>Estás en el área privada de esta cuenta de Partner</h1>
 			</div>
 			{/* Verificar si el usuario está autenticado y tiene un partner_id */}
-			{store.auth && store.partner_id && (  // Cambiar partnerId por partner_id
+			{/* {store.auth && store.partner_id && (  // Cambiar partnerId por partner_id
 				<button
 					className="btn btn-info me-3"
 					onClick={() => navigate(`/partner-profile/${store.partner_id}`)} // Usar partner_id del store
@@ -30,7 +30,7 @@ export const Partners_Home = () => {
 				>
 					Mi Perfil de Partner
 				</button>
-			)}
+			)} */}
 			<Partner_Eventos />
 		</>
 	);

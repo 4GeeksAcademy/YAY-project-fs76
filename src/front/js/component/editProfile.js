@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext"; // Asegúrate de que la ruta sea correcta
 import { useParams, useNavigate } from "react-router-dom";
-import { MapaUsuario } from "./mapaUsuario";
+import { Mapa } from "./mapa";
 
 const EditProfile = () => {
     const { store, actions } = useContext(Context);
-    const { userId } = useParams(); // Obtén userId de los parámetros de la URL
+    const { userId } = useParams();
     const [profile, setProfile] = useState({
         nombre: '',
         apellidos: '',
         fecha_nacimiento: '',
         direccion: '',
+        latitud: null,
+        longitud: null,
         breve_descripcion: ''
     });
 
@@ -44,10 +46,10 @@ const EditProfile = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        actions.completarDatos(userId, profile.nombre, profile.apellidos, profile.fecha_nacimiento, profile.direccion, profile.breve_descripcion)
+        actions.completarDatos(userId, profile.nombre, profile.apellidos, profile.fecha_nacimiento, profile.direccion,profile.latitud, profile.longitud, profile.breve_descripcion)
             .then(() => {
                 alert("Perfil actualizado exitosamente");
-                navigate(`/profile/${userId}`); // Redirigir al perfil después de la actualización
+                navigate(`/profile/${userId}`);
             })
             .catch((error) => {
                 console.error("Error al actualizar el perfil:", error);
@@ -88,10 +90,15 @@ const EditProfile = () => {
                     />
                 </div>
                 <div>
-                <label>Dirección:</label>
-                    <MapaUsuario
-                        setDireccion={(direccion) => setProfile({ ...profile, direccion })} // Actualiza la dirección en el perfil
-                        initialDireccion={profile.direccion} // Pasa la dirección guardada
+                    <label>Dirección:</label>
+                    <Mapa
+                        setDireccion={(direccion, latitud, longitud) => setProfile({
+                            ...profile,
+                            direccion,
+                            latitud, 
+                            longitud 
+                        })}
+                        initialDireccion={profile.direccion}
                     />
                 </div>
                 <div>

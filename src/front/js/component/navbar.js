@@ -41,54 +41,41 @@ export const Navbar = () => {
 					/>
 				</Link>
 				<div className="ml-auto">
-					<Link to="/interes">
-						<button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Lista de Intereses</button>
-					</Link>
-					{/* <Link to="/userInterest">
-                        <button className="btn btn-primary me-3">Intereses usuario</button>
-                    </Link> */}
-					{/* <Link to="/entidades">
-					<button className="btn me-3 text-light" style={{backgroundColor: '#7c488f'}}>Lista de Entidades</button>
-					</Link> */}
-					{/* <Link to="/eventos">
-						<button className="btn btn-primary me-3">Lista de Eventos</button>
-					</Link> */}
-					<Link to="/partners">
-						<button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Partners</button>
-					</Link>
-					<Link to="/usuarios">
-						<button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Usuarios</button>
-					</Link>
-					{/* <Link to="/mapa">
-						<button className="btn btn-primary me-3">Mapa</button>
-					</Link> */}
-					{/* <Link to="/demo">
-						<button className="btn btn-secondary">Check the Context in action</button>
-					</Link> */}
-					{/* Botón de "Mi Perfil" */}
+
+				{!store.auth && (
+                    <>
+                        <Link to="/partners">
+                            <button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Partners</button>
+                        </Link>
+
+                        <Link to="/usuarios">
+                            <button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Usuarios</button>
+                        </Link>
+                    </>
+                )}
+
 					{store.auth && userId && (
 						<button
 							className="btn me-3"
-							onClick={() => navigate(`/profile/${userId}`)}
-							style={{ backgroundColor: '#A7D0CD', color: '#494949' }}
+							onClick= {() => navigate(`/profile/${userId}`)}
+							style={{ backgroundColor: '#7c488f', color: 'white' }}
 						>
 							Mi Perfil
 						</button>
 					)}
 
-                    {/* Botón de "Mi Perfil de Partner" */}
                     {store.auth && partnerId && (
                         <button
-                            className="btn btn-info me-3"
+                            className="btn me-3"
                             onClick={() => navigate(`/partner-profile/${partnerId}`)} // Utiliza el partnerId verificado
-                            style={{ backgroundColor: '#A7D0CD' }}
+                            style={{ backgroundColor: '#7c488f', color: 'white' }}
                         >
                             Mi Perfil de Partner
                         </button>
                     )}
                     
 					{store.auth && userId && (
-						<button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>
+						<button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#7c488f', color: 'white' }}>
 							Eventos Disponibles
 						</button>
 					)}

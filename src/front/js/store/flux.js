@@ -56,20 +56,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getUserId: () => {
                 const store = getStore(); 
-                return store.user_id; 
+                if (store.user_id) {
+                    return store.user_id; 
+                }
+                const userIdFromLocalStorage = localStorage.getItem("user_id");
+                return userIdFromLocalStorage ? userIdFromLocalStorage : null; 
             },
-
             getInscripcionId: () => {
                 const store = getStore(); 
                 return store.inscripcion_id; 
             },
 
-            // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
             },
 
-            // Acción para obtener el mensaje desde el backend
             getMessage: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
@@ -594,7 +595,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
                 try {
                     // Construir la URL de la API usando el userId proporcionado
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -612,6 +613,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                             apellidos,
                             fecha_nacimiento,
                             direccion,
+                            latitud,
+                            longitud,
                             breve_descripcion
                         }), 
                     });
@@ -632,7 +635,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
                 try {
                   
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -650,6 +653,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                       apellidos,
                       fecha_nacimiento,
                       direccion,
+                      latitud,
+                      longitud,
                       breve_descripcion
                     }), 
                   });

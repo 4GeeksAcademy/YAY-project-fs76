@@ -54,11 +54,11 @@ export const Partner_Completar = () => {
                     )}
                     <div className="mb-3">
                         <label htmlFor="nombreInput" className="form-label">Nombre</label>
-                        <input type="text" value={nuevoPartner.nombre} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nombre: e.target.value })} className="form-control" id="nombreInput" placeholder="Introduzca nombre del evento..." />
+                        <input type="text" value={nuevoPartner.nombre} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nombre: e.target.value })} className="form-control" id="nombreInput" placeholder="Introduzca nombre..." />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="nifInput" className="form-label">NIF</label>
-                        <input type="text" value={nuevoPartner.nif} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nif: e.target.value })} className="form-control" id="nifInput" placeholder="Introduzca breve descripción..." />
+                        <label htmlFor="nifInput" className="form-label">NIF o DNI</label>
+                        <input type="text" value={nuevoPartner.nif} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nif: e.target.value })} className="form-control" id="nifInput" placeholder="Introduzca NIF o DNI..." />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="ciudadInput" className="form-label">Ciudad</label>
