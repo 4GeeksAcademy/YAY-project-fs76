@@ -31,6 +31,8 @@ import CompletarDatosUsuario from "./component/completarDatosUsuario";
 import ImageUpload from "./component/imageUpload";
 import ProfilePicture from "./component/profilePicture";
 import Profile from "./component/profile";
+import PartnerProfile from "./component/parnetProfile";
+import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
 
@@ -74,7 +76,9 @@ function Layout() {
                         <Route path="/profilePicture" element={<ProfilePicture />} />
                         <Route path="/profile/:userId" element={<Profile />} />
                         <Route path="/editProfile/:userId" element={<EditProfile />} />
+                        <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile/>} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
+                        <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

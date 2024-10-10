@@ -3,24 +3,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+    const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
+    const [loggingOut, setLoggingOut] = useState(false);
 
-	const { store, actions } = useContext(Context);
-	const navigate = useNavigate();
-	const [loggingOut, setLoggingOut] = useState(false);
+    // Obtén el partnerId de localStorage
+    const partnerIdFromLocalStorage = localStorage.getItem('partner_id');
+    const partnerId = store.partner_id || partnerIdFromLocalStorage; // Verifica ambos lugares para el partnerId
 
-	function handleLogout() {
-		setLoggingOut(true);
-		actions.logout();
-		localStorage.removeItem("token");
-		localStorage.removeItem("user_id");
-		localStorage.removeItem("nombre");
-		navigate("/logout", { state: { from: true } });
-	}
+    // Debugging logs
+    console.log("Auth:", store.auth);
+    console.log("User ID:", store.user_id);
+    console.log("Partner ID:", store.partner_id);
+    console.log("Partner ID desde localStorage:", partnerIdFromLocalStorage);
 
+    function handleLogout() {
+        setLoggingOut(true);
+        actions.logout();
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("nombre");
+        localStorage.removeItem("partner_id");
+        navigate("/logout", { state: { from: true } });
+    }
 	const userId = localStorage.getItem("user_id");
-	const nombre = localStorage.getItem("nombre");
+    const nombre = localStorage.getItem("nombre");
 
-	return (
+    return (
 		<nav className="navbar navbar-light" style={{ backgroundColor: '#de8f79' }}>
 			<div className="container">
 				<Link to="/">
@@ -66,6 +75,18 @@ export const Navbar = () => {
 							Mi Perfil
 						</button>
 					)}
+
+                    {/* Botón de "Mi Perfil de Partner" */}
+                    {store.auth && partnerId && (
+                        <button
+                            className="btn btn-info me-3"
+                            onClick={() => navigate(`/partner-profile/${partnerId}`)} // Utiliza el partnerId verificado
+                            style={{ backgroundColor: '#A7D0CD' }}
+                        >
+                            Mi Perfil de Partner
+                        </button>
+                    )}
+                    
 					{store.auth && userId && (
 						<button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>
 							Eventos Disponibles
@@ -79,11 +100,13 @@ export const Navbar = () => {
 						>
 							Cerrar Sesión
 						</button>
-					) : (
-						''
-					)}
-				</div>
-			</div>
-		</nav>
-	);
+                    ) : (
+                        ''
+                    )}
+                </div>
+            </div>
+        </nav>
+    );
 };
+	
+					
