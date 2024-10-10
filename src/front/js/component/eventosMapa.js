@@ -13,7 +13,7 @@ export const EventosMapa = () => {
     const [address, setAddress] = useState('');
     const mapContainerStyle = {
         height: "600px",
-        width: "800px",
+        width: "900px",
     };
 
     const mapRef = React.useRef();
@@ -60,7 +60,10 @@ export const EventosMapa = () => {
 
     return (
         <div className="d-flex m-5">
+            <div>
+            <h2 className="mb-2">Eventos disponibles <i class="fa-solid fa-map-location-dot"></i></h2>
             <LoadScript googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA" libraries={libraries}>
+
                 <GoogleMap
                     ref={mapRef}
                     mapContainerStyle={mapContainerStyle}
@@ -96,17 +99,32 @@ export const EventosMapa = () => {
                     ))}
                 </GoogleMap>
             </LoadScript>
+            </div>
             <div className="event-info">
                 {selectedEvent ? (
-                    <div className='m-5'>
-                        <h2>{selectedEvent.nombre}</h2>
-                        <p>Fecha: {selectedEvent.fecha}</p>
-                        <p>Horario: {selectedEvent.horario}</p>
-                        <p>Ubicación: {selectedEvent.direccion}</p>
-                        {/* Agrega más información según sea necesario */}
+                    <div className="container w-100 d-flex justify-content-center">
+                        <div className="card ms-5 mt-2" key={selectedEvent.id} style={{ borderColor: '#ffc107' }}>
+                            <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="card-img-top rounded-circle mx-auto mt-3" style={{ width: 'auto', height: '200px' }} />
+                            <div className="card-body text-center">
+                                <h2 className="card-title">{selectedEvent.nombre}</h2>
+                                <p className="card-text">Fecha: {selectedEvent.fecha}</p>
+                                <p className="card-text">Horario: {selectedEvent.horario}</p>
+                                <p className="card-text">Ubicación: {selectedEvent.direccion}</p>
+                                <p className="card-text">Descripción: {selectedEvent.descripción}</p>
+                                <p className="card-text">Plazas: {selectedEvent.cupo}</p>
+                                <p className="card-text">Dificultad: {selectedEvent.dificultad}</p>
+                                <p className="card-text">Accesibilidad: {selectedEvent.accesibilidad}</p>
+                                <p className="card-text">Precio: {selectedEvent.precio}</p>
+                                <p className="card-text">Observaciones: {selectedEvent.observaciones}</p>
+                            </div>
+                        </div>
                     </div>
+
                 ) : (
-                    <p className='m-5'>Selecciona un evento para ver más información.</p>
+                    <div className='d-flex flex-column align-items-center text-center w-100'>
+                        <h3 className='m-5' style={{color:  '#7c488f'}}>Selecciona un evento para ver más información</h3>
+                        <img src='https://i.ibb.co/6BTLRVj/mapa-click.png' style={{ maxHeight: '200px' }} />
+                    </div>
                 )}
             </div>
         </div>

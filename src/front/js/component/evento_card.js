@@ -54,6 +54,9 @@ export const Evento_Card = () => {
                                 <b>Ubicacion</b>: {evento.direccion}
                             </span>
                             <span className="text-muted d-block mb-3">
+                                <b>Descripción</b>: {evento.breve_descripcion}
+                            </span>
+                            <span className="text-muted d-block mb-3">
                                 <b>Plazas</b>: {evento.cupo}
                             </span>
                             <span className="text-muted d-block mb-3">
@@ -67,9 +70,6 @@ export const Evento_Card = () => {
                             </span>
                             <span className="text-muted d-block mb-3">
                                 <b>Observaciones</b>: {evento.observaciones}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Descripción</b>: {evento.breve_descripcion}
                             </span>
 
                             <div className="d-flex justify-content-between align-items-end">
