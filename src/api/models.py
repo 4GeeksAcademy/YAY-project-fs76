@@ -56,7 +56,8 @@ class Eventos(db.Model):
     hora_inicio = db.Column(db.Time, nullable=True)
     hora_fin = db.Column(db.Time, nullable=True) 
     direccion = db.Column(db.String(255), nullable=True) 
-    codigo_postal = db.Column(db.Integer, nullable=True)
+    latitud = db.Column(db.Float, nullable=True) 
+    longitud= db.Column(db.Float, nullable=True) 
     breve_descripcion = db.Column(db.String(120), nullable=True)
     accesibilidad = db.Column(db.Boolean(), nullable=True)
     dificultad = db.Column(db.String(120), nullable=True)
@@ -89,7 +90,8 @@ class Eventos(db.Model):
             "fecha": fecha_formateada,
             "horario": f"{self.hora_inicio.strftime('%H:%M')} - {self.hora_fin.strftime('%H:%M')}" if self.hora_inicio and self.hora_fin else "Horario no disponible",
             "direccion": self.direccion,
-            "codigo_postal": self.codigo_postal,
+            "latitud": self.latitud,
+            "longitud": self.longitud,
             "breve_descripcion": self.breve_descripcion,
             "accesibilidad": self.accesibilidad,
             "dificultad": self.dificultad,
@@ -136,7 +138,8 @@ class Usuarios(db.Model):
     fecha_nacimiento = db.Column(db.Date, nullable=True)  
     breve_descripcion = db.Column(db.String(255), nullable=True)  
     direccion = db.Column(db.String(255), nullable=True) 
-    codigo_postal = db.Column(db.String(10), nullable=True) 
+    latitud = db.Column(db.Float, nullable=True) 
+    longitud= db.Column(db.Float, nullable=True) 
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)  
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
@@ -151,9 +154,10 @@ class Usuarios(db.Model):
             "nombre": self.nombre,
             "apellidos": self.apellidos,
             "direccion": self.direccion,
+            "latitud": self.latitud,
+            "longitud": self.longitud,
             "fecha_nacimiento": self.fecha_nacimiento.strftime('%Y-%m-%d') if self.fecha_nacimiento else None,
             "breve_descripcion": self.breve_descripcion,
-            "codigo_postal": self.codigo_postal,
             "email": self.email,
             "is_active": self.is_active
             # No serializamos la contraseña por seguridad

@@ -499,7 +499,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
                 try {
                     // Construir la URL de la API usando el userId proporcionado
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -517,6 +517,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                             apellidos,
                             fecha_nacimiento,
                             direccion,
+                            latitud,
+                            longitud,
                             breve_descripcion
                         }), 
                     });
@@ -537,7 +539,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
                 try {
                   
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -555,6 +557,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                       apellidos,
                       fecha_nacimiento,
                       direccion,
+                      latitud,
+                      longitud,
                       breve_descripcion
                     }), 
                   });

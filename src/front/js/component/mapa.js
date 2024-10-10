@@ -23,7 +23,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                     };
                     setMarkerPosition(newPosition);
                     setCenter(newPosition);
-                    setAddress(initialDireccion); // Establece la dirección en el estado
+                    setAddress(initialDireccion);
                 } else {
                     console.error("Geocoding failed: " + status);
                 }
@@ -42,7 +42,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 setMarkerPosition(newPosition);
                 setCenter(newPosition);
                 setAddress(place.formatted_address);
-                setDireccion(place.formatted_address); // Actualiza la dirección aquí
+                setDireccion(place.formatted_address, newPosition.lat, newPosition.lng);
                 if (mapRef.current) {
                     google.maps.event.addListenerOnce(mapRef.current, 'idle', () => {
                         mapRef.current.panTo(newPosition);
@@ -58,12 +58,11 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
             lng: event.latLng.lng()
         };
         setMarkerPosition(newPosition);
-        setCenter(newPosition); // Actualiza el centro del mapa
-        // Aquí puedes usar el servicio de geocodificación para obtener la dirección
+        setCenter(newPosition); 
         const geocoder = new window.google.maps.Geocoder();
         geocoder.geocode({ location: newPosition }, (results, status) => {
             if (status === 'OK' && results[0]) {
-                setAddress(results[0].formatted_address); // Actualiza el estado de la dirección
+                setAddress(results[0].formatted_address);
             }
         });
     };
@@ -76,8 +75,8 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            event.preventDefault(); // Previene el envío del formulario
-            onPlaceChanged(); // Llama a tu función para manejar el cambio de lugar
+            event.preventDefault(); 
+            onPlaceChanged(); 
         }
     };
 

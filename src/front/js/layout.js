@@ -33,6 +33,7 @@ import ProfilePicture from "./component/profilePicture";
 import Profile from "./component/profile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
+import { EventosMapa } from "./component/eventosMapa";
 
 function Layout() {
  
@@ -64,6 +65,7 @@ function Layout() {
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Mapa />} path="/mapa" />
+                        <Route element={<EventosMapa />} path="/eventos-mapa" />
                         <Route element={<NotFound />} path="*"/>
                         <Route element={<NotFound />} path="/notFound"/>
                         <Route path="/login" element={<Login />} />

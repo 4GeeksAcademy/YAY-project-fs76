@@ -16,7 +16,9 @@ export const Evento_Form = () => {
         dificultad: '',
         precio: '',
         cupo: '',
-        observaciones: ''
+        observaciones: '',
+        latitud: null,
+        longitud: null
     });
     const [direccion, setDireccion] = useState("");
     const [alert, setAlert] = useState(null);
@@ -28,7 +30,7 @@ export const Evento_Form = () => {
         if (theid) {
             const evento = store.eventos.find(evento => evento.id === parseInt(theid));
             if (evento) {
-                
+
                 const fechaParts = evento.fecha.split(' '); // Suponiendo que la fecha está en formato "DD de Mes de YYYY"
                 const dia = fechaParts[0];
                 const mes = new Date(Date.parse(fechaParts[2] + " " + fechaParts[1] + " 1")).getMonth() + 1; // Convertir el mes a número
@@ -51,10 +53,10 @@ export const Evento_Form = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nombre, fecha, hora_inicio, hora_fin, direccion, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
+        const { nombre, fecha, hora_inicio, hora_fin, direccion, latitud, longitud, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
 
         // Validación de campos
-        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones) {
+        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || latitud === null || longitud === null || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones) {
             if (!alert || alert.type !== 'danger') {
                 setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
             }
@@ -121,15 +123,16 @@ export const Evento_Form = () => {
                 <div className="mb-3">
                     <label htmlFor="direccionInput" className="form-label">Ubicacion</label>
                     {/* <input type="text" value={nuevoEvento.direccion} onChange={(e) => setNuevoEvento({ ...nuevoEvento, direccion: e.target.value })} className="form-control" id="direccionInput" placeholder="Introduzca direccion..." /> */}
-                    <Mapa setDireccion={(newDireccion) => {
+                    <Mapa setDireccion={(newDireccion, newLatitud, newLongitud) => {
                         setDireccion(newDireccion);
-                        setNuevoEvento({ ...nuevoEvento, direccion: newDireccion });
+                        setNuevoEvento({
+                            ...nuevoEvento,
+                            direccion: newDireccion,
+                            latitud: newLatitud, 
+                            longitud: newLongitud 
+                        });
                     }} initialDireccion={direccion} />
                 </div>
-                {/* <div className="mb-3">
-                    <label htmlFor="codigo_postalInput" className="form-label">Código Postal</label>
-                    <input type="text" value={nuevoEvento.codigo_postal} onChange={(e) => setNuevoEvento({ ...nuevoEvento, codigo_postal: e.target.value })} className="form-control" id="codigo_postalInput" placeholder="Introduzca código postal..." />
-                </div> */}
                 <div className="mb-3">
                     <label htmlFor="breve_descripcionInput" className="form-label">Breve Descripción</label>
                     <input type="text" value={nuevoEvento.breve_descripcion} onChange={(e) => setNuevoEvento({ ...nuevoEvento, breve_descripcion: e.target.value })} className="form-control" id="breve_descripcionInput" placeholder="Introduzca breve descripción..." />
