@@ -341,8 +341,16 @@ def signup_partner():
     new_partner = Partners(email=email, password=hashed_password, is_active=True)
     db.session.add(new_partner)
     db.session.commit()
-    access_token = create_access_token(identity=email)
-    return jsonify({ "message": "Cuenta de Partner creada exitosamente", "access_token": access_token, "partner_id": new_partner.id }), 201
+    
+    # Crear el token con el partnerId y el email
+    access_token = create_access_token(identity={"email": new_partner.email, "partnerId": new_partner.id})
+    
+    return jsonify({
+        "message": "Cuenta de Partner creada exitosamente",
+        "access_token": access_token,
+        "partner_id": new_partner.id
+    }), 201
+
 
 
 @api.route("/partner-login", methods=['POST'])
@@ -350,12 +358,20 @@ def login_partner():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
     partner = Partners.query.filter(Partners.email == email).first()
-    
+
     if partner is None or not check_password_hash(partner.password, password):
         return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
+
+    # Crear el token con la identidad del ID del partner
+    access_token = create_access_token(identity=partner.id)  # Cambiado a partner.id
     
-    access_token = create_access_token(identity=partner.email)
-    return jsonify({"message": "Inicio de sesión de Partner correcto","access_token": access_token}), 200
+    # Retornar también el partnerId en la respuesta
+    return jsonify({
+        "message": "Inicio de sesión de Partner correcto", 
+        "access_token": access_token, 
+        "partner_id": partner.id
+    }), 200
+
 
 @api.route('/completar-perfil-partner/<int:partner_id>', methods=['POST'])
 def complete_partner_profile(partner_id):
@@ -386,15 +402,15 @@ def update_partner(partner_id):
     request_body = request.get_json()
 
     partner.nombre = request_body.get("nombre", partner.nombre)
-    partner.precio = request_body.get("nif", partner.nif)
+    partner.nif = request_body.get("nif", partner.nif)
     partner.ciudad = request_body.get("ciudad", partner.ciudad)
     partner.sector = request_body.get("sector", partner.sector)
     partner.entidad_id = request_body.get("entidad_id", partner.entidad_id)
-    partner.is_active = request_body.get("is_active", partner.is_active)
 
     db.session.commit()
 
     return jsonify(partner.serialize()), 200
+
 
 @api.route('/usuarios', methods=['GET'])
 def get_usuarios():
@@ -957,6 +973,93 @@ def delete_perfil_image(usuario_id, public_id):
             return jsonify({"ERROR": str(e)}), 500
     else:
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
+    
+@api.route('/perfil/upload-image/partner', methods=['POST'])
+@jwt_required()
+def upload_partner_perfil_image():
+    # Obtener el archivo subido
+    file = request.files.get('file')
+    
+    if not file:
+        return jsonify({"ERROR": "No se proporcionó un archivo."}), 400
+
+    # Verificar si el archivo es una imagen
+    if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+        return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
+
+    # Verificar el tamaño del archivo
+    file.seek(0, 2)
+    if file.tell() > 1024 * 1024 * 5:  # 5MB
+        return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
+    file.seek(0)
+
+    try:
+        # Subir la imagen a Cloudinary
+        upload_result = cloudinary.uploader.upload(file)
+        
+        # Obtener el email del partner que está subiendo la imagen
+        partner_email = get_jwt_identity()
+        partner = Partners.query.filter_by(email=partner_email).first()
+
+        if not partner:
+            return jsonify({"ERROR": "Partner no encontrado"}), 404
+
+        # Actualizar el campo foto_perfil del partner
+        partner.foto_perfil = upload_result['secure_url']
+        partner.public_id_perfil = upload_result['public_id']
+        db.session.commit()
+        
+        return jsonify({
+            "message": "Imagen de perfil subida con éxito",
+            "url": upload_result['secure_url']
+        }), 201
+    except Exception as e:
+        print(f"Error al subir imagen: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+
+@api.route('/perfil/images/partner', methods=['GET'])
+@jwt_required()
+def get_partner_perfil_image():
+    # Obtener el email del partner
+    partner_email = get_jwt_identity()
+    partner = Partners.query.filter_by(email=partner_email).first()
+
+    if partner:
+        return jsonify({"foto_perfil": partner.foto_perfil}), 200
+    else:
+        return jsonify({"ERROR": "Partner no encontrado"}), 404
+
+    
+
+@api.route('/perfil/image/partner/<int:image_id>', methods=['DELETE'])
+@jwt_required()
+def delete_partner_image(image_id):
+    # Obtener el email del partner
+    partner_email = get_jwt_identity()
+    partner = Partners.query.filter_by(email=partner_email).first()
+
+    if not partner:
+        return jsonify({"ERROR": "Partner no encontrado"}), 404
+
+    # Buscar la imagen
+    imagen = Imagenes.query.get(image_id)
+
+    if imagen and imagen.partner_email == partner.email:
+        try:
+            # Eliminar la imagen de Cloudinary
+            result = cloudinary.uploader.destroy(imagen.public_id)
+            if result.get('result') == 'ok':
+                db.session.delete(imagen)  # Eliminar la imagen de la base de datos
+                db.session.commit()
+                return jsonify({"message": "Imagen eliminada con éxito"}), 200
+            else:
+                return jsonify({"ERROR": "Error al eliminar la imagen en Cloudinary."}), 400
+        except Exception as e:
+            return jsonify({"ERROR": str(e)}), 500
+    else:
+        return jsonify({"ERROR": "Imagen no encontrada o no tienes permiso para eliminarla"}), 404
 
 
 
