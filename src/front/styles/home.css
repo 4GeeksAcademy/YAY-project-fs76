@@ -22,3 +22,14 @@
 h1, h2 {
     color:  #7c488f !important;
 }
+
+.custom-button:hover {
+    background-color: #A7D0CD !important;
+    color: #494949 !important;
+  }
+  
+  .custom-button:focus {
+    background-color: #A7D0CD !important;
+    color: #494949 !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 208, 0, 0.5);
+  }

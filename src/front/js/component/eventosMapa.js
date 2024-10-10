@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
 import { Context } from '../store/appContext';
+import { useParams } from 'react-router-dom';
+import { Inscripciones } from './inscripciones';
 
 const libraries = ["places", "geometry"];
 
@@ -11,6 +13,8 @@ export const EventosMapa = () => {
     const [mapCenter, setMapCenter] = useState({ lat: 40.1402000, lng: -3.4226700 });
     const [zoom, setZoom] = useState(10);
     const [address, setAddress] = useState('');
+    const [inscripcionIds, setInscripcionIds] = useState([]);
+    const params = useParams();
     const mapContainerStyle = {
         height: "600px",
         width: "900px",
@@ -20,6 +24,20 @@ export const EventosMapa = () => {
 
     useEffect(() => {
         actions.loadEventosConUsuarios();
+        actions.loadInscripciones()
+        const userId = actions.getUserId();
+        if (userId) {
+            actions.getProfile(userId).then(profile => {
+                if (profile && profile.latitud && profile.longitud) {
+                    setMapCenter({ lat: profile.latitud, lng: profile.longitud });
+                    setZoom(14);
+                }
+            }).catch(error => {
+                console.error("Error al obtener el perfil del usuario:", error);
+            });
+        } else {
+            console.error("No se pudo obtener el userId.");
+        }
     }, []);
 
     const handleMarkerClick = (evento) => {
@@ -58,71 +76,87 @@ export const EventosMapa = () => {
     };
 
 
+
+    console.log('Inscripciones:', inscripcionIds);
+
+    const setInscripcionIdForEvento = (eventoId, id) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+        console.log('Inscripcion IDs:', inscripcionIds);
+    };
+
     return (
         <div className="d-flex m-5">
             <div>
-            <h2 className="mb-2">Eventos disponibles <i class="fa-solid fa-map-location-dot"></i></h2>
-            <LoadScript googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA" libraries={libraries}>
+                <h2 className="mb-2">Eventos disponibles <i className="fa-solid fa-map-location-dot"></i></h2>
+                <LoadScript googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA" libraries={libraries}>
 
-                <GoogleMap
-                    ref={mapRef}
-                    mapContainerStyle={mapContainerStyle}
-                    center={mapCenter}
-                    zoom={zoom}
-                >
-                    <Autocomplete
-                        onLoad={autocomplete => setAutocomplete(autocomplete)}
-                        onPlaceChanged={onPlaceChanged}
+                    <GoogleMap
+                        ref={mapRef}
+                        mapContainerStyle={mapContainerStyle}
+                        center={mapCenter}
+                        zoom={zoom}
                     >
-                        <input
-                            type="text"
-                            placeholder="Buscar dirección"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            onKeyDown={handleKeyPress}
-                            style={{
-                                position: 'absolute',
-                                top: '50px',
-                                left: '10px',
-                                zIndex: 1,
-                                padding: '10px',
-                                width: '300px'
-                            }}
-                        />
-                    </Autocomplete>
-                    {store.eventos.map(evento => (
-                        <Marker
-                            key={evento.id}
-                            position={{ lat: evento.latitud, lng: evento.longitud }}
-                            onClick={() => handleMarkerClick(evento)}
-                        />
-                    ))}
-                </GoogleMap>
-            </LoadScript>
+                        <Autocomplete
+                            onLoad={autocomplete => setAutocomplete(autocomplete)}
+                            onPlaceChanged={onPlaceChanged}
+                        >
+                            <input
+                                type="text"
+                                placeholder="Buscar dirección"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                onKeyDown={handleKeyPress}
+                                style={{
+                                    position: 'absolute',
+                                    top: '50px',
+                                    left: '10px',
+                                    zIndex: 1,
+                                    padding: '10px',
+                                    width: '300px'
+                                }}
+                            />
+                        </Autocomplete>
+                        {store.eventos.map(evento => (
+                            <Marker
+                                key={evento.id}
+                                position={{ lat: evento.latitud, lng: evento.longitud }}
+                                onClick={() => handleMarkerClick(evento)}
+                            />
+                        ))}
+                    </GoogleMap>
+                </LoadScript>
             </div>
-            <div className="event-info">
+            <div className="event-info d-flex justify-content-center align-items-center">
                 {selectedEvent ? (
                     <div className="container w-100 d-flex justify-content-center">
                         <div className="card ms-5 mt-2" key={selectedEvent.id} style={{ borderColor: '#ffc107' }}>
                             <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="card-img-top rounded-circle mx-auto mt-3" style={{ width: 'auto', height: '200px' }} />
                             <div className="card-body text-center">
                                 <h2 className="card-title">{selectedEvent.nombre}</h2>
-                                <p className="card-text">Fecha: {selectedEvent.fecha}</p>
-                                <p className="card-text">Horario: {selectedEvent.horario}</p>
-                                <p className="card-text">Ubicación: {selectedEvent.direccion}</p>
-                                <p className="card-text">Descripción: {selectedEvent.descripción}</p>
-                                <p className="card-text">Plazas: {selectedEvent.cupo}</p>
-                                <p className="card-text">Dificultad: {selectedEvent.dificultad}</p>
-                                <p className="card-text">Accesibilidad: {selectedEvent.accesibilidad}</p>
-                                <p className="card-text">Precio: {selectedEvent.precio}</p>
-                                <p className="card-text">Observaciones: {selectedEvent.observaciones}</p>
+                                <p className="card-text text-muted"><b>Fecha</b>: {selectedEvent.fecha}</p>
+                                <p className="card-text text-muted"><b>Horario</b>: {selectedEvent.horario}</p>
+                                <p className="card-text text-muted"><b>Descripción</b>: {selectedEvent.descripción}</p>
+                                <p className="card-text text-muted"><b>Plazas</b>: {selectedEvent.cupo}</p>
+                                <p className="card-text text-muted"><b>Dificultad</b>: {selectedEvent.dificultad}</p>
+                                <p className="card-text text-muted"><b>Accesibilidad</b>: {selectedEvent.accesibilidad}</p>
+                                <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio}</p>
+                                <p className="card-text text-muted"><b>Observaciones</b>: {selectedEvent.observaciones}</p>
+                                <p className="card-text text-muted"><b>Ubicación</b>: {selectedEvent.direccion}</p>
+                                <Inscripciones
+                                    usuarioId={actions.getUserId()}
+                                    eventoId={selectedEvent.id}
+                                    nombreEvento={selectedEvent.nombre}
+                                    inscripcionId={inscripcionIds[selectedEvent.id]}
+                                    setInscripcionId={(id) => setInscripcionIdForEvento(selectedEvent.id, id)}
+                                />
                             </div>
                         </div>
                     </div>
 
                 ) : (
-                    <div className='d-flex flex-column align-items-center text-center w-100'>
-                        <h3 className='m-5' style={{color:  '#7c488f'}}>Selecciona un evento para ver más información</h3>
+                    <div className='d-flex flex-column align-items-center justify-content-center text-center w-100'>
+                        <h3 className='mx-5 mt-5' style={{ color: '#7c488f' }}>Selecciona un evento en el mapa</h3>
+                        <h3 className='mx-5 mb-5' style={{ color: '#7c488f' }}>para ver más información</h3>
                         <img src='https://i.ibb.co/6BTLRVj/mapa-click.png' style={{ maxHeight: '200px' }} />
                     </div>
                 )}

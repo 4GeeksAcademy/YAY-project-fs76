@@ -53,20 +53,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getUserId: () => {
                 const store = getStore(); 
-                return store.user_id; 
+                if (store.user_id) {
+                    return store.user_id; 
+                }
+                const userIdFromLocalStorage = localStorage.getItem("user_id");
+                return userIdFromLocalStorage ? userIdFromLocalStorage : null; 
             },
-
             getInscripcionId: () => {
                 const store = getStore(); 
                 return store.inscripcion_id; 
             },
 
-            // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
             },
 
-            // Acción para obtener el mensaje desde el backend
             getMessage: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/hello");

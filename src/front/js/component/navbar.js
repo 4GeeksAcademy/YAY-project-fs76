@@ -18,7 +18,7 @@ export const Navbar = () => {
 	}
 
 	const userId = localStorage.getItem("user_id");
-	const nombre = localStorage.getItem("nombre");
+	const nombre = localStorage.getItem("nombre"); 
 
 	return (
 		<nav className="navbar navbar-light" style={{ backgroundColor: '#de8f79' }}>
@@ -60,7 +60,7 @@ export const Navbar = () => {
 					{store.auth && userId && (
 						<button
 							className="btn me-3"
-							onClick={() => navigate(`/profile/${userId}`)}
+							onClick= {() => navigate(`/profile/${userId}`)}
 							style={{ backgroundColor: '#A7D0CD', color: '#494949' }}
 						>
 							Mi Perfil
