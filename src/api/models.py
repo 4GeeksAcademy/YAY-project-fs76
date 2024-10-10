@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
 
+
 db = SQLAlchemy()
 
 class User(db.Model):
@@ -110,7 +111,8 @@ class Partners(db.Model):
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     entidad_id = db.Column(db.Integer, db.ForeignKey('entidades.id'))
     tipo_entidad = db.relationship('Entidad')
-    db.relationship('Eventos', backref='partners', lazy=True)  
+    foto = db.Column(db.String(255), nullable=True)
+    foto_perfil = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         return f'<Partners {self.email}>'
@@ -123,8 +125,8 @@ class Partners(db.Model):
             "ciudad": self.ciudad,
             "sector": self.sector,
             "email": self.email,
-            "entidad_id": self.entidad_id,     
-            # do not serialize the password, its a security breach
+            "entidad_id": self.entidad_id,
+            # No serializamos la contraseña por seguridad
         }
     
 class Usuarios(db.Model):
@@ -163,13 +165,12 @@ class Imagenes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(255), nullable=False)  
     public_id = db.Column(db.String(255), nullable=False)  
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False) 
-    es_perfil = db.Column(db.Boolean, default=False) 
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=True)
+    partner_email = db.Column(db.String(120), db.ForeignKey('partners.email'), nullable=True)  # Relación basada en el email
+    es_perfil = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<Imagen {self.url}>'
-
-
 class Inscripciones(db.Model):
     __tablename__ = 'inscripciones'
     id = db.Column(db.Integer, primary_key=True)
