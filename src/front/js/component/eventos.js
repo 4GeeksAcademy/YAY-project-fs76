@@ -6,20 +6,20 @@ import { Inscripciones } from "./inscripciones";
 export const Eventos = () => {
     const { store, actions } = useContext(Context);
     const [loading, setLoading] = useState(true);
-    const [inscripcionIds, setInscripcionIds] = useState({}); // Cambia a un objeto para manejar múltiples inscripciones
-
+    const [inscripcionIds, setInscripcionIds] = useState({}); 
+    const [error, setError] = useState(null);
+    
     useEffect(() => {
         actions.loadEventosConUsuarios()
-            .then(() => setLoading(false))
+            .then(() => setLoading(false), actions.loadInscripciones())
             .catch(err => {
                 setLoading(false);
                 setError("Error al cargar eventos");
             });
     }, [actions.loadEventosConUsuarios]);
 
-
-    const setInscripcionIdForEvento = (eventoId, id) => {
-        setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
+    const setInscripcionIdForEvento = (eventoId, id, userId) => {
+        setInscripcionIds(prev => ({ ...prev, [eventoId]: id, [userId]: id }));
         console.log('Inscripcion IDs:', inscripcionIds);
     };
 
@@ -27,7 +27,7 @@ export const Eventos = () => {
         <div className="container m-5 mx-auto w-75">
             <ul className="list-group">
                 {Array.isArray(store.eventos) && store.eventos.map((evento) => (
-                    <li key={evento.id} className="list-group-item d-flex justify-content-between">
+                    <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
                         <div className="d-flex justify-content-between flex-grow-1">
                             <img
                                 src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
@@ -36,35 +36,35 @@ export const Eventos = () => {
                                 style={{ height: '100%', maxHeight: '100px' }}
                             />
                             <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
-                                <li className="fs-3 ">{evento.nombre}</li>
+                                <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                 <li className="text-muted fs-5">
-                                    <i className="fa-solid fa-calendar-days"></i> {evento.fecha}
+                                    <i className="fa-solid fa-calendar-days"  style={{ color: '#7c488f' }}></i> {evento.fecha}
                                 </li>
                                 <li className="text-muted fs-6">
-                                    <i className="fa-solid fa-clock"></i> {evento.horario}
+                                    <i className="fa-solid fa-clock"  style={{ color: '#7c488f' }}></i> {evento.horario}
                                 </li>
                                 <li className="text-muted fs-7">
-                                    <i className="fa-solid fa-location-dot"></i>  {evento.ciudad}
+                                    <i className="fa-solid fa-location-dot"  style={{ color: '#7c488f' }}></i>  {evento.ciudad}
                                 </li>
                                 <li>
-                                    <Link to={`/evento/${evento.id}`} className="btn btn-sm btn-primary">Saber más</Link>
+                                <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Saber más</Link>
                                 </li>
                             </ul>
                         </div>
-                        <div className="d-flex justify-content-end align-items-start">
+                        <div className="d-flex justify-content-end align-items-start mt-5">
+                            
                             <Inscripciones
                                 usuarioId={actions.getUserId()}
                                 eventoId={evento.id}
-                                inscripcionId={inscripcionIds[evento.id]} // Pasa el inscripcionId específico para el evento
-                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)} // Actualiza el inscripcionId para el evento específico
+                                nombreEvento={evento.nombre}
+                                inscripcionId={inscripcionIds[evento.id]} 
+                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id, actions.getUserId())}
                             />
                         </div>
                     </li>
                 ))}
             </ul>
-            <Link to="/">
-                <button className="btn btn-primary mt-5">Back home</button>
-            </Link>
+
         </div>
     );
 };

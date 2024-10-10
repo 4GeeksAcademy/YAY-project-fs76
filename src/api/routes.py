@@ -188,10 +188,18 @@ def get_eventos_con_usuarios():
         inscripciones = Inscripciones.query.filter_by(evento_id=evento.id).all()
         usuario_ids = [inscripcion.usuario_id for inscripcion in inscripciones]
         usuarios = Usuarios.query.filter(Usuarios.id.in_(usuario_ids)).all()
-        usuarios_nombres = [usuario.nombre for usuario in usuarios]
+        
+        # Cambiamos la forma en que obtenemos la información de los usuarios
+        usuarios_info = [
+            {
+                "id": usuario.id,
+                "nombre": usuario.nombre,
+                "foto_perfil": usuario.foto_perfil
+            } for usuario in usuarios
+        ]
         
         evento_data = evento.serialize()
-        evento_data['usuarios'] = usuarios_nombres 
+        evento_data['usuarios'] = usuarios_info  # Ahora incluye la foto de perfil
         output.append(evento_data)
     
     return jsonify(output), 200
@@ -618,11 +626,12 @@ def get_inscripciones():
 @api.route('/inscripciones/<id>', methods=['GET'])
 def get_inscripcion(id):
     inscripcion = Inscripciones.query.get_or_404(id)
-    inscripcion_data = {}
-    inscripcion_data['id'] = inscripcion.id
-    inscripcion_data['usuario_id'] = inscripcion.usuario_id
-    inscripcion_data['evento_id'] = inscripcion.evento_id
-    inscripcion_data['fecha_registro'] = inscripcion.fecha_registro
+    inscripcion_data = {
+        'id': inscripcion.id,
+        'usuario_id': inscripcion.usuario_id,
+        'evento_id': inscripcion.evento_id,
+        'fecha_registro': inscripcion.fecha_registro
+    }
     return jsonify(inscripcion_data)
 
 

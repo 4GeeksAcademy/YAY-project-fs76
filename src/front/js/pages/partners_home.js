@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import { Partner_Eventos } from "../component/partner_eventos";
+import { Navigate } from "react-router-dom";
 import "../../styles/home.css";
 
 export const Partners_Home = () => {

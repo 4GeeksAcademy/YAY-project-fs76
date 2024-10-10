@@ -176,10 +176,20 @@ class Inscripciones(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha_registro = db.Column(db.String(120), nullable=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
-    tipo_usuario = db.relationship('Usuarios') 
+    usuario = db.relationship('Usuarios') 
     evento_id = db.Column(db.Integer, db.ForeignKey('eventos.id'))
-    tipo_evento = db.relationship('Eventos')   
+    evento = db.relationship('Eventos')   
 
+    def __repr__(self):
+        return f'<Inscripcion {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "usuario_id": self.usuario_id,
+            "evento_id": self.evento_id,
+            "fecha_registro": self.fecha_registro
+        }
 
 class UsuariosIntereses(db.Model):
     

@@ -92,7 +92,7 @@ export const Evento_Form = () => {
     return (
         <>
             <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
-                <h1 className="text-center">Crear/Editar Evento</h1>
+                <h1 className="text-center" style={{ color: '#7c488f' }}>Crear/Editar Evento</h1>
                 {alert && (
                     <div className={`alert fade show alert-${alert.type}`} role="alert">
                         {alert.type === 'danger' ? <i className="fa-solid fa-triangle-exclamation"></i> : <i className="fa-solid fa-circle-check"></i>}
@@ -129,7 +129,7 @@ export const Evento_Form = () => {
                     <input type="text" value={nuevoEvento.breve_descripcion} onChange={(e) => setNuevoEvento({ ...nuevoEvento, breve_descripcion: e.target.value })} className="form-control" id="breve_descripcionInput" placeholder="Introduzca breve descripción..." />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="accesibilidadInput" className="form-label">Accesibilidad</label>
+                    <label htmlFor="accesibilidadInput" className="form-label">Accesibilidad </label>
                     <input type="checkbox" checked={nuevoEvento.accesibilidad} onChange={(e) => setNuevoEvento({ ...nuevoEvento, accesibilidad: e.target.checked })} className="form-check-input" id="accesibilidadInput" />
                 </div>
                 <div className="mb-3">
@@ -149,9 +149,9 @@ export const Evento_Form = () => {
                     <input type="text" value={nuevoEvento.observaciones} onChange={(e) => setNuevoEvento({ ...nuevoEvento, observaciones: e.target.value })} className="form-control" id="observacionesInput" placeholder="Introduzca observaciones..." />
                 </div>
                 <div className="d-grid gap-2">
-                    <button type="submit" className="btn btn-primary w-100">Guardar</button>
+                <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                 </div>
-                <Link to={store.auth ? "/partners-eventos" : "/eventos"}>
+                <Link to="/partners-eventos" style={{ color: '#7c488f' }}>
                     o volver a la lista de eventos
                 </Link>
 

@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             message: null,
             auth: false,
             user_id: null, // Agrega el user_id aquí
+            inscripcion_id: null,
             partner_id: null,
             public_id_perfil:null,
             intereses: [],
@@ -54,8 +55,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             getUserId: () => {
-                const store = getStore(); // Obtiene el estado global
-                return store.user_id; // Retorna el user_id almacenado
+                const store = getStore(); 
+                return store.user_id; 
+            },
+
+            getInscripcionId: () => {
+                const store = getStore(); 
+                return store.inscripcion_id; 
             },
 
             // Ejemplo de función que cambia el color
@@ -765,6 +771,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                     
                     if (resp.ok) {
                         console.log('Inscripción creada:', data);
+                        // Actualiza el store con el inscripcion_id
+                        setStore(prevStore => ({
+                            ...prevStore,
+                            inscripcion_id: data.id // Guarda el ID de la inscripción en el store
+                        }));
                         return data.id; // Retorna el ID de la inscripción
                     } else {
                         console.log("Error: ", data.message);
@@ -800,6 +811,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
+            loadInscripciones: () => {
+                fetch(`${process.env.BACKEND_URL}/api/inscripciones`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Error fetching inscripciones, status: " + resp.status);
+                        }
+                        return resp.json();
+                    })
+                    .then(data => {
+                        setStore({ inscripciones: data }); // Actualiza el store con las inscripciones
+                    })
+                    .catch(error => {
+                        console.error("Error loading inscripciones from backend", error);
+                    });
+            },
+
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
@@ -1090,31 +1117,27 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
             
 
-            getUserInscripciones: async (userId) => {
+            getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
-                try {
-                    const response = await fetch(`${process.env.BACKEND_URL}/inscripciones/${userId}`, {                       
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-           
-                        },
-                    });
-            
+                return fetch(`${process.env.BACKEND_URL}/inscripciones?usuario_id=${usuarioId}`, {                       
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                })
+                .then(response => {
                     if (!response.ok) {
                         throw new Error("Error fetching inscripciones");
                     }
-            
-                    const data = await response.json();
-                    return data;
-                } catch (error) {
+                    return response.json();
+                })
+                .catch(error => {
                     console.error("Error fetching user inscripciones:", error);
                     return null;
-                }
+                });
             },
             
-
             loadEventosConUsuarios: () => {
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
                     .then(resp => {
