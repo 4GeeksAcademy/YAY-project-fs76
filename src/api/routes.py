@@ -176,7 +176,7 @@ def add_evento():
         observaciones=request_body.get("observaciones"),  
         is_active=True,
         partner_id=partner_id,
-        partner_nombre=partner.nombre  # Asignamos el nombre del partner
+        partner_nombre=partner.nombre,  # Asignamos el nombre del partner
         interes_id = request_body.get("interes_id") 
     )
 
