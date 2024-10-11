@@ -36,6 +36,7 @@ export const PartnerMisEventos = () => {
         }
     }, [actions.loadEventosConUsuarios]);
     
+    
     return (
         <div className="container m-5 mx-auto w-75">
             {error && <p className="text-danger">{error}</p>}
@@ -82,8 +83,11 @@ export const PartnerMisEventos = () => {
                                     </button>
     
                                     <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-                                        <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                    <li>
+                                        <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}> <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" /></Link>
+                                    </li>
                                     </button>
+                                  
                                 </div>
                             </li>
                         ))}
