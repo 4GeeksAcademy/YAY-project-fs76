@@ -17,6 +17,7 @@ export const Evento_Form = () => {
         precio: '',
         cupo: '',
         observaciones: '',
+        interes_id: '',
         latitud: null,
         longitud: null
     });
@@ -26,6 +27,7 @@ export const Evento_Form = () => {
     const { theid } = useParams();
 
     useEffect(() => {
+        actions.getInteres();
         // Cargar el evento si el ID está presente
         if (theid) {
             const evento = store.eventos.find(evento => evento.id === parseInt(theid));
@@ -53,10 +55,9 @@ export const Evento_Form = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nombre, fecha, hora_inicio, hora_fin, direccion, latitud, longitud, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
-    
+        const { nombre, fecha, hora_inicio, hora_fin, direccion, latitud, longitud, breve_descripcion, dificultad, precio, cupo, observaciones, interes_id } = nuevoEvento;
         // Validación de campos
-        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || latitud === null || longitud === null || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones) {
+        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || latitud === null || longitud === null || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones || !interes_id) {
             if (!alert || alert.type !== 'danger') {
                 setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
             }
@@ -96,7 +97,7 @@ export const Evento_Form = () => {
     return (
         <>
             <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
-            <h1 className="text-center" style={{ color: '#7c488f' }}>{theid ? 'Editar Evento' : 'Crear Evento'}</h1>
+                <h1 className="text-center" style={{ color: '#7c488f' }}>{theid ? 'Editar Evento' : 'Crear Evento'}</h1>
                 {alert && (
                     <div className={`alert fade show alert-${alert.type}`} role="alert">
                         {alert.type === 'danger' ? <i className="fa-solid fa-triangle-exclamation"></i> : <i className="fa-solid fa-circle-check"></i>}
@@ -128,8 +129,8 @@ export const Evento_Form = () => {
                         setNuevoEvento({
                             ...nuevoEvento,
                             direccion: newDireccion,
-                            latitud: newLatitud, 
-                            longitud: newLongitud 
+                            latitud: newLatitud,
+                            longitud: newLongitud
                         });
                     }} initialDireccion={direccion} />
                 </div>
@@ -148,8 +149,8 @@ export const Evento_Form = () => {
                 <div className="mb-3">
                     <label htmlFor="precioInput" className="form-label">Precio</label>
                     <div className="position-relative">
-                    <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio en euros..." min="0" />
-                    <span className="position-absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>€</span>
+                        <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio en euros..." min="0" />
+                        <span className="position-absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>€</span>
                     </div>
                 </div>
                 <div className="mb-3">
@@ -159,6 +160,20 @@ export const Evento_Form = () => {
                 <div className="mb-3">
                     <label htmlFor="observacionesInput" className="form-label">Observaciones</label>
                     <input type="text" value={nuevoEvento.observaciones} onChange={(e) => setNuevoEvento({ ...nuevoEvento, observaciones: e.target.value })} className="form-control" id="observacionesInput" placeholder="Introduzca observaciones..." />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="interesSelect" className="form-label">Interés</label>
+                    <select
+                        id="interesSelect"
+                        value={nuevoEvento.interes_id}
+                        onChange={(e) => setNuevoEvento({ ...nuevoEvento, interes_id: e.target.value })}
+                        className="form-select"
+                    >
+                        <option value="">Seleccione un interés</option>
+                        {store.intereses.map(interes => (
+                            <option key={interes.id} value={interes.id}>{interes.nombre}</option> // Aquí se muestra el nombre
+                        ))}
+                    </select>
                 </div>
                 <div className="d-grid gap-2">
                     <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>

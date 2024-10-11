@@ -73,7 +73,7 @@ function Layout() {
                         <Route element={<Usuarios />} path="/usuarios" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Mapa />} path="/mapa" />
-                        <Route element={<EventosMapa />} path="/eventos-mapa" />
+                        <Route element={<EventosMapa />} path="/eventos-mapa/:theid" />
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />

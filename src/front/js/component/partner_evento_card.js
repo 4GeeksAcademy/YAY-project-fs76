@@ -10,17 +10,31 @@ export const Partner_Evento_Card = () => {
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [eventoAEliminar, setEventoAEliminar] = useState(null);
     const [showModalWarning, setShowModalWarning] = useState(false);
+    const [interes, setInteres] = useState(null);
+
 
     const params = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.loadEventosConUsuarios().then(() => {
-            console.log(store.eventos);
-        });
+        if (params.theid) {
+            actions.loadEventosConUsuarios().then(() => {
+                const eventoId = parseInt(params.theid);
+                actions.getInteresPorEvento(eventoId).then((data) => {
+                    if (data) {
+                        setInteres(data); // Almacena el interés en el estado local
+                    }
+                }).catch(error => {
+                    console.error("Error al cargar el interés:", error);
+                });
+            }).catch(error => {
+                console.error("Error al cargar eventos:", error);
+            });
+        }
     }, []);
 
     const evento = store.eventos.find((evento) => evento.id === parseInt(params.theid));
+
 
     const handleShowModal = (usuarios) => {
         setSelectedUsuarios(usuarios);
@@ -86,7 +100,9 @@ export const Partner_Evento_Card = () => {
                             <span className="text-muted d-block mb-3">
                                 <b>Creador del evento</b>: {evento.partner_nombre}
                             </span>
-
+                            <span>
+                                <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
+                            </span>
                             <div className="usuarios-inscritos my-3 me-5">
                                 <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
                                 <div style={{ display: 'flex', gap: '10px' }}>

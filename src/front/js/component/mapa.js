@@ -46,6 +46,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 if (mapRef.current) {
                     google.maps.event.addListenerOnce(mapRef.current, 'idle', () => {
                         mapRef.current.panTo(newPosition);
+                        mapRef.current.setZoom(15);
                     });
                 }
             }
@@ -90,7 +91,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 ref={mapRef}
                 mapContainerStyle={mapContainerStyle}
                 center={center}
-                zoom={10}
+                zoom={15}
                 onClick={onMapClick} // Agrega el manejador aquí
             >
                 <Autocomplete
