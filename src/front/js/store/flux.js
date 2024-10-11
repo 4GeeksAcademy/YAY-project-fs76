@@ -281,23 +281,25 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             addEvento: (newEvento, onSuccess, onError) => {
+                const store = getStore();
                 fetch(process.env.BACKEND_URL + '/api/eventos', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${store.token}`  // Asegúrate de que el token esté disponible en el store
                     },
                     body: JSON.stringify(newEvento)
                 })
-                    .then(resp => resp.json())
-                    .then(data => {
-                        const store = getStore();
-                        setStore({ eventos: [...store.eventos, data] });
-                        onSuccess();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        onError();
-                    });
+                .then(resp => resp.json())
+                .then(data => {
+                    const store = getStore();
+                    setStore({ eventos: [...store.eventos, data] });
+                    onSuccess();
+                })
+                .catch(error => {
+                    console.log(error);
+                    onError();
+                });
             },
 
             loadEventos: () => {
@@ -437,6 +439,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         localStorage.setItem("auth", "true");
                         localStorage.setItem("token", data.access_token);
                         localStorage.setItem("partner_id", data.partner_id);
+                        localStorage.setItem("nombre", "data.");
                         return true;
                     } else {
                         const errorData = await response.json();

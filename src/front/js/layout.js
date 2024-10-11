@@ -35,6 +35,7 @@ import PartnerProfile from "./component/parnetProfile";
 import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
+import { PartnerMisEventos } from "./component/partnerMisEventos";
 
 function Layout() {
  
@@ -79,6 +80,7 @@ function Layout() {
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile/>} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                         <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

@@ -155,7 +155,11 @@ def add_evento():
     if "nombre" not in request_body:
         return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
 
-    partner_id = get_jwt_identity()  
+    partner_id = get_jwt_identity()  # Obtienes el ID del partner desde el JWT
+    partner = Partners.query.get(partner_id)  # Obtienes el partner de la base de datos
+
+    if not partner:
+        return jsonify({"ERROR": "Partner no encontrado."}), 404
 
     nuevo_evento = Eventos(
         nombre=request_body.get("nombre"),  
@@ -171,13 +175,14 @@ def add_evento():
         cupo=request_body.get("cupo"), 
         observaciones=request_body.get("observaciones"),  
         is_active=True,
-        partner_id=partner_id  
+        partner_id=partner_id  # Guardamos el ID del partner
     )
 
     db.session.add(nuevo_evento)
     db.session.commit()
 
     return jsonify(nuevo_evento.serialize()), 200
+
 
 @api.route('/eventos/con-usuarios', methods=['GET'])
 def get_eventos_con_usuarios():
@@ -213,17 +218,24 @@ def get_evento(evento_id):
     return jsonify(evento.serialize()), 200
 
 @api.route('/eventos/<int:evento_id>', methods=['PUT'])
+@jwt_required()
 def update_evento(evento_id):
     evento = Eventos.query.filter_by(id=evento_id).first()
     
     if evento is None:
-        return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
+        return jsonify({"ERROR": "Evento no encontrado."}), 404
 
+    partner_id = get_jwt_identity()  # Obtén el ID del partner autenticado
+
+    if evento.partner_id != partner_id:
+        return jsonify({"ERROR": "No tienes permiso para modificar este evento."}), 403  # 403 Forbidden
+    
     request_body = request.get_json()
 
     if "nombre" not in request_body:
         return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
 
+    # Actualizamos los datos del evento
     evento.nombre = request_body.get("nombre", evento.nombre)
     evento.fecha = request_body.get("fecha", evento.fecha)
     evento.hora_inicio = request_body.get("hora_inicio", evento.hora_inicio)
@@ -243,16 +255,45 @@ def update_evento(evento_id):
     return jsonify(evento.serialize()), 200
 
 @api.route('/eventos/<int:evento_id>', methods=['DELETE'])
+@jwt_required()
 def delete_evento(evento_id):
     evento = Eventos.query.filter_by(id=evento_id).first()
     
     if evento is None:
-        return jsonify({"ERROR": "Evento no encontrado. Revise que el número de ID introducido, corresponda a un evento existente"}), 404
+        return jsonify({"ERROR": "Evento no encontrado."}), 404
+
+    partner_id = get_jwt_identity()  # Obtén el ID del partner autenticado
+
+    if evento.partner_id != partner_id:
+        return jsonify({"ERROR": "No tienes permiso para eliminar este evento."}), 403  # 403 Forbidden
 
     db.session.delete(evento)
     db.session.commit()
 
     return jsonify({"message": "Evento eliminado exitosamente"}), 200
+
+
+# Endpoint para obtener eventos por partner_id
+@api.route('/api/eventos/partner/<int:partner_id>', methods=['GET'])
+@jwt_required()  # Requiere autenticación
+def obtener_eventos_partner(partner_id):
+    try:
+        # Filtramos los eventos por el partner_id proporcionado
+        eventos = Eventos.query.filter_by(partner_id=partner_id).all()
+
+        if not eventos:
+            return jsonify({"msg": "No se encontraron eventos para este partner."}), 404
+
+        # Serializamos los eventos en un array de objetos JSON
+        eventos_serializados = [evento.serialize() for evento in eventos]
+
+        return jsonify({
+            "partner_id": partner_id,
+            "eventos": eventos_serializados  # Array de objetos con los eventos serializados
+        }), 200  # Retornamos la lista de eventos serializados dentro de un objeto
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @api.route('/partners', methods=['GET'])
 def get_partners():
@@ -365,6 +406,7 @@ def login_partner():
         "message": "Inicio de sesión de Partner correcto", 
         "access_token": access_token, 
         "partner_id": partner.id
+    
     }), 200
 
 

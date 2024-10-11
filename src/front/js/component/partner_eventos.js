@@ -95,29 +95,34 @@ export const Partner_Eventos = () => {
                                 </ul>
                             </div>
                             <div className="d-flex justify-content-end align-items-start">
-                                <button className="btn btn-icon"
-                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabindex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabindex="-1" />
-                                </button>
+                                {console.log('evento.partner_id:', evento.partner_id, 'store.partner_id:', store.partner_id)}
+                                {console.log(store.eventos)}
+                                {evento.partner_id === store.partner_id && (
+                                    <>
+                                        <button className="btn btn-icon"
+                                            onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabindex="-1">
+                                            <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabindex="-1" />
+                                        </button>
 
-                                <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabindex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabindex="-1" />
-                                </button>
+                                        <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabindex="-1">
+                                            <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabindex="-1" />
+                                        </button>
+                                    </>
+                                )}
                             </div>
                             <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
                                 <h5 style={{ textAlign: 'right', margin: 0, color: '#7c488f' }}><b>plazas reservadas</b></h5>
                                 <hr className="mt-0 mb-1" style={{ color: '#ffc107', borderWidth: '2px' }}></hr>
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                                     {evento.usuarios && evento.usuarios.length > 0 ? (
-                                        <>
+                                        <><>
                                             {evento.usuarios.slice(0, 4).map((usuario, index) => (
                                                 <div key={index} style={{ textAlign: 'center' }}>
                                                     <img
                                                         src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
                                                         alt={usuario}
                                                         className="rounded-circle mb-1"
-                                                        style={{ width: '50px', height: '50px' }}
-                                                    />
+                                                        style={{ width: '50px', height: '50px' }} />
                                                     <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
                                                 </div>
                                             ))}
@@ -140,8 +145,9 @@ export const Partner_Eventos = () => {
                                                     +{evento.usuarios.length - 4}
                                                 </button>
                                             )}
-                                        </>
+                                        </><p className="text-muted text-end"><b>Creado por:</b> {store.eventos.nombre}</p></>
                                     ) : (
+                                        
                                         <p className="text-danger text-center">Aún no hay<br />plazas reservadas</p>
                                     )}
                                 </div>

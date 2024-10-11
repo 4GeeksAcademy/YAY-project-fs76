@@ -22,6 +22,13 @@ export const Partner_Evento_Card = () => {
 
     const evento = store.eventos.find((evento) => evento.id === parseInt(params.theid));
 
+if (!evento) {
+  console.log("Evento aún no disponible");
+  return null; // O puedes mostrar un mensaje de carga en lugar de null
+}
+
+console.log("Evento seleccionado:", evento);
+
     const handleShowModal = (usuarios) => {
         setSelectedUsuarios(usuarios);
         setShowModal(true);
@@ -83,6 +90,9 @@ export const Partner_Evento_Card = () => {
                             <span className="text-muted d-block mb-3">
                                 <b>Descripción</b>: {evento.breve_descripcion}
                             </span>
+                            <span className="text-muted d-block mb-3">
+                            <b>Creador del evento</b>: {evento.partner_nombre}
+                             </span>
 
                             <div className="usuarios-inscritos my-3 me-5">
                                 <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
@@ -127,21 +137,23 @@ export const Partner_Evento_Card = () => {
                             </div>
 
                             <div className="d-flex justify-content-between align-items-end">
-                                <div>
-                                <Link to={`/formulario-evento/${evento.id}`}>
-                                    <button className="btn btn-icon" style={{ color: '#7c488f' }}>
-                                        <i className="fa-solid fa-pencil" />
-                                    </button>
-                                </Link>
-                                <button className="btn btn-icon" style={{ color: '#7c488f' }}
-                                onClick={() => handleDeleteClick(evento)}>
-                                    <i className="fa-solid fa-trash" />
-                                </button>
-                                </div>
+                                {evento.partner_id === store.partner_id && (
+                                    <div>
+                                        <Link to={`/formulario-evento/${evento.id}`}>
+                                            <button className="btn btn-icon" style={{ color: '#7c488f' }}>
+                                                <i className="fa-solid fa-pencil" />
+                                            </button>
+                                        </Link>
+                                        <button className="btn btn-icon" style={{ color: '#7c488f' }} onClick={() => handleDeleteClick(evento)}>
+                                            <i className="fa-solid fa-trash" />
+                                        </button>
+                                    </div>
+                                )}
                                 <Link to="/partners-eventos">
                                     <button className="btn btn btn-secondary me-5">Volver atrás</button>
                                 </Link>
-                            </div>
+                                </div>
+
                         </div>
                     </div>
                 </div>

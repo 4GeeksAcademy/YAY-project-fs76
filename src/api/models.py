@@ -84,6 +84,9 @@ class Eventos(db.Model):
             mes = meses[self.fecha.month]
             fecha_formateada = f"{self.fecha.day} de {mes} de {self.fecha.year}"
 
+        # Buscamos el partner asociado al evento
+        partner = Partners.query.get(self.partner_id)
+
         return {
             "id": self.id,
             "nombre": self.nombre,
@@ -97,8 +100,10 @@ class Eventos(db.Model):
             "precio": self.precio,
             "cupo": self.cupo,
             "observaciones": self.observaciones,
-            "partner_id": self.partner_id
+            "partner_id": self.partner_id,
+            "partner_nombre": partner.nombre if partner else "No disponible"  # Incluimos el nombre del partner
         }
+
 
 class Partners(db.Model):
     id = db.Column(db.Integer, primary_key=True)
