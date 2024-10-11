@@ -1,9 +1,7 @@
-// CompletarDatosUsuario.js
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar esto
 import { MapaUsuario } from './mapaUsuario';
-
 
 const CompletarDatosUsuario = () => {
     const { actions } = useContext(Context);
@@ -14,6 +12,8 @@ const CompletarDatosUsuario = () => {
     // const [ubicacion, setUbicacion] = useState("");
     const [direccion, setDireccion] = useState("");
     const [breve_descripcion, setDescripcion] = useState("");
+    const [misIntereses, setMisIntereses] = useState([]); // New state for mis intereses
+    const [interesesSeleccionados, setInteresesSeleccionados] = useState({}); // New state to store selected interests
     const navigate = useNavigate();
 
     // Obtén el userId del sessionStorage
@@ -22,24 +22,32 @@ const CompletarDatosUsuario = () => {
     const handleNextStep = () => {
         setStep(step + 1);
     };
-
     const handlePreviousStep = () => {
         setStep(step - 1);
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion);
-
+        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, misIntereses)
         if (result) {
+            await actions.updateProfile(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, misIntereses);
+            localStorage.setItem('selectedInterests', JSON.stringify(misIntereses));
             alert("Datos completados con éxito");
             navigate(`/profile/${userId}`);
         } else {
             alert("Error al completar los datos");
         }
     };
-    
+
+    const handleInteresesChange = (interes) => {
+        if (interesesSeleccionados[interes]) {
+            setInteresesSeleccionados((prevIntereses) => ({ ...prevIntereses, [interes]: false }));
+            setMisIntereses((prevIntereses) => prevIntereses.filter((i) => i !== interes));
+        } else {
+            setInteresesSeleccionados((prevIntereses) => ({ ...prevIntereses, [interes]: true }));
+            setMisIntereses((prevIntereses) => [...prevIntereses, interes]);
+        }
+    };
+
     return (
         <div className="completar-datos-container">
             <h2>Completa tu Perfil</h2>
@@ -88,6 +96,34 @@ const CompletarDatosUsuario = () => {
                             value={breve_descripcion}
                             onChange={(e) => setDescripcion(e.target.value)}
                         />
+                        <button type="button" onClick={handlePreviousStep}>Anterior</button>
+                        <button type="button" onClick={handleNextStep}>Siguiente</button>
+                    </div>
+                )}
+                {step === 4 && (
+                    <div>
+                        <label>Mis Intereses (selecciona al menos 3):</label>
+                        <div>
+                            <button type="button" onClick={() => handleInteresesChange("Deporte")}>
+                                {interesesSeleccionados["Deporte"] ? "Quitar" : ""} Deporte
+                            </button>
+                            <button type="button" onClick={() => handleInteresesChange("Música")}>
+                                {interesesSeleccionados["Música"] ? "Quitar" : ""} Música
+                            </button>
+                            <button type="button" onClick={() => handleInteresesChange("Cine")}>
+                                {interesesSeleccionados["Cine"] ? "Quitar" : ""} Cine
+                            </button>
+                            <button type="button" onClick={() => handleInteresesChange("Literatura")}>
+                                {interesesSeleccionados["Literatura"] ? "Quitar" : ""} Literatura
+                            </button>
+                            <button type="button" onClick={() => handleInteresesChange("Viajes")}>
+                                {interesesSeleccionados["Viajes"] ? "Quitar" : ""} Viajes
+                            </button>
+                            
+                        </div>
+                        {misIntereses.length < 3 && (
+                            <p>Por favor, selecciona al menos 3 intereses.</p>
+                        )}
                         <button type="button" onClick={handlePreviousStep}>Anterior</button>
                         <button type="submit">Completar Registro</button>
                     </div>

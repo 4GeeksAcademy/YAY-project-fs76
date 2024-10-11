@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext"; // Asegúrate de que la ruta sea correcta
 import { useParams, useNavigate } from "react-router-dom";
 import { MapaUsuario } from "./mapaUsuario";
@@ -13,18 +13,22 @@ const EditProfile = () => {
         direccion: '',
         breve_descripcion: ''
     });
+    const [intereses, setIntereses] = useState([]);
 
-    const navigate = useNavigate(); // Para redirigir después de la edición
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Verifica si el userId está en los parámetros, si no, obténlo de localStorage
+        const interesesSeleccionados = localStorage.getItem('selectedInterests');
+        if (interesesSeleccionados) {
+            setIntereses(JSON.parse(interesesSeleccionados));
+        }
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
-
         if (idToUse) {
             actions.getProfile(idToUse)
                 .then((data) => {
                     if (data) {
                         setProfile(data); // Establece el perfil en el estado local
+                        setIntereses(data.intereses || []); // Establece los intereses en el estado local
                     } else {
                         console.error("No se pudo obtener el perfil");
                     }
@@ -42,17 +46,28 @@ const EditProfile = () => {
         setProfile({ ...profile, [name]: value });
     };
 
+    const handleInteresChange = (interes) => {
+        if (intereses.includes(interes)) {
+            setIntereses(intereses.filter((i) => i !== interes));
+        } else {
+            setIntereses([...intereses, interes]);
+        }
+        localStorage.setItem('selectedInterests', JSON.stringify(intereses)); // Update selected interests in localStorage
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        actions.completarDatos(userId, profile.nombre, profile.apellidos, profile.fecha_nacimiento, profile.direccion, profile.breve_descripcion)
-            .then(() => {
-                alert("Perfil actualizado exitosamente");
-                navigate(`/profile/${userId}`); // Redirigir al perfil después de la actualización
-            })
-            .catch((error) => {
-                console.error("Error al actualizar el perfil:", error);
-                alert("Error al actualizar el perfil");
-            });
+        const profileConIntereses = { ...profile, intereses };
+        actions.completarDatos(userId, profileConIntereses.nombre, profileConIntereses.apellidos, profileConIntereses.fecha_nacimiento, profileConIntereses.direccion, profileConIntereses.breve_descripcion, profileConIntereses.intereses)
+          .then(() => {
+            localStorage.setItem('selectedInterests', JSON.stringify(profileConIntereses.intereses));
+            alert("Perfil actualizado exitosamente");
+            navigate(`/profile/${userId}`); // Redirigir al perfil después de la actualización
+          })
+          .catch((error) => {
+            console.error("Error al actualizar el perfil:", error);
+            alert("Error al actualizar el perfil");
+          });
     };
 
     return (
@@ -88,7 +103,7 @@ const EditProfile = () => {
                     />
                 </div>
                 <div>
-                <label>Dirección:</label>
+                    <label>Dirección:</label>
                     <MapaUsuario
                         setDireccion={(direccion) => setProfile({ ...profile, direccion })} // Actualiza la dirección en el perfil
                         initialDireccion={profile.direccion} // Pasa la dirección guardada
@@ -101,6 +116,96 @@ const EditProfile = () => {
                         value={profile.breve_descripcion}
                         onChange={handleChange}
                     />
+                </div>
+                <div>
+                    <label>Intereses:</label>
+
+                    <div>
+
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: intereses.includes("Deporte") ? "#007bff" : "",
+                                color: intereses.includes("Deporte") ? "#ffffff" : "",
+                                border: intereses.includes("Deporte") ? "none" : "",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => handleInteresChange("Deporte")}
+                        >
+                            Deporte
+                        </button>
+
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: intereses.includes("Música") ? "#007bff" : "",
+                                color: intereses.includes("Música") ? "#ffffff" : "",
+                                border: intereses.includes("Música") ? "none" : "",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                cursor: "pointer"
+                            }}
+
+                            onClick={() => handleInteresChange("Música")}
+                        >
+                            Música
+                        </button>
+
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: intereses.includes("Cine") ? "#007bff" : "",
+                                color: intereses.includes("Cine") ? "#ffffff" : "",
+                                border: intereses.includes("Cine") ? "none" : "",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => handleInteresChange("Cine")}
+                        >
+                            Cine
+                        </button>
+
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: intereses.includes("Literatura") ? "#007bff" : "",
+                                color: intereses.includes("Literatura") ? "#ffffff" : "",
+                                border: intereses.includes("Literatura") ? "none" : "",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => handleInteresChange("Literatura")}
+                        >
+                            Literatura
+                        </button>
+
+                        <button
+                            type="button"
+                            style={{
+                                backgroundColor: intereses.includes("Viajes") ? "#007bff" : "",
+                                color: intereses.includes("Viajes") ? "#ffffff" : "",
+                                border: intereses.includes("Viajes") ? "none" : "",
+                                padding: "10px 20px",
+                                fontSize: "16px",
+                                cursor: "pointer"
+                            }}
+                            onClick={() => handleInteresChange("Viajes")}
+                        >
+                            Viajes
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label>Intereses seleccionados:</label>
+                    <ul>
+                        {intereses && intereses.map((interes, index) => (
+                            <li key={index}>{interes}</li>
+                        ))}
+                    </ul>
                 </div>
                 <button type="submit">Guardar Cambios</button>
             </form>
