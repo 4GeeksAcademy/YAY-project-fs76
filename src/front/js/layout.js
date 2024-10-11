@@ -39,6 +39,7 @@ import { UserInscripciones } from "./component/userInscripciones";
 import { EventosMapa } from "./component/eventosMapa";
 import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
+import { PartnerMisEventos } from "./component/partner_mis_eventos";
 
 
 function Layout() {
@@ -88,6 +89,8 @@ function Layout() {
                         <Route element={<EventosPublicos />} path="/eventos-yay" />
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
+                        <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
+                        
                     </Routes>
                     <Footer />
                 </ScrollToTop>

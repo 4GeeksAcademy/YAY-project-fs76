@@ -54,7 +54,7 @@ export const Evento_Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { nombre, fecha, hora_inicio, hora_fin, direccion, latitud, longitud, breve_descripcion, dificultad, precio, cupo, observaciones } = nuevoEvento;
-
+    
         // Validación de campos
         if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || latitud === null || longitud === null || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones) {
             if (!alert || alert.type !== 'danger') {
@@ -65,14 +65,15 @@ export const Evento_Form = () => {
             const formattedDate = new Date(fecha).toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
             const formattedStartTime = hora_inicio; // formato 'HH:MM'
             const formattedEndTime = hora_fin; // formato 'HH:MM'
-
+    
             const eventoData = {
                 ...nuevoEvento,
                 fecha: formattedDate,
                 hora_inicio: formattedStartTime,
                 hora_fin: formattedEndTime,
+                partner_id: store.partnerId // Agregar el campo partner_id
             };
-
+    
             if (theid) {
                 actions.updateEvento(theid, eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento updated successfully' });
@@ -92,7 +93,6 @@ export const Evento_Form = () => {
             }
         }
     };
-
     return (
         <>
             <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">

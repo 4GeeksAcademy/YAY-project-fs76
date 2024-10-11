@@ -83,6 +83,9 @@ export const Partner_Evento_Card = () => {
                             <span className="text-muted d-block mb-3">
                                 <b>Descripción</b>: {evento.breve_descripcion}
                             </span>
+                            <span className="text-muted d-block mb-3">
+                                <b>Creador del evento</b>: {evento.partner_nombre}
+                            </span>
 
                             <div className="usuarios-inscritos my-3 me-5">
                                 <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
@@ -127,17 +130,19 @@ export const Partner_Evento_Card = () => {
                             </div>
 
                             <div className="d-flex justify-content-between align-items-end">
-                                <div>
-                                    <Link to={`/formulario-evento/${evento.id}`}>
-                                        <button className="btn btn-icon" style={{ color: '#7c488f' }}>
-                                            <i className="fa-solid fa-pencil" />
-                                        </button>
-                                    </Link>
-                                    <button className="btn btn-icon" style={{ color: '#7c488f' }}
-                                        onClick={() => handleDeleteClick(evento)}>
-                                        <i className="fa-solid fa-trash" />
-                                    </button>
-                                </div>
+                              {/* Botones de editar y eliminar */}
+{evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
+  <div className="d-flex justify-content-end align-items-start">
+    <button className="btn btn-icon"
+      onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+      <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
+    </button>
+
+    <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
+      <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
+    </button>
+  </div>
+)}
                                 <Link to="/partners-eventos">
                                     <button className="btn btn btn-secondary me-5">Volver atrás</button>
                                 </Link>
