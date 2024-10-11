@@ -53,23 +53,23 @@ const Profile = () => {
                     console.error("Error al obtener el perfil:", error);
 
                 });
-
+            
         } else {
 
             console.error("No se proporcionó userId");
 
         }
-
+    
     }, [userId, store.user_id]);
 
     return (
-        <div>
+        <div className="m-5">
             <h2>Perfil del usuario</h2>
             {profile.nombre ? (
-                <>
-                    <div className="d-flex flex-row">
+                <> 
+                    <div className="d-flex flex-row my-5 justify-content-around">
                         <div>
-                            <GetUserPerfilImage />
+
                             <p>Nombre: {profile.nombre}</p>
                             <p>Apellidos: {profile.apellidos}</p>
                             <p>Fecha de nacimiento: {profile.fecha_nacimiento}</p>
@@ -79,14 +79,15 @@ const Profile = () => {
                                 <p> Mis intereses: {profile.selectedInterests.join(', ')}</p>
                             )}
                             <Link to={`/editProfile/${userId}`}>
-                                <button>Editar perfil</button>
+                                <button className="me-3">Editar perfil</button> 
                             </Link>
                             {/* Vincula el botón de inscripciones */}
                             <Link to={`/inscripciones/${userId}`}>
                                 <button>Tus eventos</button>
                             </Link>
                         </div>
-                        <div>
+                        <div className="me-5">
+                        <GetUserPerfilImage />
                             {/* Pasa el userId como prop */}
                             <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
                         </div>

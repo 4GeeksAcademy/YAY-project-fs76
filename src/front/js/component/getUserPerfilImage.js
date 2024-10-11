@@ -7,6 +7,7 @@ const GetUserPerfilImage = () => {
     const [error, setError] = useState(null);
     const { store, actions } = useContext(Context);
 
+    
     const fetchPerfilImage = async () => {
         try {
             // Llama a la acción para obtener la imagen de perfil

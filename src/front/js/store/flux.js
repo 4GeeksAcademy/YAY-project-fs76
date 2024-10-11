@@ -1,11 +1,14 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
+            foto_perfil:null,
             token: null,
             message: null,
             auth: false,
             user_id: null, // Agrega el user_id aquí
             inscripcion_id: null,
+            partner_id: null,
+            public_id_perfil:null,
             intereses: [],
             eventos: [],
             entidades: [],
@@ -53,20 +56,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getUserId: () => {
                 const store = getStore(); 
-                return store.user_id; 
+                if (store.user_id) {
+                    return store.user_id; 
+                }
+                const userIdFromLocalStorage = localStorage.getItem("user_id");
+                return userIdFromLocalStorage ? userIdFromLocalStorage : null; 
             },
-
             getInscripcionId: () => {
                 const store = getStore(); 
                 return store.inscripcion_id; 
             },
 
-            // Ejemplo de función que cambia el color
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
             },
 
-            // Acción para obtener el mensaje desde el backend
             getMessage: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
@@ -357,7 +361,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             signupPartner: (email, password) => {
-                console.log("Signup Partner desde flux")
+                console.log("Signup Partner desde flux");
                 const requestOptions = {
                     method: 'POST',
                     headers: {
@@ -368,26 +372,37 @@ const getState = ({ getStore, getActions, setStore }) => {
                         "password": password
                     })
                 };
+                
                 fetch(process.env.BACKEND_URL + "/api/partner-signup", requestOptions)
                     .then(response => {
-                        if (response.status === 200) {
-                            const store = getStore();
-                            const newPartner = { email };
-                            setStore({
-                                partners: [...store.partners, newPartner],
-                            });
+                        // Maneja la respuesta
+                        if (!response.ok) {
+                            throw new Error('Error en la creación de la cuenta');
                         }
-                        return response.json()
+                        return response.json();
                     })
                     .then(data => {
                         console.log(data);
+                        // Guardar el token y el partner_id en localStorage
                         localStorage.setItem("token", data.access_token);
-                        setStore({ message: null, partnerId: data.partner_id });
+                        localStorage.setItem("partner_id", data.partner_id);
+                        
+                        // Actualiza el store
+                        const store = getStore();
+                        const newPartner = { email, partner_id: data.partner_id }; // Asegúrate de incluir el partner_id
+                        setStore({
+                            partners: [...store.partners, newPartner],
+                            message: null, // Restablecer el mensaje de error, si existe
+                            partnerId: data.partner_id // Almacenar el partnerId en el store
+                        });
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        // Aquí puedes manejar el error y establecer un mensaje en el store si es necesario
+                        setStore({ message: "Error al crear la cuenta. Inténtalo de nuevo." });
                     });
             },
+            
 
             checkPartnerExists: (email) => {
                 return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
@@ -401,33 +416,40 @@ const getState = ({ getStore, getActions, setStore }) => {
                     .then(data => data.exists);
             },
 
-            loginPartner: (email, password) => {
-                console.log("Login Partner desde flux");
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                    body: JSON.stringify({ "email": email, "password": password })
-                };
-                fetch(process.env.BACKEND_URL + "/api/partner-login", requestOptions)
-                    .then(response => {
-                        if (response.status === 200) {
-                            setStore({ auth: true });
-                            return response.json();
-                        } else {
-                            console.log("El correo electrónico o la contraseña son incorrectos")
-
-                        }
-                    })
-                    .then(data => {
-                        if (data.access_token) {
-                            localStorage.setItem("token", data.access_token);
-                            console.log("Inicio de sesión de Partner correcto", "token", data.access_token);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+            loginPartner: async (email, password) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + "/api/partner-login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
                     });
+            
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("Datos recibidos:", data);
+                        console.log(data.partner_id);
+            
+                        // Actualizar el store con los datos del partner y token
+                        setStore({ auth: true, partner_id: data.partner_id, token: data.access_token });
+            
+                        // Guardar auth, token y partner_id en localStorage
+                        localStorage.setItem("auth", "true");
+                        localStorage.setItem("token", data.access_token);
+                        localStorage.setItem("partner_id", data.partner_id);
+                        return true;
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error en el login de Partner:", errorData);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error en login de Partner", error);
+                    return false;
+                }
             },
+            
 
             completePartner: (theid, newPartner, onSuccess, onError) => {
                 fetch(`${process.env.BACKEND_URL}/api/completar-perfil-partner/${theid}`, {
@@ -448,6 +470,80 @@ const getState = ({ getStore, getActions, setStore }) => {
                         onError();
                     });
             },
+       
+
+            getPartnerProfile: async (partnerId) => {
+                try {
+                    // Si no se proporciona el partnerId, lo obtenemos desde el token
+                    if (!partnerId) {
+                        const token = localStorage.getItem("token");
+            
+                        if (token) {
+                            // Decodificamos el token y obtenemos el partnerId
+                            const decodedToken = jwt_decode(token);
+                            partnerId = decodedToken.partnerId; // Cambia 'partnerId' según el nombre exacto del campo en tu token
+                            console.log("Partner ID desde el token:", partnerId);
+                        } else {
+                            console.error("No se encontró un token en localStorage.");
+                            return null;
+                        }
+                    }
+            
+                    if (partnerId) {
+                        const url = `${process.env.BACKEND_URL}/api/partners/${partnerId}`;
+            
+                        const token = localStorage.getItem("token");
+                        const response = await fetch(url, {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+            
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log("Datos del partner obtenidos exitosamente", data);
+                            return data;
+                        } else {
+                            const errorData = await response.json();
+                            console.error("Error al obtener los datos del partner:", errorData);
+                            return null;
+                        }
+                    } else {
+                        console.error("partnerId no fue proporcionado.");
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de obtener datos del partner:", error);
+                    return null;
+                }
+            },
+            updatePartnerProfile: (theid, updatedPartner, onSuccess, onError) => {
+                fetch(`${process.env.BACKEND_URL}/api/partners/${theid}`, {
+                    method: 'PUT', // Método PUT para actualizar el perfil
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedPartner)
+                })
+                .then(resp => resp.json())
+                .then(data => {
+                    const store = getStore();
+                    setStore({
+                        partners: store.partners.map(partner => partner.id === data.id ? data : partner)
+                    });
+                    onSuccess();
+                })
+                .catch(error => {
+                    console.error(error);
+                    onError();
+                });
+            },
+            
+            
+            
+            
 
             signup: async (email, password) => { 
                 try {
@@ -499,7 +595,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
-            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion) => {
+            completarDatos: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
                 try {
                     // Construir la URL de la API usando el userId proporcionado
                     const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
@@ -517,6 +613,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                             apellidos,
                             fecha_nacimiento,
                             direccion,
+                            latitud,
+                            longitud,
                             breve_descripcion
                         }), 
                     });
@@ -537,9 +635,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, intereses) => {
-
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion,latitud,longitud,breve_descripcion,intereses) => {
                 try {
+                  
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
                   console.log("URL del fetch:", url);
                   const response = await fetch(url, {
@@ -553,8 +651,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                       apellidos,
                       fecha_nacimiento,
                       direccion,
+                      latitud,
+                      longitud,
                       breve_descripcion,
-                      intereses 
+                      intereses,
                     }), 
                   });
               
@@ -715,6 +815,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
             
+            loadInscripciones: () => {
+                fetch(`${process.env.BACKEND_URL}/api/inscripciones`)
+                    .then(resp => {
+                        if (!resp.ok) {
+                            throw new Error("Error fetching inscripciones, status: " + resp.status);
+                        }
+                        return resp.json();
+                    })
+                    .then(data => {
+                        setStore({ inscripciones: data }); // Actualiza el store con las inscripciones
+                    })
+                    .catch(error => {
+                        console.error("Error loading inscripciones from backend", error);
+                    });
+            },
+
             uploadImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
@@ -726,7 +842,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return reject(new Error("Usuario no autenticado"));
                     }
             
-                    fetch(`${process.env.BACKEND_URL}/api/upload-image`, {  // Agregamos barra al final de la URL base
+                    fetch(`${process.env.BACKEND_URL}/api/upload-image`, {  
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -900,6 +1016,109 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
+            uploadPartnerImage: (file) => {
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    formData.append("es_perfil", true); // Indicar que la imagen es de perfil
+            
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        console.error("No se encontró el token. Usuario no autenticado.");
+                        return reject(new Error("Usuario no autenticado"));
+                    }
+            
+                    fetch(`${process.env.BACKEND_URL}/api/perfil/upload-image/partner`, {  
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Token de autenticación
+                        },
+                        body: formData, // FormData que incluye la imagen y otros datos
+                    })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Error en la respuesta del servidor");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        resolve(data);
+                    })
+                    .catch((error) => {
+                        console.error("Error subiendo la imagen de perfil:", error);
+                        reject(error);
+                    });
+                });
+            },
+            
+            
+            getPartnerImage: () => {
+                const token = localStorage.getItem('token');
+                
+                // Intenta obtener la imagen desde el localStorage primero
+                const storedImage = localStorage.getItem('partner_profile_image');
+                if (storedImage) {
+                    return Promise.resolve({ url_imagen: storedImage }); // Retorna la imagen guardada en localStorage
+                }
+            
+                return fetch(`${process.env.BACKEND_URL}/api/perfil/images/partner`, {  
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Error en la respuesta al obtener la imagen de perfil");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.foto_perfil) {
+                        localStorage.setItem('partner_profile_image', data.foto_perfil);  // Guarda la imagen en localStorage
+                        setStore({ response: data.foto_perfil }); // Guarda la imagen de perfil en el store
+                        return data;
+                    } else {
+                        throw new Error("No se encontró la imagen de perfil.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error obteniendo la imagen de perfil:", error);
+                    throw error;
+                });
+            },
+            
+            
+        
+            deletePartnerImage: async (public_id) => {
+                const token = localStorage.getItem('token');
+                
+                if (!public_id) {
+                    console.error("Faltan parámetros: public_id está undefined");
+                    return;
+                }
+            
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/perfil/image/partner/${public_id}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al eliminar la imagen de perfil');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al eliminar la imagen de perfil:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
+                }
+            },
 
             getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
@@ -922,7 +1141,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
             },
             
-            loadEventosConUsuarios: () => {
+            loadEventosConUsuarios: () => { 
                 return fetch(process.env.BACKEND_URL + '/api/eventos/con-usuarios')
                     .then(resp => {
                         if (!resp.ok) {
@@ -938,7 +1157,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                         console.error("Error loading eventos con usuarios from backend", error);
                     });
             },
+
+            getInscripcionUsuarioEventoInscrito: async (usuarioId, eventoId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/inscripciones/usuario/${usuarioId}/evento/${eventoId}/inscrito`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
             
+                    if (response.ok) {
+                        const data = await response.json();
+                        return { inscrito: data.inscrito, id: data.id }; // Retorna el estado y el ID
+                    
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error:", errorData);
+                        return { inscrito: false, id: null };
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    return { inscrito: false, id: null }; // Retorna false y null en caso de error
+                }
+            },
+
 
             changeColor: (index, color) => {
                 const store = getStore();

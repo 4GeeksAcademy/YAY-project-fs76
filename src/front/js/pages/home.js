@@ -1,6 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
+
+const CambiarLetra = () => {
+    const [valor, setValor] = useState('o');
+    const valores = ['a', 'o'];
+    let indice = 0;
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setValor(valores[indice]);
+            indice = (indice + 1) % valores.length;
+        }, 1200);
+        return () => clearInterval(interval);
+    }, []);
+
+    return <h1 style={{ fontSize: '100px', color: '#7c488f' }}>Bienvenid{valor} a <b>YAY</b></h1>;
+};
+
 
 
 export const Home = () => {
@@ -16,9 +33,11 @@ export const Home = () => {
 			backgroundColor: '#de8f79',
 			zIndex: -1
 		}}></div>
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '75vh'}}>
-        <h1 className="text-center" style={{ fontSize: '100px', color: '#7c488f' }}>Bienvenido/a a <b>YAY</b></h1>
-      </div>
+<div className="text-center" style={{ height: '75vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+<CambiarLetra /> 
+    <h3 style={{ backgroundColor: '#A7D0CD', color: '#494949', letterSpacing: '5px', padding: '5px' }}>HAZ DE TU BARRIO UN HOGAR</h3>
+    <img src="https://i.ibb.co/tbbV6G0/yay-fondo.png" alt="yay-fondo" border="0" className="h-25 mt-2"/>
+</div>
 		</>
 	);
 };
