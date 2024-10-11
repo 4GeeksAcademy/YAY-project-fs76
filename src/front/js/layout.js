@@ -32,11 +32,12 @@ import CompletarDatosUsuario from "./component/completarDatosUsuario";
 import ImageUpload from "./component/imageUpload";
 import ProfilePicture from "./component/profilePicture";
 import Profile from "./component/profile";
-import PartnerProfile from "./component/parnetProfile";
+import PartnerProfile from "./component/partnerProfile";
 import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
 import { EventosMapa } from "./component/eventosMapa";
+
 
 function Layout() {
  

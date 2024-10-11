@@ -384,7 +384,9 @@ def complete_partner_profile(partner_id):
 
     partner.nombre = request_body.get("nombre", partner.nombre)
     partner.nif = request_body.get("nif", partner.nif)
-    partner.ciudad = request_body.get("ciudad", partner.ciudad)
+    partner.direccion = request_body.get("direccion", partner.direccion)
+    partner.latitud = request_body.get("latitud", partner.latitud)
+    partner.longitud = request_body.get("longitud", partner.longitud)
     partner.sector = request_body.get("sector", partner.sector)
     partner.entidad_id = request_body.get("entidad_id", partner.entidad_id)
 
@@ -403,7 +405,9 @@ def update_partner(partner_id):
 
     partner.nombre = request_body.get("nombre", partner.nombre)
     partner.nif = request_body.get("nif", partner.nif)
-    partner.ciudad = request_body.get("ciudad", partner.ciudad)
+    partner.direccion = request_body.get("direccion", partner.direccion)
+    partner.latitud = request_body.get("latitud", partner.latitud)
+    partner.longitud = request_body.get("longitud", partner.longitud)
     partner.sector = request_body.get("sector", partner.sector)
     partner.entidad_id = request_body.get("entidad_id", partner.entidad_id)
 
@@ -540,9 +544,7 @@ def ruta_protegida():
 
 @api.route('/signup', methods=['POST'])
 def signup():
-    # nombre = request.json.get('nombre')
-    # apellidos = request.json.get('apellidos')
-    # ciudad = request.json.get('ciudad')
+
     email = request.json.get('email')
     password = request.json.get('password')
 
@@ -564,9 +566,7 @@ def signup():
     
     # Crear el nuevo usuario
     new_usuario = Usuarios(
-        # nombre=nombre,
-        # apellidos=apellidos,
-        # ciudad=ciudad,
+
         email=email,
         password=hashed_password,
         is_active=True

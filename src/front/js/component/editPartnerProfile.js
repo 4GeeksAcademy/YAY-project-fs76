@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext"; // Asegúrate de que la ruta sea correcta
 import { useParams, useNavigate } from "react-router-dom";
+import { Mapa } from "./mapa";
 
 const EditPartnerProfile = () => {
     const { store, actions } = useContext(Context);
@@ -8,22 +9,24 @@ const EditPartnerProfile = () => {
     const [profile, setProfile] = useState({
         nombre: '',
         nif: '',
-        ciudad: '',
+        direccion: '',
+        latitud: '',
+        longitud: '',
         sector: '',
         entidad_id: ''
     });
     const [alert, setAlert] = useState(null); // Para las alertas
     const navigate = useNavigate(); // Para redirigir después de la edición
+    const [direccion, setDireccion] = useState("");
 
     useEffect(() => {
-        // Verifica si el partnerId está en los parámetros
-        const idToUse = partnerId || localStorage.getItem("partnerId") || store.partner_id;
-
-        if (idToUse) {
-            actions.getProfile(idToUse)
+        if (partnerId) {
+            actions.getEntidades();
+            actions.getPartnerProfile(partnerId)
                 .then((data) => {
                     if (data) {
                         setProfile(data); // Establece el perfil en el estado local
+                        setDireccion(data.direccion); // Establece la dirección en el estado local
                     } else {
                         console.error("No se pudo obtener el perfil");
                     }
@@ -34,7 +37,7 @@ const EditPartnerProfile = () => {
         } else {
             console.error("No se proporcionó partnerId");
         }
-    }, [partnerId, store.partner_id]);
+    }, [partnerId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,15 +46,12 @@ const EditPartnerProfile = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        const idToUse = partnerId || localStorage.getItem("partnerId") || store.partner_id;
 
-        // Llamamos a updatePartnerProfile en lugar de completarDatos
-        actions.updatePartnerProfile(idToUse, profile, 
+        actions.updatePartnerProfile(partnerId, profile,
             () => {
                 setAlert({ type: 'success', message: 'Perfil actualizado exitosamente' });
                 setTimeout(() => {
-                    navigate(`/partner-profile/${idToUse}`); // Redirigir al perfil después de la actualización
+                    navigate(`/partner-profile/${partnerId}`); // Redirigir al perfil después de la actualización
                 }, 1000);
             },
             (error) => {
@@ -77,12 +77,19 @@ const EditPartnerProfile = () => {
                     <input type="text" name="nombre" value={profile.nombre} onChange={handleChange} className="form-control" id="nombreInput" required />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="nifInput" className="form-label">NIF</label>
+                    <label htmlFor="nifInput" className="form-label">NIF o DNI</label>
                     <input type="text" name="nif" value={profile.nif} onChange={handleChange} className="form-control" id="nifInput" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="ciudadInput" className="form-label">Ciudad</label>
-                    <input type="text" name="ciudad" value={profile.ciudad} onChange={handleChange} className="form-control" id="ciudadInput" />
+                <Mapa
+                        setDireccion={(direccion, latitud, longitud) => setProfile({
+                            ...profile,
+                            direccion,
+                            latitud, 
+                            longitud 
+                        })}
+                        initialDireccion={direccion}
+                    />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="sectorInput" className="form-label">Sector</label>
@@ -97,20 +104,20 @@ const EditPartnerProfile = () => {
                         className="form-control"
                         id="entidad_idInput"
                     >
-                        <option value="">Seleccione una entidad</option>
-                        {store.entidades.map((entidad) => (
-                            <option key={entidad.id} value={entidad.id}>
-                                {entidad.tipo}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="d-grid gap-2">
-                    <button type="submit" className="btn btn-primary w-100">Guardar Cambios</button>
-                </div>
-            </form>
-        </div>
-    );
+                       <option value="">Seleccione una entidad</option>
+        {store.entidades.map((entidad) => (
+            <option key={entidad.id} value={entidad.id}>
+                {entidad.tipo}
+            </option>
+        ))}
+    </select>
+</div>
+<div className="d-grid gap-2">
+    <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar Cambios</button>
+</div>
+</form>
+</div>
+);
 };
 
 export default EditPartnerProfile;
