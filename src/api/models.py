@@ -106,7 +106,9 @@ class Partners(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), unique=False, nullable=True)
     nif = db.Column(db.String(120), nullable=True)
-    ciudad = db.Column(db.String(120), nullable=True)
+    direccion = db.Column(db.String(255), nullable=True) 
+    latitud = db.Column(db.Float, nullable=True) 
+    longitud= db.Column(db.Float, nullable=True) 
     sector = db.Column(db.String(120), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -123,8 +125,10 @@ class Partners(db.Model):
         return {
             "id": self.id,
             "nombre": self.nombre,
-            "NIF": self.nif,
-            "ciudad": self.ciudad,
+            "nif": self.nif,
+            "direccion": self.direccion,
+            "latitud": self.latitud,
+            "longitud": self.longitud,
             "sector": self.sector,
             "email": self.email,
             "entidad_id": self.entidad_id,

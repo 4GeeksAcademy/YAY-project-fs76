@@ -96,7 +96,7 @@ export const Evento_Form = () => {
     return (
         <>
             <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
-                <h1 className="text-center" style={{ color: '#7c488f' }}>Crear/Editar Evento</h1>
+            <h1 className="text-center" style={{ color: '#7c488f' }}>{theid ? 'Editar Evento' : 'Crear Evento'}</h1>
                 {alert && (
                     <div className={`alert fade show alert-${alert.type}`} role="alert">
                         {alert.type === 'danger' ? <i className="fa-solid fa-triangle-exclamation"></i> : <i className="fa-solid fa-circle-check"></i>}

@@ -2,13 +2,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import { Navigate } from "react-router-dom";
+import { Mapa } from "./mapa";
 
 export const Partner_Completar = () => {
     const { store, actions } = useContext(Context);
     const [nuevoPartner, setNuevoPartner] = useState({
         nombre: '',
         nif: '',
-        ciudad: '',
+        direccion: '',
+        latitud: '',
+        longitud: '',
         sector: '',
         entidad_id: ''
     });
@@ -22,9 +25,9 @@ export const Partner_Completar = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nombre, nif, ciudad, sector, entidad_id } = nuevoPartner;
+        const { nombre, nif, direccion, latitud, longitud, sector, entidad_id } = nuevoPartner;
 
-        if (!nombre || !nif || !ciudad || !sector || !entidad_id) {
+        if (!nombre || !nif || !direccion || latitud === null || longitud === null || !sector || !entidad_id) {
             if (!alert || alert.type !== 'danger') {
                 setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
             }
@@ -38,6 +41,9 @@ export const Partner_Completar = () => {
                 setAlert({ type: 'danger', message: 'Error al completar el perfil' });
             });
         }
+    };
+    const setDireccion = (direccion, latitud, longitud) => {
+        setNuevoPartner({ ...nuevoPartner, direccion, latitud, longitud });
     };
 
     return (
@@ -61,8 +67,9 @@ export const Partner_Completar = () => {
                         <input type="text" value={nuevoPartner.nif} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nif: e.target.value })} className="form-control" id="nifInput" placeholder="Introduzca NIF o DNI..." />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="ciudadInput" className="form-label">Ciudad</label>
-                        <input type="text" value={nuevoPartner.ciudad} onChange={(e) => setNuevoPartner({ ...nuevoPartner, ciudad: e.target.value })} className="form-control" id="ciudadInput" placeholder="Introduzca ciudad..." />
+                 
+                            <Mapa setDireccion={setDireccion} initialDireccion={nuevoPartner.direccion} />
+                    
                     </div>
                     <div className="mb-3">
                         <label htmlFor="sectorInput" className="form-label">Sector</label>

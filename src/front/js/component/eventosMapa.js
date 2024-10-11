@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
 import { Context } from '../store/appContext';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Inscripciones } from './inscripciones';
 
@@ -13,6 +14,7 @@ export const EventosMapa = () => {
     const [mapCenter, setMapCenter] = useState({ lat: 40.1402000, lng: -3.4226700 });
     const [zoom, setZoom] = useState(10);
     const [address, setAddress] = useState('');
+    const navigate = useNavigate();
     const [inscripcionIds, setInscripcionIds] = useState([]);
     const params = useParams();
     const mapContainerStyle = {
@@ -25,7 +27,7 @@ export const EventosMapa = () => {
     useEffect(() => {
         actions.loadEventosConUsuarios();
         actions.loadInscripciones()
-        const userId = actions.getUserId();
+        const userId = actions.getUserId(); 
         if (userId) {
             actions.getProfile(userId).then(profile => {
                 if (profile && profile.latitud && profile.longitud) {
@@ -87,7 +89,18 @@ export const EventosMapa = () => {
     return (
         <div className="d-flex m-5">
             <div>
+            <div className="d-flex justify-content-between">
                 <h2 className="mb-2">Eventos disponibles <i className="fa-solid fa-map-location-dot"></i></h2>
+                <button className="custom-button btn btn-lg mb-3"
+                    onClick={()  => navigate(`/eventos`)}
+                    style={{
+                        borderColor: '#ffc107',
+                        color: '#494949'
+                    }}
+                >
+                    Ver en Lista  <i className="fa-solid fa-rectangle-list" style={{ color: '#7c488f' }}></i>
+                </button>
+                </div>
                 <LoadScript googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA" libraries={libraries}>
 
                     <GoogleMap
