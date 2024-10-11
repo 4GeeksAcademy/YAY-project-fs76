@@ -4,27 +4,21 @@ import { Context } from "../store/appContext";
 import { Navigate } from "react-router-dom";
 import "../../styles/home.css";
 
-export const Partner_Eventos = () => {
+export const EventosPublicos = () => {
     const { store, actions } = useContext(Context);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showModalInfo, setShowModalInfo] = useState(false);
     const [selectedUsuarios, setSelectedUsuarios] = useState([]);
     const navigate = useNavigate();
-    const isAuthenticated = store.auth;
-    const [showModalDelete, setShowModalDelete] = useState(false);
-    const [eventoAEliminar, setEventoAEliminar] = useState(null);
-    const [showModalWarning, setShowModalWarning] = useState(false);
 
-    if (!isAuthenticated) {
-        return <Navigate to="/notFound" />;
-    }
 
     useEffect(() => {
         actions.loadEventosConUsuarios()
             .then(() => {
                 setLoading(false);
-                console.log(store.eventos); // Inspecciona el contenido de store.eventos
+                console.log(store.eventos);
             })
             .catch(err => {
                 setLoading(false);
@@ -37,32 +31,17 @@ export const Partner_Eventos = () => {
         setShowModal(true);
     };
 
-    const handleDeleteClick = (evento) => {
-        if (evento.usuarios && evento.usuarios.length > 0) {
-            // Si hay usuarios inscritos, mostrar un modal de advertencia
-            setEventoAEliminar(evento);
-            setShowModalWarning(true);
-        } else {
-            // Si no hay usuarios, proceder a mostrar el modal de confirmación
-            setEventoAEliminar(evento);
-            setShowModalDelete(true);
-        }
+    const handleShowInfoModal = () => {
+        setShowModalInfo(true);
     };
 
-    const handleConfirmDelete = () => {
-        if (eventoAEliminar) {
-            actions.deleteEvento(eventoAEliminar.id);
-        }
-        setShowModalDelete(false);
-        setEventoAEliminar(null);
-    };
 
     return (
         <div className="container m-5 mx-auto w-75">
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
-                <Link to="/formulario-evento">
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Crear nuevo evento</button>
+                <Link to="/usuarios">
+                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Regístrate y YAY</button>
                 </Link>
             </div>
             {loading ? (
@@ -90,19 +69,9 @@ export const Partner_Eventos = () => {
                                         <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.direccion}
                                     </li>
                                     <li>
-                                        <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Ver detalles</Link>
+                                        <button className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onClick={handleShowInfoModal}>Ver detalles</button>
                                     </li>
                                 </ul>
-                            </div>
-                            <div className="d-flex justify-content-end align-items-start">
-                                <button className="btn btn-icon"
-                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                </button>
-
-                                <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                </button>
                             </div>
                             <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
                                 <h5 style={{ textAlign: 'right', margin: 0, color: '#7c488f' }}><b>plazas reservadas</b></h5>
@@ -181,53 +150,28 @@ export const Partner_Eventos = () => {
                     </div>
                 </div>
             )}
-            {showModalWarning && (
-                <div className="modal show" style={{ display: 'block' }}>
-                    <div className="modal-dialog">
+            {showModalInfo && (
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+                    <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Solicitud Cancelada</h5>
-                                <button type="button" className="btn-close" onClick={() => setShowModalWarning(false)} aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body d-flex align-items-start">
-                                <i className="fa-solid fa-circle-xmark fa-4x mx-2" style={{ color: '#7c488f' }}></i>
-                                <div className="mx-3">
-                                    <h4 className="mb-0" style={{ color: '#7c488f' }}>{eventoAEliminar ? eventoAEliminar.nombre : ''}</h4>
-                                    <hr className="mt-0 mb-1" />
-                                    <p>No puedes eliminar este evento porque hay usuarios inscritos. Contáctanos y te ayudamos a gestionarlo: gestion@yay.ia</p>
-                                </div>
+                                <h4 className="modal-title">Detalles del Evento</h4>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => setShowModalInfo(false)} aria-label="Close" onFocus={(e) => e.target.blur()}></button>                            </div>
+                            <div className="modal-body text-center mt-3">
+                                <h5>¿Quieres saber más de este evento?</h5>
+                                <Link to="/usuarios">
+                                    <button className="btn btn-lg mb-3" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Regístrate y YAY</button>
+                                </Link>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowModalWarning(false)}>Cerrar</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModalInfo(false)} onFocus={(e) => e.target.blur()}>Cerrar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-            {showModalDelete && (
-                <div className="modal show" style={{ display: 'block' }}>
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Solicitud para eliminar un evento</h5>
-                                <button type="button" className="btn-close" onClick={() => setShowModalDelete(false)} aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body d-flex align-items-start">
-                                <i className="fa-solid fa-circle-exclamation fa-4x mx-2" style={{ color: '#7c488f' }}></i>
-                                <div className="mx-3">
-                                    <h4 className="mb-0" style={{ color: '#7c488f' }}>{eventoAEliminar ? eventoAEliminar.nombre : ''}</h4>
-                                    <hr className="mt-0 mb-1" />
-                                    <p>¿Estás seguro/a de que quieres eliminar este evento?</p>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowModalDelete(false)}>Cancelar</button>
-                                <button type="button" className="btn text-white" style={{ backgroundColor: "#de8f79" }} onClick={handleConfirmDelete}>Eliminar evento</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+
+
         </div>
     );
 };

@@ -18,7 +18,7 @@ const PartnerProfile = () => {
         entidad_id: '',
     });
     const [direccion, setDireccion] = useState("");
-    
+
 
     useEffect(() => {
         if (partnerId) {
@@ -40,30 +40,33 @@ const PartnerProfile = () => {
         }
     }, [partnerId]);
 
+    const entidad = store.entidades.find(entidad => entidad.id === profile.entidad_id);
+    const tipoEntidad = entidad ? entidad.tipo : 'Entidad no encontrada';
+
     return (
         <div className="m-5">
- <div className="d-flex justify-content-around">
-            <h2>Perfil del partner</h2>
-            <Link to="/partners-eventos">
+            <div className="d-flex justify-content-around">
+                <h2>Perfil del partner</h2>
+                <Link to="/partners-eventos">
                     <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Lista de Eventos</button>
                 </Link>
-                </div>
+            </div>
             {profile.nombre ? (
-                <> 
+                <>
                     <div className="d-flex flex-row m-5 justify-content-between">
                         <div className="m-5">
                             <p><strong>Nombre:</strong> {profile.nombre}</p>
                             <p><strong>NIF o DNI:</strong> {profile.nif}</p>
                             <p><strong>Direccion:</strong> {profile.direccion}</p>
                             <p><strong>Sector:</strong> {profile.sector}</p>
-                            <p><strong>Entidad ID:</strong> {profile.entidad_id}</p>
+                            <p><strong>Entidad ID:</strong> {tipoEntidad}</p>
                             <Link to={`/editPartnerProfile/${partnerId}`}>
                                 <button>Editar perfil</button>
                             </Link>
                         </div>
                         <div className="m-5">
-                        <UploadImageComponent actions={actions} />
-                        <DisplayImageComponent actions={actions} />
+                            <UploadImageComponent actions={actions} />
+                            <DisplayImageComponent actions={actions} />
                         </div>
                     </div>
                 </>

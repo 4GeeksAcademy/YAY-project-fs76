@@ -63,10 +63,10 @@ export const Evento_Card = () => {
                                 <b>Dificultad</b>: {evento.dificultad}
                             </span>
                             <span className="text-muted d-block mb-3">
-                                <b>Precio</b>: {evento.precio}
+                                <b>Precio</b>: {evento.precio} €
                             </span>
                             <span className="text-muted d-block mb-3">
-                                <b>Accesibilidad</b>: {evento.accesibilidad}
+                                <b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}
                             </span>
                             <span className="text-muted d-block mb-3">
                                 <b>Observaciones</b>: {evento.observaciones}

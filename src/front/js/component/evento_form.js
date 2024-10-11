@@ -147,11 +147,14 @@ export const Evento_Form = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="precioInput" className="form-label">Precio</label>
-                    <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio..." />
+                    <div className="position-relative">
+                    <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio en euros..." min="0" />
+                    <span className="position-absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>€</span>
+                    </div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="cupoInput" className="form-label">Cupo</label>
-                    <input type="number" value={nuevoEvento.cupo} onChange={(e) => setNuevoEvento({ ...nuevoEvento, cupo: e.target.value })} className="form-control" id="cupoInput" placeholder="Introduzca cupo..." />
+                    <input type="number" value={nuevoEvento.cupo} onChange={(e) => setNuevoEvento({ ...nuevoEvento, cupo: e.target.value })} className="form-control" id="cupoInput" placeholder="Introduzca cupo..." min="0" />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="observacionesInput" className="form-label">Observaciones</label>
