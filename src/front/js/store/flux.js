@@ -1182,6 +1182,27 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
+            getInteresPorEvento: async (eventoId) => {
+                try {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/eventos/${eventoId}/interes`);
+                    const data = await resp.json();
+            
+                    if (resp.ok) {
+                        // Actualiza el store con el interés obtenido
+                        setStore((prevStore) => ({
+                            ...prevStore,
+                            interes: data // Guarda el interés en el store
+                        }));
+                        return data; // Retorna el interés encontrado
+                    } else {
+                        console.log("Error: ", data.message);
+                        return null; // O maneja el error como prefieras
+                    }
+                } catch (error) {
+                    console.error("Error loading interest from backend", error);
+                    return null; // O maneja el error como prefieras
+                }
+            },            
 
             changeColor: (index, color) => {
                 const store = getStore();
