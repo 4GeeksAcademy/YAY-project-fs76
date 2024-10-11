@@ -1182,6 +1182,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return { inscrito: false, id: null }; // Retorna false y null en caso de error
                 }
             },
+
+
             changeColor: (index, color) => {
                 const store = getStore();
 

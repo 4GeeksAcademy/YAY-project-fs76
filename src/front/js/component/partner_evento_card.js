@@ -16,7 +16,7 @@ export const Partner_Evento_Card = () => {
 
     useEffect(() => {
         actions.loadEventosConUsuarios().then(() => {
-            console.log(store.eventos); 
+            console.log(store.eventos);
         });
     }, []);
 
@@ -40,7 +40,7 @@ export const Partner_Evento_Card = () => {
     const handleConfirmDelete = () => {
         if (eventoAEliminar) {
             actions.deleteEvento(eventoAEliminar.id);
-            navigate(-1); 
+            navigate(-1);
         }
         setShowModalDelete(false);
         setEventoAEliminar(null);
@@ -72,10 +72,10 @@ export const Partner_Evento_Card = () => {
                                 <b>Dificultad</b>: {evento.dificultad}
                             </span>
                             <span className="text-muted d-block mb-3">
-                                <b>Precio</b>: {evento.precio}
+                                <b>Precio</b>: {evento.precio} €
                             </span>
                             <span className="text-muted d-block mb-3">
-                                <b>Accesibilidad</b>: {evento.accesibilidad}
+                                <b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}
                             </span>
                             <span className="text-muted d-block mb-3">
                                 <b>Observaciones</b>: {evento.observaciones}
@@ -87,40 +87,40 @@ export const Partner_Evento_Card = () => {
                             <div className="usuarios-inscritos my-3 me-5">
                                 <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
                                 <div style={{ display: 'flex', gap: '10px' }}>
-                                {evento.usuarios && evento.usuarios.length > 0 ? (
+                                    {evento.usuarios && evento.usuarios.length > 0 ? (
                                         <>
-                                       {evento.usuarios.slice(0, 7).map((usuario, index) => (
-                                            <div key={index} style={{ textAlign: 'center' }}>
-                                                <img
-                                                    src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
-                                                    alt={usuario.nombre}
-                                                    className="rounded-circle mb-1"
-                                                    style={{ width: '50px', height: '50px' }}
-                                                />
-                                                <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                            </div>
-                                        ))}
-                                        {evento.usuarios.length > 7 && (
-                                            <button
-                                                className="btn mb-1"
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    width: '50px',
-                                                    height: '50px',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: '#7c488f',
-                                                    color: 'white',
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() => handleShowModal(evento.usuarios)}
-                                            >
-                                                +{evento.usuarios.length - 7}
-                                            </button>
-                                        )}
-                                    </>
-                                ) : (
+                                            {evento.usuarios.slice(0, 7).map((usuario, index) => (
+                                                <div key={index} style={{ textAlign: 'center' }}>
+                                                    <img
+                                                        src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                                        alt={usuario.nombre}
+                                                        className="rounded-circle mb-1"
+                                                        style={{ width: '50px', height: '50px' }}
+                                                    />
+                                                    <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
+                                                </div>
+                                            ))}
+                                            {evento.usuarios.length > 7 && (
+                                                <button
+                                                    className="btn mb-1"
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        borderRadius: '50%',
+                                                        backgroundColor: '#7c488f',
+                                                        color: 'white',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    onClick={() => handleShowModal(evento.usuarios)}
+                                                >
+                                                    +{evento.usuarios.length - 7}
+                                                </button>
+                                            )}
+                                        </>
+                                    ) : (
                                         <p className="text-danger">No hay usuarios inscritos.</p>
                                     )}
                                 </div>
@@ -128,15 +128,15 @@ export const Partner_Evento_Card = () => {
 
                             <div className="d-flex justify-content-between align-items-end">
                                 <div>
-                                <Link to={`/formulario-evento/${evento.id}`}>
-                                    <button className="btn btn-icon" style={{ color: '#7c488f' }}>
-                                        <i className="fa-solid fa-pencil" />
+                                    <Link to={`/formulario-evento/${evento.id}`}>
+                                        <button className="btn btn-icon" style={{ color: '#7c488f' }}>
+                                            <i className="fa-solid fa-pencil" />
+                                        </button>
+                                    </Link>
+                                    <button className="btn btn-icon" style={{ color: '#7c488f' }}
+                                        onClick={() => handleDeleteClick(evento)}>
+                                        <i className="fa-solid fa-trash" />
                                     </button>
-                                </Link>
-                                <button className="btn btn-icon" style={{ color: '#7c488f' }}
-                                onClick={() => handleDeleteClick(evento)}>
-                                    <i className="fa-solid fa-trash" />
-                                </button>
                                 </div>
                                 <Link to="/partners-eventos">
                                     <button className="btn btn btn-secondary me-5">Volver atrás</button>
@@ -150,7 +150,7 @@ export const Partner_Evento_Card = () => {
                     <i className="fa-solid fa-triangle-exclamation"></i> Evento no encontrado
                 </h1>
             )}
-             {showModal && (
+            {showModal && (
                 <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -180,7 +180,7 @@ export const Partner_Evento_Card = () => {
                     </div>
                 </div>
             )}
-                        {showModal && (
+            {showModal && (
                 <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -219,7 +219,7 @@ export const Partner_Evento_Card = () => {
                                 <button type="button" className="btn-close" onClick={() => setShowModalWarning(false)} aria-label="Close"></button>
                             </div>
                             <div className="modal-body d-flex align-items-start">
-                                <i class="fa-solid fa-circle-xmark fa-4x mx-2" style={{ color: '#7c488f' }}></i>
+                                <i className="fa-solid fa-circle-xmark fa-4x mx-2" style={{ color: '#7c488f' }}></i>
                                 <div className="mx-3">
                                     <h4 className="mb-0" style={{ color: '#7c488f' }}>{eventoAEliminar ? eventoAEliminar.nombre : ''}</h4>
                                     <hr className="mt-0 mb-1" />

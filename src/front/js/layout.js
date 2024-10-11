@@ -37,10 +37,12 @@ import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
 import { EventosMapa } from "./component/eventosMapa";
+import { SobreNosotros } from "./component/sobreNosotros";
+import { EventosPublicos } from "./component/eventosPublicos";
 
 
 function Layout() {
- 
+
     const basename = process.env.BASENAME || "";
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
@@ -55,7 +57,7 @@ function Layout() {
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Intereses />} path="/interes" />
                         <Route element={<Eventos />} path="/eventos" />
-                        <Route element={<UserInterest/>} path="/userInterest" />
+                        <Route element={<UserInterest />} path="/userInterest" />
                         <Route element={<Evento_Card />} path="/evento/:theid" />
                         <Route element={<Evento_Form />} path="/formulario-evento" />
                         <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
@@ -71,8 +73,6 @@ function Layout() {
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Mapa />} path="/mapa" />
                         <Route element={<EventosMapa />} path="/eventos-mapa" />
-                        <Route element={<NotFound />} path="*"/>
-                        <Route element={<NotFound />} path="/notFound"/>
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
@@ -81,9 +81,13 @@ function Layout() {
                         <Route path="/profilePicture" element={<ProfilePicture />} />
                         <Route path="/profile/:userId" element={<Profile />} />
                         <Route path="/editProfile/:userId" element={<EditProfile />} />
-                        <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile/>} />
+                        <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                         <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route element={<SobreNosotros />} path="/sobre-nosotros" />
+                        <Route element={<EventosPublicos />} path="/eventos-yay" />
+                        <Route element={<NotFound />} path="*" />
+                        <Route element={<NotFound />} path="/notFound" />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

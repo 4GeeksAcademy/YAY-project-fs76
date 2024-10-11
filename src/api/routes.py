@@ -1067,7 +1067,8 @@ def get_inscripcion_usuario_evento_inscrito(usuario_id, evento_id):
     if inscripcion:
         return jsonify({'inscrito': True, 'id': inscripcion.id}), 200
     else:
-        return jsonify({'inscrito': False}), 200
+        return jsonify({'inscrito': False}), 200 
+
 
 
 if __name__ == '__main__':

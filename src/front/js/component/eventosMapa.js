@@ -151,8 +151,8 @@ export const EventosMapa = () => {
                                 <p className="card-text text-muted"><b>Descripción</b>: {selectedEvent.descripción}</p>
                                 <p className="card-text text-muted"><b>Plazas</b>: {selectedEvent.cupo}</p>
                                 <p className="card-text text-muted"><b>Dificultad</b>: {selectedEvent.dificultad}</p>
-                                <p className="card-text text-muted"><b>Accesibilidad</b>: {selectedEvent.accesibilidad}</p>
-                                <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio}</p>
+                                <p className="card-text text-muted"><b>Accesibilidad</b>: {selectedEvent.accesibilidad ? 'Sí' : 'No'}</p>
+                                <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio} €</p>
                                 <p className="card-text text-muted"><b>Observaciones</b>: {selectedEvent.observaciones}</p>
                                 <p className="card-text text-muted"><b>Ubicación</b>: {selectedEvent.direccion}</p>
                                 <Inscripciones
