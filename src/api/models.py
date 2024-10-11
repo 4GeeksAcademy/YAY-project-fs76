@@ -38,7 +38,7 @@ class Entidad(db.Model):
 class Intereses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(120), unique=True, nullable=False)
-    descripcion = db.Column(db.String(120), nullable=False)
+    descripcion = db.Column(db.String(120), nullable=True)
 
     def __repr__(self):
         return f'<Interes {self.nombre}>'
@@ -68,6 +68,8 @@ class Eventos(db.Model):
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     partner_id = db.Column(db.Integer, db.ForeignKey('partners.id'), nullable=True)
     partner = db.relationship('Partners', backref='eventos', lazy=True)
+    interes_id = db.Column(db.Integer, db.ForeignKey('intereses.id'), nullable=True)
+    interes = db.relationship('Intereses', backref='eventos', lazy=True)
 
     def __repr__(self):
         return f'<Eventos {self.nombre}>'
@@ -99,7 +101,8 @@ class Eventos(db.Model):
             "precio": self.precio,
             "cupo": self.cupo,
             "observaciones": self.observaciones,
-            "partner_id": self.partner_id
+            "partner_id": self.partner_id,
+            "interes_id": self.interes_id
         }
 
 class Partners(db.Model):

@@ -6,9 +6,11 @@ export const UserInscripciones = () => {
     const { store, actions } = useContext(Context);
     const { userId } = useParams();
     const [inscripciones, setInscripciones] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchInscripciones = async () => {
+            setLoading(true); 
             const eventosInscritos = [];
             for (const evento of store.eventos) {
                 const { inscrito, id } = await actions.getInscripcionUsuarioEventoInscrito(userId, evento.id);
@@ -17,12 +19,19 @@ export const UserInscripciones = () => {
                 }
             }
             setInscripciones(eventosInscritos);
+            setLoading(false);
         };
 
         fetchInscripciones();
     }, [store.eventos, userId, actions]);
 
+
     return (
+        <>
+        {loading ? (
+            <p>Cargando inscripciones...</p>
+        ) : (
+
         <div className="container m-5 mx-auto w-50">
             <h2>Tus Inscripciones</h2>
             {inscripciones.length > 0 ? (
@@ -59,5 +68,7 @@ export const UserInscripciones = () => {
                 <p>No tienes inscripciones.</p>
             )}
         </div>
+                )}
+                </>
     );
 };

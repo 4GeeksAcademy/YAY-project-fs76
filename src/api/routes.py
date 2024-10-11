@@ -172,7 +172,8 @@ def add_evento():
         cupo=request_body.get("cupo"), 
         observaciones=request_body.get("observaciones"),  
         is_active=True,
-        partner_id=partner_id  
+        partner_id=partner_id,  
+        interes_id = request_body.get("interes_id") 
     )
 
     db.session.add(nuevo_evento)
@@ -241,6 +242,7 @@ def update_evento(evento_id):
     evento.precio = request_body.get("precio", evento.precio)
     evento.cupo = request_body.get("cupo", evento.cupo)
     evento.observaciones = request_body.get("observaciones", evento.observaciones)
+    evento.interes_id = request_body.get("interes_id", evento.interes_id)
     evento.is_active = request_body.get("is_active", evento.is_active)
 
     db.session.commit()
@@ -1068,6 +1070,24 @@ def get_inscripcion_usuario_evento_inscrito(usuario_id, evento_id):
         return jsonify({'inscrito': True, 'id': inscripcion.id}), 200
     else:
         return jsonify({'inscrito': False}), 200 
+
+@api.route('/eventos/<int:evento_id>/interes', methods=['GET'])
+def get_interes_por_evento(evento_id):
+    evento = Eventos.query.get(evento_id)
+    
+    if evento is None:
+        return jsonify({"ERROR": "Evento no encontrado."}), 404
+
+    # Obtener el interés asociado al evento
+    interes = evento.interes
+    
+    if interes is None:
+        return jsonify({"ERROR": "No hay interés asociado a este evento."}), 404
+
+    return jsonify({
+        "interes_id": interes.id,
+        "nombre": interes.nombre
+    }), 200
 
 
 

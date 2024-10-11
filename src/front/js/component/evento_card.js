@@ -7,17 +7,34 @@ import { Inscripciones } from "./inscripciones";
 export const Evento_Card = () => {
     const { store, actions } = useContext(Context);
     const [inscripcionIds, setInscripcionIds] = useState([]);
+    const [interes, setInteres] = useState(null);
+    const [loading, setLoading] = useState(true);
+
 
     const params = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.loadEventosConUsuarios()
         actions.loadInscripciones()
         actions.getUserId()
+        actions.loadEventosConUsuarios().then(() => {
+            const eventoId = parseInt(params.theid);
+            actions.getInteresPorEvento(eventoId).then((data) => {
+                if (data) {
+                    setInteres(data);
+                }
+                setLoading(false);
+            }).catch(error => {
+                console.error("Error al cargar el interés:", error);
+                setLoading(false);
+            });
+        }).catch(error => {
+            console.error("Error al cargar eventos:", error);
+            setLoading(false);
+        });
     }, []);
 
-    
+
     const evento = store.eventos.find((evento) => evento.id === parseInt(params.theid));
     console.log('Evento:', evento);
     console.log('Inscripciones:', store.inscripciones);
@@ -33,6 +50,7 @@ export const Evento_Card = () => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
         console.log('Inscripcion IDs:', inscripcionIds);
     };
+    
 
     return (
         <>
@@ -71,7 +89,13 @@ export const Evento_Card = () => {
                             <span className="text-muted d-block mb-3">
                                 <b>Observaciones</b>: {evento.observaciones}
                             </span>
-
+                            {loading ? (
+                                <p>Cargando interés...</p>
+                            ) : (
+                                <span className="text-muted d-block mb-3">
+                                    <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
+                                </span>
+                            )}
                             <div className="d-flex justify-content-between align-items-end">
                                 <Inscripciones
                                     className='mt-3'

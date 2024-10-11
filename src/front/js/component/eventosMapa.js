@@ -12,10 +12,12 @@ export const EventosMapa = () => {
     const [autocomplete, setAutocomplete] = useState(null);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [mapCenter, setMapCenter] = useState({ lat: 40.1402000, lng: -3.4226700 });
-    const [zoom, setZoom] = useState(10);
+    const [zoom, setZoom] = useState(15);
     const [address, setAddress] = useState('');
     const navigate = useNavigate();
     const [inscripcionIds, setInscripcionIds] = useState([]);
+    const [interes, setInteres] = useState(null);
+    const [loading, setLoading] = useState(true);
     const params = useParams();
     const mapContainerStyle = {
         height: "600px",
@@ -25,9 +27,8 @@ export const EventosMapa = () => {
     const mapRef = React.useRef();
 
     useEffect(() => {
-        actions.loadEventosConUsuarios();
         actions.loadInscripciones()
-        const userId = actions.getUserId(); 
+        const userId = actions.getUserId();
         if (userId) {
             actions.getProfile(userId).then(profile => {
                 if (profile && profile.latitud && profile.longitud) {
@@ -40,12 +41,25 @@ export const EventosMapa = () => {
         } else {
             console.error("No se pudo obtener el userId.");
         }
+        actions.loadEventosConUsuarios().then(() => {
+            const eventoId = parseInt(params.theid);
+            actions.getInteresPorEvento(eventoId).then((data) => {
+                if (data) {
+                    setInteres(data); 
+                }
+            }).catch(error => {
+                console.error("Error al cargar el interés:", error);
+            });
+        }).catch(error => {
+            console.error("Error al cargar eventos:", error);
+        });
+    
     }, []);
 
     const handleMarkerClick = (evento) => {
         setSelectedEvent(evento);
         setMapCenter({ lat: evento.latitud, lng: evento.longitud });
-        setZoom(14);
+        setZoom(15);
         setAddress(evento.direccion);
     };
 
@@ -62,6 +76,7 @@ export const EventosMapa = () => {
                 if (mapRef.current) {
                     google.maps.event.addListenerOnce(mapRef.current, 'idle', () => {
                         mapRef.current.panTo(newPosition);
+                        mapRef.current.setZoom(15);
                     });
                 }
             } else {
@@ -86,20 +101,21 @@ export const EventosMapa = () => {
         console.log('Inscripcion IDs:', inscripcionIds);
     };
 
+
     return (
         <div className="d-flex m-5">
             <div>
-            <div className="d-flex justify-content-between">
-                <h2 className="mb-2">Eventos disponibles <i className="fa-solid fa-map-location-dot"></i></h2>
-                <button className="custom-button btn btn-lg mb-3"
-                    onClick={()  => navigate(`/eventos`)}
-                    style={{
-                        borderColor: '#ffc107',
-                        color: '#494949'
-                    }}
-                >
-                    Ver en Lista  <i className="fa-solid fa-rectangle-list" style={{ color: '#7c488f' }}></i>
-                </button>
+                <div className="d-flex justify-content-between">
+                    <h2 className="mb-2">Eventos disponibles <i className="fa-solid fa-map-location-dot"></i></h2>
+                    <button className="custom-button btn btn-lg mb-3"
+                        onClick={() => navigate(`/eventos`)}
+                        style={{
+                            borderColor: '#ffc107',
+                            color: '#494949'
+                        }}
+                    >
+                        Ver en Lista  <i className="fa-solid fa-rectangle-list" style={{ color: '#7c488f' }}></i>
+                    </button>
                 </div>
                 <LoadScript googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA" libraries={libraries}>
 
@@ -155,6 +171,11 @@ export const EventosMapa = () => {
                                 <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio} €</p>
                                 <p className="card-text text-muted"><b>Observaciones</b>: {selectedEvent.observaciones}</p>
                                 <p className="card-text text-muted"><b>Ubicación</b>: {selectedEvent.direccion}</p>
+                
+                                    <p className="card-text text-muted"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</p>
+         
+
+
                                 <Inscripciones
                                     usuarioId={actions.getUserId()}
                                     eventoId={selectedEvent.id}
