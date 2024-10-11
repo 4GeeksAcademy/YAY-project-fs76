@@ -635,18 +635,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion,latitud,longitud,breve_descripcion,intereses) => {
                 try {
                   
                   const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
                   console.log("URL del fetch:", url);
-              
-                  // Realizar la solicitud PUT para actualizar los datos del usuario
                   const response = await fetch(url, {
-                    method: "PUT", // Método para actualizar datos
+                    method: "PUT", 
                     headers: {
-                      "Content-Type": "application/json", // Indicar que el cuerpo es JSON
-                      Authorization: `Bearer ${sessionStorage.getItem('token')}` // Agregar el token en los headers
+                      "Content-Type": "application/json", 
+                      Authorization: `Bearer ${sessionStorage.getItem('token')}` 
                     },
                     body: JSON.stringify({
                       nombre,
@@ -655,7 +653,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                       direccion,
                       latitud,
                       longitud,
-                      breve_descripcion
+                      breve_descripcion,
+                      intereses,
                     }), 
                   });
               
