@@ -103,62 +103,64 @@ export const Partner_Evento_Card = () => {
                             <span>
                                 <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
                             </span>
+                            {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
                             <div className="usuarios-inscritos my-3 me-5">
                                 <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
                                 <div style={{ display: 'flex', gap: '10px' }}>
-                                    {evento.usuarios && evento.usuarios.length > 0 ? (
-                                        <>
-                                            {evento.usuarios.slice(0, 7).map((usuario, index) => (
-                                                <div key={index} style={{ textAlign: 'center' }}>
-                                                    <img
-                                                        src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
-                                                        alt={usuario.nombre}
-                                                        className="rounded-circle mb-1"
-                                                        style={{ width: '50px', height: '50px' }}
-                                                    />
-                                                    <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                                </div>
-                                            ))}
-                                            {evento.usuarios.length > 7 && (
-                                                <button
-                                                    className="btn mb-1"
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        width: '50px',
-                                                        height: '50px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: '#7c488f',
-                                                        color: 'white',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                    onClick={() => handleShowModal(evento.usuarios)}
-                                                >
-                                                    +{evento.usuarios.length - 7}
-                                                </button>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-danger">No hay usuarios inscritos.</p>
+                                {evento.usuarios && evento.usuarios.length > 0 ? (
+                                    <>
+                                    {evento.usuarios.slice(0, 7).map((usuario, index) => (
+                                        <div key={index} style={{ textAlign: 'center' }}>
+                                        <img
+                                            src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                            alt={usuario.nombre}
+                                            className="rounded-circle mb-1"
+                                            style={{ width: '50px', height: '50px' }}
+                                        />
+                                        <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
+                                        </div>
+                                    ))}
+                                    {evento.usuarios.length > 7 && (
+                                        <button
+                                        className="btn mb-1"
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: '50px',
+                                            height: '50px',
+                                            borderRadius: '50%',
+                                            backgroundColor: '#7c488f',
+                                            color: 'white',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => handleShowModal(evento.usuarios)}
+                                        >
+                                        +{evento.usuarios.length - 7}
+                                        </button>
                                     )}
+                                    </>
+                                ) : (
+                                    <p className="text-danger">No hay usuarios inscritos.</p>
+                                )}
                                 </div>
                             </div>
+                            )}
 
                             <div className="d-flex justify-content-between align-items-end">
                               {/* Botones de editar y eliminar */}
-{evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
-  <div className="d-flex justify-content-end align-items-start">
-    <button className="btn btn-icon"
-      onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
-      <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
-    </button>
+                                {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
+                                <div className="d-flex justify-content-end align-items-start">
+                                    <button className="btn btn-icon"
+                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                    </button>
 
-    <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-      <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
-    </button>
-  </div>
-)}
+                                    <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
+                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                    </button>
+                                </div>
+                                )}
                                 <Link to="/partners-eventos">
                                     <button className="btn btn btn-secondary me-5">Volver atrás</button>
                                 </Link>
