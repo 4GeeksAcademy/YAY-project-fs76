@@ -156,6 +156,9 @@ def add_evento():
         return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
 
     partner_id = get_jwt_identity()  
+    partner = Partners.query.filter_by(id=partner_id).first()
+    if partner is None:
+        return jsonify({"ERROR": "Partner no encontrado"}), 404
 
     nuevo_evento = Eventos(
         nombre=request_body.get("nombre"),  
@@ -172,7 +175,8 @@ def add_evento():
         cupo=request_body.get("cupo"), 
         observaciones=request_body.get("observaciones"),  
         is_active=True,
-        partner_id=partner_id,  
+        partner_id=partner_id,
+        partner_nombre=partner.nombre,  # Asignamos el nombre del partner
         interes_id = request_body.get("interes_id") 
     )
 

@@ -71,6 +71,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().changeColor(0, "green");
             },
 
+            getPartnerIdFromToken(token) {
+                const decodedToken = jwtDecode(token);
+                return decodedToken.partner_id;
+            },
+
             getMessage: async () => {
                 try {
                     const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
@@ -282,12 +287,21 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             addEvento: (newEvento, onSuccess, onError) => {
+                const token = localStorage.getItem('token');
+                const partnerId = localStorage.getItem("partner_id");; // función para obtener el ID del partner desde el token
+            
+                const evento = {
+                    ...newEvento,
+                    partner_id: partnerId
+                };
+            
                 fetch(process.env.BACKEND_URL + '/api/eventos', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // envía el token de autenticación en la cabecera
                     },
-                    body: JSON.stringify(newEvento)
+                    body: JSON.stringify(evento)
                 })
                     .then(resp => resp.json())
                     .then(data => {

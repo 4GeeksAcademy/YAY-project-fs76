@@ -19,7 +19,6 @@ const PartnerProfile = () => {
     });
     const [direccion, setDireccion] = useState("");
 
-
     useEffect(() => {
         if (partnerId) {
             actions.getEntidades();
@@ -50,6 +49,9 @@ const PartnerProfile = () => {
                 <Link to="/partners-eventos">
                     <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Lista de Eventos</button>
                 </Link>
+                <Link to={`/partner-mis-eventos/${partnerId}`}>
+                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Mis eventos</button>
+                </Link>
             </div>
             {profile.nombre ? (
                 <>
@@ -57,7 +59,7 @@ const PartnerProfile = () => {
                         <div className="m-5">
                             <p><strong>Nombre:</strong> {profile.nombre}</p>
                             <p><strong>NIF o DNI:</strong> {profile.nif}</p>
-                            <p><strong>Direccion:</strong> {profile.direccion}</p>
+                            <p><strong>Dirección:</strong> {profile.direccion}</p>
                             <p><strong>Sector:</strong> {profile.sector}</p>
                             <p><strong>Entidad ID:</strong> {tipoEntidad}</p>
                             <Link to={`/editPartnerProfile/${partnerId}`}>
@@ -65,8 +67,8 @@ const PartnerProfile = () => {
                             </Link>
                         </div>
                         <div className="m-5">
-                            <UploadImageComponent actions={actions} />
-                            <DisplayImageComponent actions={actions} />
+                            <UploadImageComponent actions={actions} partnerId={partnerId} />
+                            <DisplayImageComponent actions={actions} partnerId={partnerId} />
                         </div>
                     </div>
                 </>

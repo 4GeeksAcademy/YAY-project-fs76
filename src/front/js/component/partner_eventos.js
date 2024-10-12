@@ -94,16 +94,19 @@ export const Partner_Eventos = () => {
                                     </li>
                                 </ul>
                             </div>
+                           {/* Botones de editar y eliminar */}
+                            {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
                             <div className="d-flex justify-content-end align-items-start">
                                 <button className="btn btn-icon"
-                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+                                <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
                                 </button>
 
                                 <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
                                 </button>
                             </div>
+                                )}
                             <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
                                 <h5 style={{ textAlign: 'right', margin: 0, color: '#7c488f' }}><b>plazas reservadas</b></h5>
                                 <hr className="mt-0 mb-1" style={{ color: '#ffc107', borderWidth: '2px' }}></hr>
