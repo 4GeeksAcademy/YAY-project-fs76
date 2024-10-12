@@ -1,0 +1,106 @@
+.navbar {
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.05rem;
+  width: 100%;
+}
+.navbar-toggler:focus {
+    outline: none; 
+    box-shadow: none; 
+}
+
+.navbar.scrolled {
+    top: -100px; /* Oculta el navbar fuera de la pantalla cuando se hace scroll hacia abajo */
+  }
+
+.navbar.scrolled.show {
+    top: 0; /* Muestra el navbar en la parte superior de la pantalla cuando se hace scroll hacia arriba */
+  }
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #333;
+  letter-spacing: 0.05rem;
+}
+.fa-circle-user {
+    position: relative;
+    top: 2px;
+  }
+
+.navbar-nav {
+  margin-left: auto;
+}
+
+.nav-link {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #333;
+  transition: color 0.2s ease;
+  letter-spacing: 0.05rem;
+}
+
+.nav-link:hover {
+  color: #666;
+}
+
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  letter-spacing: 0.05rem;
+}
+
+.navbar-toggler-icon {
+  font-size: 1.5rem;
+}
+
+
+.dropdown-item {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #666;
+  transition: color 0.2s ease;
+  padding: 1rem 2rem;
+}
+
+.dropdown-item:hover {
+  color: #333;
+  background-color: #A7D0CD ;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .navbar .dropdown-menu {
+    border-top: .1875rem solid #7c488f;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.dropdown-menu {
+    box-shadow: 0 .75rem 1rem rgba(98, 102, 109, 0.3);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1rem;
+  }
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+  .nav-link {
+    font-size: 1.2rem;
+  }
+  .navbar-toggler {
+    padding: 0.5rem 0.5rem;
+  }
+  .navbar-toggler-icon {
+    font-size: 1.2rem;
+  }
+}

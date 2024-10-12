@@ -9,7 +9,7 @@ import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
 import { Entidades } from "./component/entidades";
-import { Navbar } from "./component/navbar";
+import { Navbar_Prev } from "./component/navbar_prev";
 import { Intereses } from "./component/intereses";
 import { Eventos } from "./component/eventos";
 import { Evento_Card } from "./component/evento_card";
@@ -41,6 +41,10 @@ import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
 import { PartnerMisEventos } from "./component/partner_mis_eventos";
 
+// ------ DISEÑO ON -------
+import { Landing_Page } from "./pages/landing_page";
+import { Navbar } from "./component/diseñoON/navbar";
+
 
 function Layout() {
 
@@ -54,7 +58,7 @@ function Layout() {
                 <ScrollToTop>
                     <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/home" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Intereses />} path="/interes" />
                         <Route element={<Eventos />} path="/eventos" />
@@ -90,6 +94,7 @@ function Layout() {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
+                        <Route element={<Landing_Page />} path="/" />
                         
                     </Routes>
                     <Footer />
