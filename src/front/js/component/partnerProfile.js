@@ -45,6 +45,9 @@ const PartnerProfile = () => {
     return (
         <div className="m-5">
             <div className="d-flex justify-content-around">
+            <Link to="/informacion-partner">
+                <button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Informacion Partner</button>
+            </Link>
                 <h2>Perfil del partner</h2>
                 <Link to="/partners-eventos">
                     <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Lista de Eventos</button>

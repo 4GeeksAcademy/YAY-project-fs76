@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../store/appContext';
-import ImageUploadPerfil from './imagePerfilUpload';
+import ImageUploadPerfil from './imagePerfilUpload'; // Asegúrate de que el nombre y la ruta sean correctos
+import "../../styles/imagenes.css";
 
 const GetUserPerfilImage = () => {
     const [image, setImage] = useState(null);
     const [error, setError] = useState(null);
     const { store, actions } = useContext(Context);
 
-    
     const fetchPerfilImage = async () => {
         try {
-            // Llama a la acción para obtener la imagen de perfil
-            const response = await actions.getUserPerfilImage(); 
-            setImage(response.foto_perfil); // Actualiza el estado de la imagen
+            const response = await actions.getUserPerfilImage();
+            setImage(response.foto_perfil);
         } catch (error) {
             setError("No se pudo cargar la imagen de perfil.");
         }
@@ -20,37 +19,37 @@ const GetUserPerfilImage = () => {
 
     const handleDeleteClick = async () => {
         try {
-            await actions.deletePerfilImage(); // Llama a la acción para eliminar la imagen
-            setImage(null); // Actualiza el estado de la imagen
+            await actions.deletePerfilImage();
+            setImage(null);
         } catch (error) {
             setError("No se pudo eliminar la imagen de perfil.");
         }
     };
 
     useEffect(() => {
-        fetchPerfilImage(); // Llama a la función al montar el componente
+        fetchPerfilImage();
     }, []);
 
     return (
-        <div>
-            <h3>Imagen de Perfil</h3>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="perfil-image-container">
+            <h3 className="perfil-title">Imagen de Perfil</h3>
+            {error && <p className="error-message">{error}</p>}
             {image ? (
-                <div style={{ position: 'relative' }}>
+                <div className="image-wrapper">
                     <img
                         src={image}
                         alt="Imagen de Perfil"
-                        style={{ maxWidth: '200px', height: 'auto', margin: '10px' }}
+                        className="perfil-image"
                     />
                     <button 
                         onClick={handleDeleteClick} 
-                        style={{ position: 'absolute', bottom: '5px', left: '5px' }}
+                        className="delete-button"
                     >
-                        Eliminar
+                        x
                     </button>
                 </div>
             ) : (
-                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} /> // Muestra el componente de carga si no hay imagen
+                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} /> // Este componente se muestra si no hay imagen
             )}
         </div>
     );

@@ -41,6 +41,7 @@ import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
 import { PartnerMisEventos } from "./component/partner_mis_eventos";
 import { CheckLoginPartner } from "./component/checkLoginPartner";
+import InformacionPartner from "./component/informacionPartner";
 
 
 function Layout() {
@@ -92,6 +93,8 @@ function Layout() {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
+                        <Route path="/informacion-partner" element={<InformacionPartner />} />
+
                         
                     </Routes>
                     <Footer />

@@ -1,0 +1,102 @@
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';
+.perfil-image-container {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    color: red;
+    font-size: 18px;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block; /* Asegura que el botón se alinee con la imagen */
+}
+
+/* Estilos para la imagen de perfil (redonda) */
+.perfil-image {
+    width: 100px;         /* Ancho fijo */
+    height: 100px;        /* Altura fija */
+    margin: 10px;
+    border-radius: 50%;   /* Hacer la imagen redonda */
+    object-fit: cover;     /* Mantiene la proporción y recorta si es necesario */
+}
+
+/* Estilos para las imágenes del usuario (rectangulares) */
+.user-image {
+    width: 250px;         /* Ancho fijo para las imágenes del usuario */
+    height: 150px;        /* Altura fija para mantener la proporción */
+    margin: 10px;         /* Margen alrededor de la imagen */
+    object-fit: cover;    /* Mantiene la proporción y recorta si es necesario */
+    border: 2px solid #ccc; /* Borde opcional */
+}
+
+.delete-button {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background-color: #de8f79; /* Color de fondo del botón */
+    color: white; /* Texto blanco para el botón */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-button:hover {
+    background-color: #7c488f; /* Color más oscuro en hover */
+}
+
+.user-images-container {
+    padding: 20px;
+}
+
+.user-images-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.good-captures-message {
+    color: orange;
+}
+
+.images-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-card {
+    position: relative;
+}
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    margin-right: 10px; /* Espacio entre el botón de elegir y subir */
+}
+
+.btn {
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño */
+}
+
+.alert {
+    border-radius: 4px; /* Bordes redondeados para las alertas */
+}
+
+.spinner-border {
+    margin-right: 5px; /* Espacio entre el spinner y el texto */
+}
