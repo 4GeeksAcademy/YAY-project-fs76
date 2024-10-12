@@ -107,48 +107,50 @@ export const Partner_Eventos = () => {
                                 </button>
                             </div>
                                 )}
-                            <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
-                                <h5 style={{ textAlign: 'right', margin: 0, color: '#7c488f' }}><b>plazas reservadas</b></h5>
-                                <hr className="mt-0 mb-1" style={{ color: '#ffc107', borderWidth: '2px' }}></hr>
-                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                                    {evento.usuarios && evento.usuarios.length > 0 ? (
-                                        <>
-                                            {evento.usuarios.slice(0, 4).map((usuario, index) => (
-                                                <div key={index} style={{ textAlign: 'center' }}>
-                                                    <img
-                                                        src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
-                                                        alt={usuario}
-                                                        className="rounded-circle mb-1"
-                                                        style={{ width: '50px', height: '50px' }}
-                                                    />
-                                                    <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                                </div>
-                                            ))}
-                                            {evento.usuarios.length > 4 && (
-                                                <button
-                                                    className="btn mb-1"
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        width: '50px',
-                                                        height: '50px',
-                                                        borderRadius: '50%',
-                                                        backgroundColor: '#7c488f',
-                                                        color: 'white',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                    onClick={() => handleShowModal(evento.usuarios)}
-                                                >
-                                                    +{evento.usuarios.length - 4}
-                                                </button>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <p className="text-danger text-center">Aún no hay<br />plazas reservadas</p>
-                                    )}
-                                </div>
-                            </div>
+                          {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
+  <div className="usuarios-inscritos position-absolute bottom-0 end-0 mb-3 me-3">
+    <h5 style={{ textAlign: 'right', margin: 0, color: '#7c488f' }}><b>plazas reservadas</b></h5>
+    <hr className="mt-0 mb-1" style={{ color: '#ffc107', borderWidth: '2px' }}></hr>
+    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+      {evento.usuarios && evento.usuarios.length > 0 ? (
+        <>
+          {evento.usuarios.slice(0, 4).map((usuario, index) => (
+            <div key={index} style={{ textAlign: 'center' }}>
+              <img
+                src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                alt={usuario}
+                className="rounded-circle mb-1"
+                style={{ width: '50px', height: '50px' }}
+              />
+              <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
+            </div>
+          ))}
+          {evento.usuarios.length > 4 && (
+            <button
+              className="btn mb-1"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                backgroundColor: '#7c488f',
+                color: 'white',
+                cursor: 'pointer',
+              }}
+              onClick={() => handleShowModal(evento.usuarios)}
+            >
+              +{evento.usuarios.length - 4}
+            </button>
+          )}
+        </>
+      ) : (
+        <p className="text-danger text-center">Aún no hay<br />plazas reservadas</p>
+      )}
+    </div>
+  </div>
+)}
                         </li>
                     ))}
                 </ul>
