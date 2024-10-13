@@ -58,7 +58,7 @@ export const Landing_Header = () => {
                     justifyContent: 'center'
                 }}>
                     <h1 style={{ margin: '0', display: 'inline' }}>·</h1>
-                    <span style={{ margin: '0 10px', display: 'inline' }}>HAZ DE TU BARRIO UN HOGAR</span>
+                    <span style={{ margin: '0 10px', display: 'inline', fontSize:'35px'}}>HAZ DE TU BARRIO UN HOGAR</span>
                     <h1 style={{ margin: '0', display: 'inline' }}>·</h1>
                 </h3>
             </div>
@@ -85,7 +85,7 @@ export const Landing_Header = () => {
                                             <span className={`typed-cursor ${blink ? 'typed-cursor--blink' : ''}`} aria-hidden="true">|</span>
                                         </span>
                                     </h1>
-                                    <p className="lead">Front's feature-rich designed demo pages help you create the best possible product.</p>
+                                    <p className="lead">Aquí no solo compartimos experiencias, sino que creamos nuevos recuerdos.</p>
                                 </div>
                                 {/* End Heading */}
 
