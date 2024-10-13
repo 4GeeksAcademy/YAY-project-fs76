@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"; 
-import "../../styles/home.css";
+import "../../styles/checkLoginPartner.css"; // Nuevo archivo CSS para estilos personalizados
 
 export const CheckLoginPartner = () => {
     const { store, actions } = useContext(Context);
@@ -12,14 +12,9 @@ export const CheckLoginPartner = () => {
     const partnerIdFromLocalStorage = localStorage.getItem('partner_id');
     const partnerId = store.partner_id || partnerIdFromLocalStorage; 
 
-    // Debugging logs
-    console.log("Auth:", store.auth);
-    console.log("User ID:", store.user_id);
-    console.log("Partner ID:", store.partner_id);
-    console.log("Partner ID desde localStorage:", partnerIdFromLocalStorage);
-
     // Función para manejar el logout
     const handleLogout = () => {
+        alert("Tendrá que hacer login nuevamente.");
         setLoggingOut(true);
         actions.logout(); // Asegúrate de que esta acción actualice el estado de autenticación en el store
         localStorage.removeItem("token");
@@ -31,26 +26,27 @@ export const CheckLoginPartner = () => {
 
     // Verificar autenticación cuando se monta el componente
     useEffect(() => {
-        // Si el usuario no está autenticado o no tiene un partner_id, redirigir a la página de login
         if (!store.auth || !localStorage.getItem("token")) {
             navigate("/partner-login"); // Redirigir a la página de login si no está autenticado
         }
     }, [store.auth, navigate]);
 
     return (
-        <>		
-            <div className="text-center my-5">
-                <h1>Estás en el área privada de esta cuenta de Partner</h1>
+        <div className="checkLogin-container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="checkLogin-card text-center">
+                <div className="checkLogin-card-body">
+                    <h1 className="checkLogin-title mb-4">Área privada de Partner</h1>
+                    <p className="checkLogin-text">Hace falta verificar si es usted para continuar.</p>
+                    <p className="checkLogin-text">Por favor, seleccione "Verificar" para autentificarse.</p>
+                    <button
+                        className="checkLogin-btn btn btn-primary mt-4"
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                    >
+                        {loggingOut ? "Saliendo..." : "Verificar"}
+                    </button>
+                </div>
             </div>
-            <h1>Hace falta verificar si es usted para continuar</h1>
-            <h2>Por favor seleccione verificar para autentificar</h2>
-            <button
-                className="enter btn btn-secondary my-auto"
-                onClick={handleLogout}
-                disabled={loggingOut} // Desactivar el botón mientras se está cerrando sesión
-            >
-                {loggingOut ? "Saliendo..." : "Verificar"}
-            </button>
-        </>
+        </div>
     );
 };

@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import GetUserImages from "./getUserImagens";
 import GetUserPerfilImage from "./getUserPerfilImage";
 import UserInterest from "./userInterest";
-import "../../styles/perfilUsuario.css";
+import "../../styles/profile.css"; // Archivo de CSS personalizado
 
 const Profile = () => {
     const { store, actions } = useContext(Context);
@@ -44,45 +44,49 @@ const Profile = () => {
 
     return (
         <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-8 mx-auto">
-                    <h2 className="text-center mb-4">Perfil del Usuario</h2>
-                    {profile.nombre ? (
-                        <>
-                            <div className="row">
-                                {/* Información del perfil */}
-                                <div className="col-md-6">
-                                    <p><strong>Nombre:</strong> {profile.nombre}</p>
-                                    <p><strong>Apellidos:</strong> {profile.apellidos}</p>
-                                    <p><strong>Fecha de Nacimiento:</strong> {profile.fecha_nacimiento}</p>
-                                    <p><strong>Dirección:</strong> {profile.direccion}</p>
-                                    <p><strong>Descripción:</strong> {profile.breve_descripcion}</p>
-                                    {profile.selectedInterests && (
-                                        <p><strong>Intereses:</strong> {profile.selectedInterests.join(', ')}</p>
-                                    )}
-                                    <div className="mt-3">
-                                        <Link to={`/editProfile/${userId}`}>
-                                            <button className="btn btn-custom-primary btn-lg me-2">Editar Perfil</button>
-                                        </Link>
-                                        <Link to={`/inscripciones/${userId}`}>
-                                            <button className="btn btn-custom-secondary btn-lg">Tus Eventos</button>
-                                        </Link>
-                                    </div>
+            <div className="profile-card">
+                <div className="profile-card-header">
+                    {/* Imagen de perfil en la parte superior */}
+                    <GetUserPerfilImage />
+                </div>
+                
+                <div className="profile-card-body">
+                    {/* Datos del perfil a la izquierda */}
+                    <div className="profile-details">
+                        <h3>Perfil del Usuario</h3>
+                        {profile.nombre ? (
+                            <>
+                                <p><strong>Nombre:</strong> {profile.nombre}</p>
+                                <p><strong>Apellidos:</strong> {profile.apellidos}</p>
+                                <p><strong>Fecha de Nacimiento:</strong> {profile.fecha_nacimiento}</p>
+                                <p><strong>Dirección:</strong> {profile.direccion}</p>
+                                <p><strong>Descripción:</strong> {profile.breve_descripcion}</p>
+                                {profile.selectedInterests && (
+                                    <p><strong>Intereses:</strong> {profile.selectedInterests.join(', ')}</p>
+                                )}
+                                <div className="mt-3">
+                                    <Link to={`/editProfile/${userId}`}>
+                                        <button className="btn btn-custom-primary">Editar Perfil</button>
+                                    </Link>
+                                    <Link to={`/inscripciones/${userId}`}>
+                                        <button className="btn btn-custom-secondary">Tus Eventos</button>
+                                    </Link>
                                 </div>
+                            </>
+                        ) : (
+                            <p>Cargando perfil...</p>
+                        )}
+                    </div>
 
-                                {/* Imagen de perfil y galería */}
-                                <div className="col-md-6 text-center">
-                                    <GetUserPerfilImage />
-                                    <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
-                                </div>
-                            </div>
+                    {/* Imágenes de usuario a la derecha */}
+                    <div className="profile-images">
+                        <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
+                    </div>
+                </div>
 
-                            {/* Intereses adicionales del usuario */}
-                            <UserInterest />
-                        </>
-                    ) : (
-                        <p className="text-center">Cargando perfil...</p>
-                    )}
+                {/* Intereses adicionales del usuario debajo */}
+                <div className="profile-card-footer">
+                    <UserInterest />
                 </div>
             </div>
         </div>

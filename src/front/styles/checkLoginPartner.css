@@ -1,0 +1,36 @@
+/* Estilos personalizados para evitar conflictos */
+.checkLogin-container {
+    background-color: #f5f5f5;
+}
+
+.checkLogin-card {
+    width: 30rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: white;
+    padding: 2rem;
+}
+
+.checkLogin-card-body {
+    padding: 1.5rem;
+}
+
+.checkLogin-title {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.checkLogin-text {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.checkLogin-btn {
+    font-size: 1.2rem;
+    padding: 0.5rem 2rem;
+    transition: background-color 0.3s ease;
+}
+
+.checkLogin-btn:hover {
+    background-color: #004085;
+}

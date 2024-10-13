@@ -46,24 +46,24 @@ const GetUserImages = () => {
     }, []);
 
     return (
-        <div className="user-images-container">
-            <h3 className="user-images-title">Tu galeria de imagenes</h3>
-            {error && <p className="error-message">{error}</p>}
+        <div className="user-gallery-container">
+            <h3 className="user-gallery-title">Tu galería de imágenes</h3>
+            {error && <p className="user-gallery-error-message">{error}</p>}
             {images.length >= 5 && (
-                <p className="good-captures-message">Muy buenas tomas</p>
+                <p className="user-gallery-good-captures-message">Muy buenas tomas</p>
             )}
-            <div className="images-wrapper">
+            <div className="user-gallery-wrapper">
                 {images.map((url, index) => (
-                    <div key={index} className="image-card">
+                    <div key={index} className="user-gallery-image-card">
                         <img
                             src={url}
                             alt={`Imagen ${index + 1}`}
-                            className="user-image"
+                            className="user-gallery-image"
                             onClick={() => handleImageClick(url)} // Muestra la imagen en el modal al hacer clic
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 
-                            className="delete-button"
+                            className="user-gallery-delete-button"
                         >
                             x
                         </button>
@@ -74,10 +74,10 @@ const GetUserImages = () => {
             {images.length < 5 && <ImageUpload fetchImages={fetchImages} />}
 
             {isModalOpen && (
-                <div className="modal" onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <span className="close" onClick={closeModal}>&times;</span>
-                        <img src={selectedImage} alt="Imagen grande" className="modal-image" />
+                <div className="user-gallery-modal" onClick={closeModal}>
+                    <div className="user-gallery-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="user-gallery-modal-close" onClick={closeModal}>&times;</span>
+                        <img src={selectedImage} alt="Imagen grande" className="user-gallery-modal-image" />
                     </div>
                 </div>
             )}
