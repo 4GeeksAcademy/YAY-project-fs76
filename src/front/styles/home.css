@@ -7,16 +7,16 @@
 */
 
 .btn {
-    transition: transform 0.2s; /* Transición suave */
+    transition: transform 0.5s; 
 }
 
 .btn:hover {
-    transform: scale(1.03); /* Aumenta el tamaño al pasar el mouse */
+    transform: scale(1.02); 
 }
 
 .btn:focus {
-    outline: none; /* Elimina el borde */
-    box-shadow: none; /* Elimina la sombra */
+    outline: none; 
+    box-shadow: none; 
 }
 
 h1, h2 {
