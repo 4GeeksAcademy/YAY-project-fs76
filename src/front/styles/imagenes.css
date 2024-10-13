@@ -31,7 +31,19 @@
     border-radius: 50%;   /* Hacer la imagen redonda */
     object-fit: cover;     /* Mantiene la proporción y recorta si es necesario */
 }
-
+.perfil-image:hover {
+    transform: scale(1.1); /* Aumentar la imagen al 110% en hover */
+}
+.partnerPerfil{
+    width: 100px;         /* Ancho fijo */
+    height: 100px;        /* Altura fija */
+    margin: 10px;
+    border-radius: 50%;   /* Hacer la imagen redonda */
+    object-fit: cover;  
+}
+.partnerPerfil:hover {
+    transform: scale(1.1); /* Aumentar la imagen al 110% en hover */
+}
 /* Estilos para las imágenes del usuario (rectangulares) */
 .user-image {
     width: 250px;         /* Ancho fijo para las imágenes del usuario */
@@ -40,6 +52,8 @@
     object-fit: cover;    /* Mantiene la proporción y recorta si es necesario */
     border: 2px solid #ccc; /* Borde opcional */
 }
+
+
 
 .delete-button {
     position: absolute;

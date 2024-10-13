@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import { Link, useParams } from "react-router-dom";
-import UploadImageComponent from "./uploadPartnerImage";
-import DisplayImageComponent from "./getPartnerImage";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import empresaColaboradoraYay from "../../../../docs/assets/PartnerPerfil.webp"; // Aquí importas correctamente la imagen
+const API_BASE_URL = "https://tu-api-url.com";
+import "../../styles/imagenes.css";
+import { PartnerMisEventos } from "./partner_mis_eventos";
 
 const PartnerProfile = () => {
-    console.log(localStorage.getItem("token"))
     const { store, actions } = useContext(Context);
     const { partnerId } = useParams();
+    const navigate = useNavigate(); // Inicializa useNavigate
     const [profile, setProfile] = useState({
         nombre: '',
         nif: '',
         direccion: '',
-        latitud: '',
-        longitud: '',
         sector: '',
         entidad_id: '',
+        image: '' 
     });
     const [direccion, setDireccion] = useState("");
 
@@ -25,8 +26,8 @@ const PartnerProfile = () => {
             actions.getPartnerProfile(partnerId)
                 .then((data) => {
                     if (data) {
-                        setProfile(data); // Establece el perfil en el estado local
-                        setDireccion(data.direccion); // Establece la dirección en el estado local
+                        setProfile(data);
+                        setDireccion(data.direccion);
                     } else {
                         console.error("No se pudo obtener el perfil");
                     }
@@ -43,41 +44,68 @@ const PartnerProfile = () => {
     const tipoEntidad = entidad ? entidad.tipo : 'Entidad no encontrada';
 
     return (
-        <div className="m-5">
-            <div className="d-flex justify-content-around">
-            <Link to="/informacion-partner">
-                <button className="btn me-3 text-light" style={{ backgroundColor: '#7c488f' }}>Informacion Partner</button>
-            </Link>
-                <h2>Perfil del partner</h2>
-                <Link to="/partners-eventos">
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Lista de Eventos</button>
-                </Link>
-                <Link to={`/partner-mis-eventos/${partnerId}`}>
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Mis eventos</button>
-                </Link>
-            </div>
-            {profile.nombre ? (
-                <>
-                    <div className="d-flex flex-row m-5 justify-content-between">
-                        <div className="m-5">
-                            <p><strong>Nombre:</strong> {profile.nombre}</p>
-                            <p><strong>NIF o DNI:</strong> {profile.nif}</p>
-                            <p><strong>Dirección:</strong> {profile.direccion}</p>
-                            <p><strong>Sector:</strong> {profile.sector}</p>
-                            <p><strong>Entidad ID:</strong> {tipoEntidad}</p>
-                            <Link to={`/editPartnerProfile/${partnerId}`}>
-                                <button>Editar perfil</button>
-                            </Link>
-                        </div>
-                        <div className="m-5">
-                            <UploadImageComponent actions={actions} partnerId={partnerId} />
-                            <DisplayImageComponent actions={actions} partnerId={partnerId} />
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-8">
+                    <div className="card p-4 shadow-sm">
+                        <div className="row">
+                            <div className="col-md-3 text-center">
+                                {/* Imagen de perfil con estilo circular */}
+                                <img
+                                    src={empresaColaboradoraYay} // Aquí usas la variable que importaste
+                                    alt="Perfil del Partner"
+                                    className="img-fluid rounded-circle mb-4 partnerPerfil"
+                                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                                />
+                                <Link to={`/editPartnerProfile/${partnerId}`}>
+                                    <button className="btn btn-primary" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>
+                                        Editar perfil
+                                    </button>
+                                </Link>
+                            </div>
+                            <div className="col-md-9">
+                                <h4 className="mb-4" style={{ color: '#7c488f' }}>Información del Partner</h4>
+                                <div className="form-group mb-3">
+                                    <label><strong>Nombre:</strong></label>
+                                    <p>{profile.nombre}</p>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label><strong>NIF o DNI:</strong></label>
+                                    <p>{profile.nif}</p>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label><strong>Dirección:</strong></label>
+                                    <p>{profile.direccion}</p>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label><strong>Sector:</strong></label>
+                                    <p>{profile.sector}</p>
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label><strong>Entidad ID:</strong></label>
+                                    <p>{tipoEntidad}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </>
-            ) : (
-                <p>Cargando perfil...</p>
-            )}
+                </div>
+                <div className="col-md-4 d-flex flex-column justify-content-start">
+                    <button
+                        className="btn me-3 mb-2"
+                        onClick={() => navigate(`/partner-mis-eventos/${partnerId}`)} // Utiliza el partnerId verificado
+                        style={{ backgroundColor: '#7c488f', color: 'white' }}
+                    >
+                        Mis Eventos
+                    </button>
+                    <button
+                        className="btn"
+                        onClick={() => navigate(`/formulario-evento`)} // Redirige a la ruta para crear un nuevo evento
+                        style={{ backgroundColor: '#A7D0CD', color: '#494949' }}
+                    >
+                        Crear Evento
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

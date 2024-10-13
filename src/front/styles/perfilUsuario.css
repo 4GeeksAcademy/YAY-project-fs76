@@ -1,0 +1,56 @@
+/* Estilos personalizados */
+
+/* Colores corporativos */
+.btn-custom-primary {
+    background-color: #A7D0CD; /* Azul YAY */
+    border: none;
+    color: white;
+}
+
+.btn-custom-primary:hover {
+    background-color: #7c488f; /* Morado YAY */
+}
+
+.btn-custom-secondary {
+    background-color: #de8f79; /* Naranja YAY */
+    border: none;
+    color: white;
+}
+
+.btn-custom-secondary:hover {
+    background-color: #A7D0CD; /* Azul YAY */
+}
+
+h2 {
+    font-size: 2rem;
+    color: #7c488f; /* Morado YAY */
+}
+
+p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #4A4A4A; /* Un color neutral para el texto */
+}
+
+/* Ajustes para los campos clave */
+p strong {
+    color: #7c488f; /* Morado YAY */
+}
+
+.container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .btn-lg {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .col-md-6 {
+        margin-bottom: 20px;
+    }
+}
