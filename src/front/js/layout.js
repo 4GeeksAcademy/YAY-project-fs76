@@ -40,6 +40,7 @@ import { EventosMapa } from "./component/eventosMapa";
 import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
 import { PartnerMisEventos } from "./component/partner_mis_eventos";
+import { CheckLoginPartner } from "./component/checkLoginPartner";
 
 // ------ DISEÑO ON -------
 import { Landing_Page } from "./pages/landing_page";
@@ -89,6 +90,7 @@ function Layout() {
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                         <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route path="/check-login" element={<CheckLoginPartner />} />
                         <Route element={<SobreNosotros />} path="/sobre-nosotros" />
                         <Route element={<EventosPublicos />} path="/eventos-yay" />
                         <Route element={<NotFound />} path="*" />

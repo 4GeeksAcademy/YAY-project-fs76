@@ -35,7 +35,7 @@ export const Partner_Completar = () => {
             actions.completePartner(theid, nuevoPartner, () => {
                 setAlert({ type: 'success', message: 'Perfil completado exitosamente' });
                 setTimeout(() => {
-                    navigate('/partners_home');
+                    navigate('/check-login');
                 }, 1000);
             }, () => {
                 setAlert({ type: 'danger', message: 'Error al completar el perfil' });
@@ -48,7 +48,7 @@ export const Partner_Completar = () => {
 
     return (
         <>
-            {store.auth === true ? <Navigate to="/partners_home" /> :
+            {store.auth === true ? <Navigate to="/check-login" /> :
                 <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
                     <h1 className="text-center">Completar tu perfil de Partner</h1>
                     {alert && (
