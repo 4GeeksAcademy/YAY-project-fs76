@@ -13,7 +13,7 @@ const GetUserPerfilImage = () => {
             const response = await actions.getUserPerfilImage();
             setImage(response.foto_perfil);
         } catch (error) {
-            setError("No se pudo cargar la imagen de perfil.");
+            setError(<span style={{ color: 'grey' }}>Sube una imagen de perfil</span>);
         }
     };
 

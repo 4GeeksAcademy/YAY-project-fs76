@@ -100,3 +100,76 @@
 .spinner-border {
     margin-right: 5px; /* Espacio entre el spinner y el texto */
 }
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+    padding: 10px; /* Un pequeño margen interno */
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 50%; /* Asegura que el modal no sea más grande que el 90% del ancho de la pantalla */
+    max-height: 80%; /* Limita la altura máxima del modal */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para el modal */
+}
+
+.modal-image {
+    width: 100%; /* Asegura que la imagen se ajuste al modal */
+    max-width: 600px; /* Tamaño máximo para pantallas grandes */
+    max-height: 80vh; /* Limita la altura al 80% de la pantalla */
+    border-radius: 10px;
+    object-fit: contain; /* Asegura que la imagen mantenga sus proporciones */
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Estilos adicionales para hacer el modal más responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 100%; /* El modal ocupará todo el ancho disponible en pantallas pequeñas */
+        max-height: 80%; /* Limita la altura del modal en pantallas pequeñas */
+        padding: 10px; /* Reduce el padding para pantallas pequeñas */
+    }
+    
+    .modal-image {
+        max-width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+        max-height: 70vh; /* Limita la altura en pantallas pequeñas */
+    }
+
+    .close {
+        font-size: 20px; /* Reduce el tamaño del botón de cerrar en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 5px; /* Reduce aún más el padding en dispositivos muy pequeños */
+    }
+    
+    .modal-image {
+        max-height: 60vh; /* Ajusta la altura máxima para pantallas muy pequeñas */
+    }
+
+    .close {
+        font-size: 18px; /* Botón de cerrar más pequeño */
+    }
+}

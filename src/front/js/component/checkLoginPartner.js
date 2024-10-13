@@ -10,7 +10,7 @@ export const CheckLoginPartner = () => {
 
     // Obtén el partnerId de localStorage
     const partnerIdFromLocalStorage = localStorage.getItem('partner_id');
-    const partnerId = store.partner_id || partnerIdFromLocalStorage; // Verifica ambos lugares para el partnerId
+    const partnerId = store.partner_id || partnerIdFromLocalStorage; 
 
     // Debugging logs
     console.log("Auth:", store.auth);
@@ -43,7 +43,7 @@ export const CheckLoginPartner = () => {
                 <h1>Estás en el área privada de esta cuenta de Partner</h1>
             </div>
             <h1>Hace falta verificar si es usted para continuar</h1>
-            <h2>Por favor vuelva a login para autentificar</h2>
+            <h2>Por favor seleccione verificar para autentificar</h2>
             <button
                 className="enter btn btn-secondary my-auto"
                 onClick={handleLogout}

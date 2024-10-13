@@ -14,9 +14,12 @@ const EditProfile = () => {
         direccion: '',
         latitud: null,
         longitud: null,
-        breve_descripcion: ''
+        breve_descripcion: '',
+        telefono: '',
+        genero: ''
     });
     const [intereses, setIntereses] = useState([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const navigate = useNavigate();
 
@@ -70,6 +73,8 @@ const EditProfile = () => {
             profileConIntereses.latitud,
             profileConIntereses.longitud,
             profileConIntereses.breve_descripcion,
+            profileConIntereses.telefono,
+            profileConIntereses.genero,
             profileConIntereses.intereses
         )
         .then(() => {
@@ -83,11 +88,24 @@ const EditProfile = () => {
         });
     };
 
+    const handleDeleteAccount = () => {
+        // Aquí va la lógica para eliminar la cuenta
+        actions.deleteAccount(userId)
+            .then(() => {
+                alert("Cuenta eliminada exitosamente");
+                navigate('/'); // Redirigir al inicio
+            })
+            .catch((error) => {
+                console.error("Error al eliminar la cuenta:", error);
+                alert("Error al eliminar la cuenta");
+            });
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center" style={{ color: "#7c488f", fontSize: "2rem" }}>Editar Informacion Personal</h2>
+            <h2 className="text-center" style={{ color: "#7c488f", fontSize: "2rem" }}>Editar Información Personal</h2>
             <div className="col-md-3">
-                    <GetUserPerfilImage />
+                <GetUserPerfilImage />
             </div>
             <form onSubmit={handleSubmit} className="p-4" style={{ backgroundColor: "#fff", borderRadius: "8px", border: "1px solid #ddd" }}>
                 <div className="form-group mb-3">
@@ -124,7 +142,34 @@ const EditProfile = () => {
                         style={{ fontSize: "1.1rem" }}
                     />
                 </div>
-                <div className="form-group mb-3 ">
+                <div className="form-group mb-3">
+                    <label className="form-label" style={{ fontSize: "1.2rem", color: "#000" }}>Teléfono:</label>
+                    <input
+                        type="tel"
+                        name="telefono"
+                        value={profile.telefono}
+                        onChange={handleChange}
+                        className="form-control"
+                        style={{ fontSize: "1.1rem" }}
+                        placeholder="Número de teléfono"
+                    />
+                </div>
+                <div className="form-group mb-3">
+                    <label className="form-label" style={{ fontSize: "1.2rem", color: "#000" }}>Género:</label>
+                    <select
+                        name="genero"
+                        value={profile.genero}
+                        onChange={handleChange}
+                        className="form-control"
+                        style={{ fontSize: "1.1rem" }}
+                    >
+                        <option value="">Seleccione...</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div className="form-group mb-3">
                     <label className="form-label" style={{ fontSize: "1.2rem", color: "#000" }}>Dirección:</label>
                     <Mapa
                         setDireccion={(direccion, latitud, longitud) => setProfile({
@@ -162,12 +207,39 @@ const EditProfile = () => {
                                 }}
                                 onClick={() => handleInteresChange(interes)}
                             >
-                                {interes}
+                                        {interes}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#de8f79", borderColor: "#de8f79", fontSize: "1.2rem" }}>Guardar Cambios</button>
+                        
+                    <div className="mt-4">
+                    <h4 className="text-danger">Eliminar Cuenta</h4>
+                    <p style={{ fontSize: "1rem", color: "#000" }}>
+                        ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.
+                    </p>
+                    <button
+                        className="btn btn-danger"
+                        style={{ fontSize: "1rem", width: "auto" }}
+                        onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
+                    >
+                        {showDeleteConfirm ? "Cancelar" : "Eliminar Cuenta"}
+                    </button>
+                    {showDeleteConfirm && (
+                        <div className="mt-2">
+                            <p>Confirmas que deseas eliminar tu cuenta. Esto es irreversible.</p>
+                            <button
+                                className="btn btn-danger"
+                                style={{ fontSize: "1rem", width: "auto" }}
+                                onClick={handleDeleteAccount}
+                            >
+                                Confirmar Eliminación
                             </button>
-                        ))}
-                    </div>
+                        </div>
+                    )}
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#de8f79", borderColor: "#de8f79", fontSize: "1.2rem" }}>Guardar Cambios</button>
+
             </form>
         </div>
     );

@@ -5,6 +5,8 @@ import "../../styles/imagenes.css";
 
 const GetUserImages = () => {
     const [images, setImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
+    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
     const [error, setError] = useState(null);
     const { store, actions } = useContext(Context);
 
@@ -13,7 +15,7 @@ const GetUserImages = () => {
             const response = await actions.getUserImages();
             setImages(response.fotos);
         } catch (error) {
-            setError("No se pudieron cargar las imágenes.");
+            setError(<span style={{ color: 'grey' }}>Completa para que los demás puedan conocerte</span>);
         }
     };
 
@@ -29,13 +31,23 @@ const GetUserImages = () => {
         }
     };
 
+    const handleImageClick = (url) => {
+        setSelectedImage(url); // Establece la imagen seleccionada
+        setIsModalOpen(true); // Abre el modal
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); // Cierra el modal
+        setSelectedImage(null); // Limpia la imagen seleccionada
+    };
+
     useEffect(() => {
         fetchImages();
     }, []);
 
     return (
         <div className="user-images-container">
-            <h3 className="user-images-title">Imágenes del Usuario</h3>
+            <h3 className="user-images-title">Tu galeria de imagenes</h3>
             {error && <p className="error-message">{error}</p>}
             {images.length >= 5 && (
                 <p className="good-captures-message">Muy buenas tomas</p>
@@ -47,6 +59,7 @@ const GetUserImages = () => {
                             src={url}
                             alt={`Imagen ${index + 1}`}
                             className="user-image"
+                            onClick={() => handleImageClick(url)} // Muestra la imagen en el modal al hacer clic
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 
@@ -59,6 +72,15 @@ const GetUserImages = () => {
             </div>
 
             {images.length < 5 && <ImageUpload fetchImages={fetchImages} />}
+
+            {isModalOpen && (
+                <div className="modal" onClick={closeModal}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="close" onClick={closeModal}>&times;</span>
+                        <img src={selectedImage} alt="Imagen grande" className="modal-image" />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
