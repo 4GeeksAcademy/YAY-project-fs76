@@ -8,6 +8,9 @@ import { Landing_Card } from "../component/diseñoON/landing_card";
 import { Landing_About } from "../component/diseñoON/landing_about";
 import { Landing_Cifras } from "../component/diseñoON/landing_cifras";
 import { Landing_Maps } from "../component/diseñoON/landing_maps";
+import { Landing_Form } from "../component/diseñoON/landing_form";
+import { Landing_Partner } from "../component/diseñoON/landing_partner";
+import { ScrollToTopButton } from "../component/diseñoON/scrollToTopButton";
 
 
 export const Landing_Page = () => {
@@ -20,6 +23,9 @@ export const Landing_Page = () => {
             <Landing_About />
             <Landing_Cifras />
             <Landing_Maps />
+            <Landing_Form />
+            <Landing_Partner />
+            <ScrollToTopButton />
 
         </>
     );

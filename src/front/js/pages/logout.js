@@ -25,23 +25,27 @@ export const Logout = () => {
   return (
     <>
       {redirect ? <Navigate to="/" /> : null}
-      <div style={{
+      {/* <div className="container" style={{
 			position: 'fixed',
 			top: 0,
 			left: 0,
 			width: '100%',
 			height: '100%',
 			backgroundColor: '#de8f79',
-			zIndex: -1
-		}}></div>
-      <div className="container text-center">
+			zIndex: -1,
+      padding: '20px'
+		}}></div> */}
+      <div className="container text-center mx-auto" style={{	backgroundColor: '#de8f79',
+      padding: '20px',
+      margin: '20px',
+      borderRadius: '15px'}}>
         <div className="row align-items-start mt-5">
           <div className="col">
 
           </div>
           <div className="col-10">
-            <h2 className="display-6">¡Nos vemos pronto!</h2>
-            <h5>Cerrando sesión...</h5>
+            <h2 className="display-6" style={{ fontWeight: '500' }}>¡Nos vemos pronto!</h2>
+            <h4>Cerrando sesión...</h4>
             <br></br>
             <div className="loader mx-auto "></div>
           </div>

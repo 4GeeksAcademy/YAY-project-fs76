@@ -7,30 +7,31 @@ export const Landing_Cifras = () => {
 
     return (
 
-        <div className="container content-space-2 content-space-lg-3 my-5">
-        <div className="row">
+        <div className=" content-space-2 gradiente-cifras content-space-lg-3 my-5 d-flex justify-content-center">
+        <div className="container row">
           <div className="col-sm-4 mb-3 mb-sm-0">
-            <div className="text-center">
-              <small className="text-cap text-primary">— Valuation methods</small>
-              <h4 className="display-4">500,000</h4>
-              <p>Our valuation methods are based on more than 500,000 real transactions.</p>
-            </div>
-          </div>
-  
-          <div className="col-sm-4 mb-3 mb-sm-0">
-            <div className="text-center">
-              <small className="text-cap text-primary">— Coverage</small>
-              <h4 className="display-4">75%</h4>
-              <p>This represents over 75% of the UK property sales over the past 10 years.</p>
-            </div>
-          </div>
-  
-          <div className="col-sm-4">
-            <div className="text-center">
-              <small className="text-cap text-primary">— Advanced algorithm</small>
-              <h4 className="display-4">125,000</h4>
-              <p>Our algorithms are updated by data from over 125,000 property sales every year.</p>
-            </div>
+          <div className="text-center">
+                        <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Usuarios Registrados</small>
+                        <h4 className="display-4" style={{color: '#494949'}}>150,000</h4>
+                        <p>Más de 150,000 usuarios mayores de 60 se han registrado en nuestra plataforma.</p>
+                    </div>
+                </div>
+
+                <div className="col-sm-4 mb-3 mb-sm-0">
+                    <div className="text-center">
+                    <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Satisfacción del Usuario</small>
+                        <h4 className="display-4" style={{color: '#494949'}}>95%</h4>
+                        <p>El 95% de nuestros usuarios están satisfechos con los eventos a los que asisten.</p>
+
+                    </div>
+                </div>
+
+                <div className="col-sm-4">
+                    <div className="text-center">
+                    <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Eventos Disponibles</small>
+                        <h4 className="display-4" style={{color: '#494949'}}>1,200</h4>
+                        <p>Ofrecemos más de 1,200 eventos organizados por nuestros partners cada año.</p>
+                    </div>
           </div>
         </div>
       </div>

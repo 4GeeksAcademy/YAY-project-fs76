@@ -4,6 +4,7 @@ import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Inscripciones } from './inscripciones';
+import { CustomMarker } from './customMarker';
 
 const libraries = ["places", "geometry"];
 
@@ -45,7 +46,7 @@ export const EventosMapa = () => {
             const eventoId = parseInt(params.theid);
             actions.getInteresPorEvento(eventoId).then((data) => {
                 if (data) {
-                    setInteres(data); 
+                    setInteres(data);
                 }
             }).catch(error => {
                 console.error("Error al cargar el interés:", error);
@@ -53,7 +54,8 @@ export const EventosMapa = () => {
         }).catch(error => {
             console.error("Error al cargar eventos:", error);
         });
-    
+
+
     }, []);
 
     const handleMarkerClick = (evento) => {
@@ -92,6 +94,22 @@ export const EventosMapa = () => {
         }
     };
 
+    const onMapClick = (event) => {
+        const newPosition = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        setMarkerPosition(newPosition);
+        setCenter(newPosition);
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: newPosition }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                const formattedAddress = results[0].formatted_address;
+                setAddress(formattedAddress); // Actualiza el estado del input
+                setDireccion(formattedAddress, newPosition.lat, newPosition.lng); // Llama a setDireccion
+            }
+        });
+    };
 
 
     console.log('Inscripciones:', inscripcionIds);
@@ -124,6 +142,7 @@ export const EventosMapa = () => {
                         mapContainerStyle={mapContainerStyle}
                         center={mapCenter}
                         zoom={zoom}
+                        onClick={onMapClick} 
                     >
                         <Autocomplete
                             onLoad={autocomplete => setAutocomplete(autocomplete)}
@@ -146,34 +165,14 @@ export const EventosMapa = () => {
                             />
                         </Autocomplete>
                         {store.eventos.map(evento => (
-                                 <Marker
-                                 key={evento.id}
-                                 position={{ lat: evento.latitud, lng: evento.longitud }}
-                                 icon={{
-                                     url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 384 512">
-                                             <defs>
-                                                 <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                                                     <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
-                                                     <feOffset dx="0" dy="2" result="offsetblur" />
-                                                     <feFlood flood-color="rgba(0, 0, 0, 0.5)" />
-                                                     <feComposite in2="offsetblur" operator="in" />
-                                                     <feMerge>
-                                                         <feMergeNode />
-                                                         <feMergeNode in="SourceGraphic" />
-                                                     </feMerge>
-                                                 </filter>
-                                             </defs>
-                                             <g filter="url(#shadow)">
-                                                 <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" fill="#7c488f"/>
-                                             </g>
-                                         </svg>
-                                     `),
-                                     scaledSize: new window.google.maps.Size(40, 40) 
-                                 }}
-                                 onClick={() => handleMarkerClick(evento)}
-                             />
-                            ))}
+                            <CustomMarker
+                                key={evento.id}
+                                evento={evento}
+                                position={{ lat: evento.latitud, lng: evento.longitud }}
+                                onClick={() => handleMarkerClick(evento)}
+                            />
+
+                        ))}
                     </GoogleMap>
                 </LoadScript>
             </div>
@@ -193,9 +192,9 @@ export const EventosMapa = () => {
                                 <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio} €</p>
                                 <p className="card-text text-muted"><b>Observaciones</b>: {selectedEvent.observaciones}</p>
                                 <p className="card-text text-muted"><b>Ubicación</b>: {selectedEvent.direccion}</p>
-                
-                                    <p className="card-text text-muted"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</p>
-         
+
+                                <p className="card-text text-muted"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</p>
+
 
 
                                 <Inscripciones
