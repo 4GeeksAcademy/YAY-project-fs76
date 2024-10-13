@@ -104,3 +104,9 @@
     font-size: 1.2rem;
   }
 }
+
+a, .nav-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+

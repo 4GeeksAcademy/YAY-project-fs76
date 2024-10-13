@@ -389,7 +389,7 @@ small {
     height: 3.125rem;
 }
 
-.banner-half-middle-x {
+.image-about {
     position: absolute;
     top: 0;
     right: 0;
@@ -403,7 +403,7 @@ small {
     }
 }
 
-.banner-half-middle-x::before {
+.image-about::before {
     position: absolute;
     top: 50%;
     right: 100%;
@@ -467,3 +467,4 @@ small {
         transition: none;
     }
 }
+
