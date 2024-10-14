@@ -8,29 +8,29 @@ export const Landing_Cifras = () => {
     return (
 
         <div className=" content-space-2 gradiente-cifras content-space-lg-3 my-5 d-flex justify-content-center">
-        <div className="container row">
-          <div className="col-sm-4 mb-3 mb-sm-0">
+        <div className=" row d-flex justify-content-around">
+          <div className="col-sm-3 mb-2 mb-sm-0">
           <div className="text-center">
-                        <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Usuarios Registrados</small>
+                        <small className="text-cap fs-5" style={{color: '#de8f79', letterSpacing: '4px'}}>— Usuarios Registrados</small>
                         <h4 className="display-4" style={{color: '#494949'}}>150,000</h4>
-                        <p>Más de 150,000 usuarios mayores de 60 se han registrado en nuestra plataforma.</p>
+                        <h5>Más de 150,000 usuarios mayores de 60 se han registrado en nuestra plataforma.</h5>
                     </div>
                 </div>
 
-                <div className="col-sm-4 mb-3 mb-sm-0">
+                <div className="col-sm-3 mb-2 mb-sm-0">
                     <div className="text-center">
-                    <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Satisfacción del Usuario</small>
-                        <h4 className="display-4" style={{color: '#494949'}}>95%</h4>
-                        <p>El 95% de nuestros usuarios están satisfechos con los eventos a los que asisten.</p>
+                    <small className="text-cap fs-5" style={{color: '#de8f79', letterSpacing: '4px'}}>— Satisfacción del Usuario</small>
+                        <h4 className="display-4" style={{color: '#494949', }}>95%</h4>
+                        <h5>El 95% de nuestros usuarios están satisfechos con los eventos a los que asisten.</h5>
 
                     </div>
                 </div>
 
-                <div className="col-sm-4">
+                <div className="col-sm-3">
                     <div className="text-center">
-                    <small className="text-cap fs-5" style={{color: '#de8f79'}}>— Eventos Disponibles</small>
+                    <small className="text-cap fs-5" style={{color: '#de8f79', letterSpacing: '4px'}}>— Eventos Disponibles</small>
                         <h4 className="display-4" style={{color: '#494949'}}>1,200</h4>
-                        <p>Ofrecemos más de 1,200 eventos organizados por nuestros partners cada año.</p>
+                        <h5>Ofrecemos más de 1,200 eventos organizados por nuestros partners cada año.</h5>
                     </div>
           </div>
         </div>

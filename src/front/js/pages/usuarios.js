@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Signup } from "../component/signup";
+import { Signup } from "../component/diseñoON/signup";
 import { Login } from "../component/login";
 
 import "../../styles/home.css";

@@ -604,3 +604,8 @@ a {
 .list-inline-item {
     display: inline-block;
 }
+
+h5, h4 {
+    font-weight: 350;
+}
+

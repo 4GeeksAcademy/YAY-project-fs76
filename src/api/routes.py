@@ -292,23 +292,16 @@ def logout_partner():
     session.pop('jwt_token', None) 
     return jsonify({"msg": "Cierre de sesión con éxito"}), 200
 
-@api.route('/checkPartner', methods=['POST'])
+@api.route('/checkPartner', methods=['GET'])
 def check_partner_exists():
-    partnerName = request.json.get('partnerName')
-    email = request.json.get('email')
+    email = request.args.get('email')  # Obtener el email desde los parámetros de la URL
 
-    if not partnerName and not email:
-        return jsonify(message="Nombre y correo electrónico obligatorio"), 400
+    if not email:
+        return jsonify(message="Correo electrónico obligatorio"), 400
 
-    if email:
-        existing_partner = Partners.query.filter_by(email=email).first()
-        if existing_partner:
-            return jsonify(exists=True, message="Ya existe un Partner registrado con este correo electrónico"), 200
-
-    if partnerName:
-        existing_partner = Partners.query.filter_by(partnerName=partnerName).first()
-        if existing_partner:
-            return jsonify(exists=True, message="Ya existe un Partner registrado con ese nombre"), 200
+    existing_partner = Partners.query.filter_by(email=email).first()
+    if existing_partner:
+        return jsonify(exists=True, message="Ya existe un Partner registrado con este correo electrónico"), 200
 
     return jsonify(exists=False), 200
 
@@ -462,20 +455,18 @@ def logout_usuario():
     session.pop('jwt_token', None)
     return jsonify({"msg": "Cierre de sesión con éxito"}), 200
 
-# Verificar si existe un usuario con el email proporcionado
-@api.route('/usuarios', methods=['POST'])
-def check_usuario_exists():
-    email = request.json.get('email')
+@api.route('/checkUser', methods=['GET'])
+def check_user_exists():
+    email = request.args.get('email')  # Obtener el email desde los parámetros de la URL
 
     if not email:
-        return jsonify(message="El correo electrónico es obligatorio"), 400
+        return jsonify(message="Correo electrónico obligatorio"), 400
 
-    existing_usuario = Usuarios.query.filter_by(email=email).first()
-    if existing_usuario:
-        return jsonify(exists=True, message="Ya existe un Usuario registrado con este correo electrónico"), 200
+    existing_user = Usuarios.query.filter_by(email=email).first()  # Asegúrate de tener el modelo Users
+    if existing_user:
+        return jsonify(exists=True, message="Ya existe un usuario registrado con este correo electrónico"), 200
 
     return jsonify(exists=False), 200
-
 # Eliminar un usuario por ID
 @api.route('/usuarios/<int:usuario_id>', methods=['DELETE'])
 def delete_usuario(usuario_id):

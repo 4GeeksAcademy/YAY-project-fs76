@@ -40,7 +40,7 @@ export const EventosPublicos = () => {
         <div className="container m-5 mx-auto w-75">
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
-                <Link to="/usuarios">
+                <Link to="/signup">
                     <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Regístrate y YAY</button>
                 </Link>
             </div>

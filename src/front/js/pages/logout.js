@@ -13,6 +13,7 @@ export const Logout = () => {
   useEffect(() => {
     if (location.state && location.state.from) {
       const redirectTimeout = setTimeout(() => {
+        window.location.reload();
         setRedirect(true);
       }, 3000);
 
@@ -20,21 +21,12 @@ export const Logout = () => {
     } else {
       navigate("/", { replace: true });
     }
+    
   }, [location]);
 
   return (
     <>
       {redirect ? <Navigate to="/" /> : null}
-      {/* <div className="container" style={{
-			position: 'fixed',
-			top: 0,
-			left: 0,
-			width: '100%',
-			height: '100%',
-			backgroundColor: '#de8f79',
-			zIndex: -1,
-      padding: '20px'
-		}}></div> */}
       <div className="container text-center mx-auto" style={{	backgroundColor: '#de8f79',
       padding: '20px',
       margin: '20px',

@@ -45,7 +45,7 @@ export const Landing_Card = () => {
     <div className="container content-space-2 content-space-b-lg-3">
     {/* Title */}
     <div className="w-md-75 w-lg-50 text-center mx-md-auto mb-7">
-        <h1>Eventos disponibles</h1>
+        <h1 className="p-0" style={{ letterSpacing: '4px' }}>Eventos Destacados</h1>
     </div>
     {/* End Title */}
 
@@ -111,7 +111,7 @@ export const Landing_Card = () => {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => setShowModalInfo(false)} aria-label="Close" onFocus={(e) => e.target.blur()}></button>                            </div>
               <div className="modal-body text-center mt-3">
                 <h5>¿Quieres saber más de este evento?</h5>
-                <Link to="/usuarios">
+                <Link to="/signup">
                 <button className="btn btn-lg my-3" style={{ backgroundColor: '#7c488f', color: 'white' }}>Regístrate y YAY</button>
                 </Link>
               </div>
