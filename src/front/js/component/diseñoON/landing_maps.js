@@ -135,7 +135,7 @@ export const Landing_Maps = () => {
         <div className="content-space-b-2 content-space-b-lg-3 mt-5 mb-0">
             {/* Title */}
             <div className="w-md-75 w-lg-100 text-center ms-0 p-0 mx-md-auto mb-7 mb-md-9">
-                <h1>Encuentra eventos en tu zona <i className="fa-solid fa-map-location-dot"></i></h1>
+                <h1 style={{ letterSpacing: '4px' }}>Encuentra eventos en tu zona <i className="fa-solid fa-map-location-dot"></i></h1>
                 <p style={{ color: '#494949', fontSize: '20px' }}>Conocer tu barrio va más allá de reconocer las calles y los edificios; se trata de construir un hogar.
                     <br></br>
                     Conecta con tus vecinos, crea redes de apoyo que enriquecen la vida cotidiana.
@@ -270,7 +270,7 @@ export const Landing_Maps = () => {
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => setShowModalInfo(false)} aria-label="Close" onFocus={(e) => e.target.blur()}></button>                            </div>
                             <div className="modal-body text-center mt-3">
                                 <h5>¿Quieres saber más de este evento?</h5>
-                                <Link to="/usuarios">
+                                <Link to="/signup">
                                     <button className="btn btn-lg my-3" style={{ backgroundColor: '#7c488f', color: 'white' }}>Regístrate y YAY</button>
                                 </Link>
                             </div>

@@ -54,6 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 localStorage.setItem("user_id", user_id);
             },
 
+
             getUserId: () => {
                 const store = getStore(); 
                 if (store.user_id) {
@@ -417,17 +418,26 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
             },
             
-
             checkPartnerExists: (email) => {
-                return fetch(process.env.BACKEND_URL + "/api/checkPartner", {
-                    method: 'POST',
+                return fetch(`${process.env.BACKEND_URL}/api/checkPartner?email=${encodeURIComponent(email)}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify({ email })
+                    }
                 })
-                    .then(response => response.json())
-                    .then(data => data.exists);
+                .then(response => response.json())
+                .then(data => data.exists);
+            },
+            
+            checkUserExists: (email) => {
+                return fetch(`${process.env.BACKEND_URL}/api/checkUser?email=${encodeURIComponent(email)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => data.exists);
             },
 
             loginPartner: async (email, password) => {
