@@ -79,12 +79,12 @@ const EditProfile = () => {
         )
         .then(() => {
             localStorage.setItem('selectedInterests', JSON.stringify(profileConIntereses.intereses));
-            alert("Perfil actualizado exitosamente");
+            // alert("Perfil actualizado exitosamente");
             navigate(`/profile/${userId}`);
         })
         .catch((error) => {
             console.error("Error al actualizar el perfil:", error);
-            alert("Error al actualizar el perfil");
+            // alert("Error al actualizar el perfil");
         });
     };
 
@@ -92,12 +92,12 @@ const EditProfile = () => {
         // Aquí va la lógica para eliminar la cuenta
         actions.deleteAccount(userId)
             .then(() => {
-                alert("Cuenta eliminada exitosamente");
+                // alert("Cuenta eliminada exitosamente");
                 navigate('/'); // Redirigir al inicio
             })
             .catch((error) => {
                 console.error("Error al eliminar la cuenta:", error);
-                alert("Error al eliminar la cuenta");
+                // alert("Error al eliminar la cuenta");
             });
     };
 

@@ -97,7 +97,7 @@ const CompletarDatosUsuario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (latitud === null || longitud === null) {
-            alert("Por favor, selecciona una ubicación en el mapa.");
+            // alert("Por favor, selecciona una ubicación en el mapa.");
             return;
         }
 
@@ -106,10 +106,10 @@ const CompletarDatosUsuario = () => {
         if (result) {
             await actions.updateProfile(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, misIntereses);
             localStorage.setItem('selectedInterests', JSON.stringify(misIntereses));
-            alert("Datos completados con éxito");
+            // alert("Datos completados con éxito");
             navigate(`/profile/${userId}`);
         } else {
-            alert("Error al completar los datos");
+            // alert("Error al completar los datos");
         }
     };
 

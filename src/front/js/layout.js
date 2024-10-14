@@ -40,14 +40,14 @@ import { useAuth } from "./store/authContext";
 
 // ------ DISEÑO ON -------
 import { Landing_Page } from "./pages/landing_page";
-import { Navbar } from "./component/diseñoON/navbar";
-import { Footer } from "./component/diseñoON/footer";
-import { Login } from "./component/diseñoON/login";
-import { Signup } from "./component/diseñoON/signup";
-import { Partner_Signup } from "./component/diseñoON/partner_signup";
-import { Forgot_Password } from "./component/diseñoON/forgot_password";
-import { SobreNosotros } from "./component/diseñoON/sobreNosotros";
-import { Partner_Login } from "./component/diseñoON/partner_login";
+import { Navbar } from "./component/designON/navbar";
+import { Footer } from "./component/designON/footer";
+import { Login } from "./component/designON/login";
+import { Signup } from "./component/designON/signup";
+import { Partner_Signup } from "./component/designON/partner_signup";
+import { Forgot_Password } from "./component/designON/forgot_password";
+import { SobreNosotros } from "./component/designON/sobreNosotros";
+import { Partner_Login } from "./component/designON/partner_login";
 
 
 function Layout() {
@@ -102,7 +102,6 @@ function Layout() {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
-                        <Route path="/informacion-partner" element={<InformacionPartner />} />
 
                         <Route element={<Landing_Page />} path="/" />
 
