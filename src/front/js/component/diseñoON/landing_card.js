@@ -112,7 +112,7 @@ export const Landing_Card = () => {
               <div className="modal-body text-center mt-3">
                 <h5>¿Quieres saber más de este evento?</h5>
                 <Link to="/usuarios">
-                  <button className="btn btn-lg mb-3" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Regístrate y YAY</button>
+                <button className="btn btn-lg my-3" style={{ backgroundColor: '#7c488f', color: 'white' }}>Regístrate y YAY</button>
                 </Link>
               </div>
               <div className="modal-footer">

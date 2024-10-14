@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
+import { CustomMarkerMapa } from './customMarkerMapa';
 
 const libraries = ["places", "geometry"];
 
 export const Mapa = ({ setDireccion, initialDireccion }) => {
     const [autocomplete, setAutocomplete] = useState(null);
     const [address, setAddress] = useState('');
-    const [markerPosition, setMarkerPosition] = useState(initialDireccion || { lat: 40.1402000, lng: -3.4226700 });
-    const [center, setCenter] = useState(initialDireccion || { lat: 40.1402000, lng: -3.4226700 });
+    const [markerPosition, setMarkerPosition] = useState(initialDireccion || { lat: 41.39124311587592, lng: 2.1558980676717767 });
+    const [center, setCenter] = useState(initialDireccion || { lat: 41.39124311587592, lng: 2.1558980676717767 });
 
     const mapRef = React.useRef();
 
@@ -18,7 +19,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 if (status === 'OK' && results[0]) {
                     const location = results[0].geometry.location;
                     const newPosition = {
-                        lat: location.lat(),
+                        lat: location.lat(), 
                         lng: location.lng()
                     };
                     setMarkerPosition(newPosition);
@@ -63,7 +64,9 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
         const geocoder = new window.google.maps.Geocoder();
         geocoder.geocode({ location: newPosition }, (results, status) => {
             if (status === 'OK' && results[0]) {
-                setAddress(results[0].formatted_address);
+                const formattedAddress = results[0].formatted_address;
+                setAddress(formattedAddress); // Actualiza el estado del input
+                setDireccion(formattedAddress, newPosition.lat, newPosition.lng); // Llama a setDireccion
             }
         });
     };
@@ -92,7 +95,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 mapContainerStyle={mapContainerStyle}
                 center={center}
                 zoom={15}
-                onClick={onMapClick} // Agrega el manejador aquí
+                onClick={onMapClick} 
             >
                 <Autocomplete
                     onLoad={autocomplete => setAutocomplete(autocomplete)}
@@ -114,8 +117,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                         }}
                     />
                 </Autocomplete>
-                <Marker position={markerPosition}
-                  
+                <CustomMarkerMapa position={markerPosition}
                 />
 
             </GoogleMap>

@@ -4,6 +4,7 @@ import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Inscripciones } from './inscripciones';
+import { CustomMarker } from './customMarker';
 
 const libraries = ["places", "geometry"];
 
@@ -45,7 +46,7 @@ export const EventosMapa = () => {
             const eventoId = parseInt(params.theid);
             actions.getInteresPorEvento(eventoId).then((data) => {
                 if (data) {
-                    setInteres(data); 
+                    setInteres(data);
                 }
             }).catch(error => {
                 console.error("Error al cargar el interés:", error);
@@ -53,7 +54,8 @@ export const EventosMapa = () => {
         }).catch(error => {
             console.error("Error al cargar eventos:", error);
         });
-    
+
+
     }, []);
 
     const handleMarkerClick = (evento) => {
@@ -92,6 +94,22 @@ export const EventosMapa = () => {
         }
     };
 
+    const onMapClick = (event) => {
+        const newPosition = {
+            lat: event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        setMarkerPosition(newPosition);
+        setCenter(newPosition);
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode({ location: newPosition }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                const formattedAddress = results[0].formatted_address;
+                setAddress(formattedAddress); // Actualiza el estado del input
+                setDireccion(formattedAddress, newPosition.lat, newPosition.lng); // Llama a setDireccion
+            }
+        });
+    };
 
 
     console.log('Inscripciones:', inscripcionIds);
@@ -124,6 +142,7 @@ export const EventosMapa = () => {
                         mapContainerStyle={mapContainerStyle}
                         center={mapCenter}
                         zoom={zoom}
+                        onClick={onMapClick} 
                     >
                         <Autocomplete
                             onLoad={autocomplete => setAutocomplete(autocomplete)}
@@ -146,13 +165,14 @@ export const EventosMapa = () => {
                             />
                         </Autocomplete>
                         {store.eventos.map(evento => (
-                                 <Marker
-                                 key={evento.id}
-                                 position={{ lat: evento.latitud, lng: evento.longitud }}
-                                
-                                 onClick={() => handleMarkerClick(evento)}
-                             />
-                            ))}
+                            <CustomMarker
+                                key={evento.id}
+                                evento={evento}
+                                position={{ lat: evento.latitud, lng: evento.longitud }}
+                                onClick={() => handleMarkerClick(evento)}
+                            />
+
+                        ))}
                     </GoogleMap>
                 </LoadScript>
             </div>
@@ -172,9 +192,9 @@ export const EventosMapa = () => {
                                 <p className="card-text text-muted"><b>Precio</b>: {selectedEvent.precio} €</p>
                                 <p className="card-text text-muted"><b>Observaciones</b>: {selectedEvent.observaciones}</p>
                                 <p className="card-text text-muted"><b>Ubicación</b>: {selectedEvent.direccion}</p>
-                
-                                    <p className="card-text text-muted"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</p>
-         
+
+                                <p className="card-text text-muted"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</p>
+
 
 
                                 <Inscripciones
