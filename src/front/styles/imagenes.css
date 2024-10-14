@@ -1,0 +1,171 @@
+.perfil-image-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.perfil-title {
+    font-size: 1.8rem;
+    color: #7c488f; /* Morado */
+}
+
+.image-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.perfil-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.perfil-image:hover {
+    transform: scale(1.1); /* Crece un 10% en hover */
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #de8f79; /* Naranja */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    background-color: #A7D0CD; /* Azul */
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+/* Contenedor de la galería */
+.user-gallery-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.user-gallery-title {
+    font-size: 1.8rem;
+    color: #7c488f; /* Morado */
+}
+
+.user-gallery-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.user-gallery-good-captures-message {
+    color: #28a745;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Wrapper para las imágenes de la galería */
+.user-gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Estilos para las tarjetas de imagen */
+.user-gallery-image-card {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* Botón de eliminar imagen */
+.user-gallery-delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #de8f79; /* Naranja */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-gallery-delete-button:hover {
+    background-color: #A7D0CD; /* Azul */
+}
+
+/* Estilos del modal */
+.user-gallery-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.user-gallery-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-gallery-modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.user-gallery-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    color: #333;
+    cursor: pointer;
+}
+/* Efecto hover para que la imagen crezca */
+.user-gallery-image-card:hover .user-gallery-image {
+    transform: scale(1.1); /* Crece un 10% en hover */
+}

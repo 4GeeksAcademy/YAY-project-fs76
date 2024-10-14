@@ -1,23 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import { Link, useParams } from "react-router-dom";
-import UploadImageComponent from "./uploadPartnerImage";
-import DisplayImageComponent from "./getPartnerImage";
+import { useParams, useNavigate } from "react-router-dom";
+import "../../styles/partnerProfiles.css";
+import fondoPartner from "../../../../docs/assets/fondoPartner.webp"; // Asegúrate de que esta ruta sea correcta
 
 const PartnerProfile = () => {
-    console.log(localStorage.getItem("token"))
     const { store, actions } = useContext(Context);
     const { partnerId } = useParams();
+    const navigate = useNavigate();
     const [profile, setProfile] = useState({
         nombre: '',
         nif: '',
         direccion: '',
-        latitud: '',
-        longitud: '',
         sector: '',
         entidad_id: '',
+        image: ''  // Este campo se puede eliminar si no lo necesitas
     });
-    const [direccion, setDireccion] = useState("");
 
     useEffect(() => {
         if (partnerId) {
@@ -25,8 +23,7 @@ const PartnerProfile = () => {
             actions.getPartnerProfile(partnerId)
                 .then((data) => {
                     if (data) {
-                        setProfile(data); // Establece el perfil en el estado local
-                        setDireccion(data.direccion); // Establece la dirección en el estado local
+                        setProfile(data);
                     } else {
                         console.error("No se pudo obtener el perfil");
                     }
@@ -43,38 +40,46 @@ const PartnerProfile = () => {
     const tipoEntidad = entidad ? entidad.tipo : 'Entidad no encontrada';
 
     return (
-        <div className="m-5">
-            <div className="d-flex justify-content-around">
-                <h2>Perfil del partner</h2>
-                <Link to="/partners-eventos">
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Lista de Eventos</button>
-                </Link>
-                <Link to={`/partner-mis-eventos/${partnerId}`}>
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Mis eventos</button>
-                </Link>
-            </div>
-            {profile.nombre ? (
-                <>
-                    <div className="d-flex flex-row m-5 justify-content-between">
-                        <div className="m-5">
-                            <p><strong>Nombre:</strong> {profile.nombre}</p>
-                            <p><strong>NIF o DNI:</strong> {profile.nif}</p>
-                            <p><strong>Dirección:</strong> {profile.direccion}</p>
-                            <p><strong>Sector:</strong> {profile.sector}</p>
-                            <p><strong>Entidad ID:</strong> {tipoEntidad}</p>
-                            <Link to={`/editPartnerProfile/${partnerId}`}>
-                                <button>Editar perfil</button>
-                            </Link>
+        <div className="container-fluid perfil-container" style={{ backgroundImage: `url(${fondoPartner})` }}>
+            <div className="row">
+                <div className="col-md-3 sidebar">
+                    <h5 className="text-center" style={{ color: '#7c488f' }}>Menú</h5>
+                    <ul className="list-group">
+                        <li className="list-group-item" onClick={() => navigate(`/editPartnerProfile/${partnerId}`)}>Editar Perfil</li>
+                        <li className="list-group-item" onClick={() => navigate(`/formulario-evento`)}>Crear Evento</li>
+                        <li className="list-group-item" onClick={() => navigate(`/partner-mis-eventos/${partnerId}`)}>Mis Eventos</li>
+                        <li className="list-group-item" onClick={() => navigate(`/partners_home`)}>Home</li>
+                        <li className="list-group-item" onClick={() => navigate(`/contactar`)}>Contactar con Yay</li>
+                        <li className="list-group-item" onClick={() => navigate(`/pedir-ayuda`)}>Pedir Ayuda</li>
+                        <li className="list-group-item" onClick={() => navigate(`/sobre-nosotros`)}>Sobre Nosotros</li>
+                    </ul>
+                </div>
+                <div className="col-md-9">
+                    <div className="card p-4 profile-card shadow-sm">
+                        <h4 className="mb-4" style={{ color: '#7c488f' }}>Información del Partner</h4>
+                        <div className="form-group mb-3">
+                            <label><strong>Nombre:</strong></label>
+                            <p>{profile.nombre}</p>
                         </div>
-                        <div className="m-5">
-                            <UploadImageComponent actions={actions} partnerId={partnerId} />
-                            <DisplayImageComponent actions={actions} partnerId={partnerId} />
+                        <div className="form-group mb-3">
+                            <label><strong>NIF o DNI:</strong></label>
+                            <p>{profile.nif}</p>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label><strong>Dirección:</strong></label>
+                            <p>{profile.direccion}</p>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label><strong>Sector:</strong></label>
+                            <p>{profile.sector}</p>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label><strong>Entidad ID:</strong></label>
+                            <p>{tipoEntidad}</p>
                         </div>
                     </div>
-                </>
-            ) : (
-                <p>Cargando perfil...</p>
-            )}
+                </div>
+            </div>
         </div>
     );
 };

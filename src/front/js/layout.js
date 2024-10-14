@@ -102,6 +102,8 @@ function Layout() {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
+                        <Route path="/informacion-partner" element={<InformacionPartner />} />
+
                         <Route element={<Landing_Page />} path="/" />
 
                     </Routes>

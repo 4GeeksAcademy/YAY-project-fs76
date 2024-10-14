@@ -1,0 +1,81 @@
+/* Contenedor principal de la tarjeta de perfil */
+.profile-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* Cabecera de la tarjeta: contiene la imagen de perfil */
+.profile-card-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Imagen de perfil */
+.profile-card-header img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #7c488f; /* Bordes morados */
+}
+
+/* Cuerpo de la tarjeta: contiene detalles del perfil e imágenes del usuario */
+.profile-card-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Información del perfil */
+.profile-details {
+    flex: 1;
+}
+
+/* Título del perfil */
+.profile-details h3 {
+    color: #7c488f; /* Color morado */
+    margin-bottom: 15px;
+}
+
+/* Imágenes de usuario */
+.profile-images {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+/* Footer de la tarjeta: Intereses del usuario */
+.profile-card-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Botones */
+.btn-custom-primary {
+    background-color: #7c488f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+.btn-custom-primary:hover {
+    background-color: #643671;
+}
+
+.btn-custom-secondary {
+    background-color: #A7D0CD;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+}
+
+.btn-custom-secondary:hover {
+    background-color: #8ab8b6;
+}

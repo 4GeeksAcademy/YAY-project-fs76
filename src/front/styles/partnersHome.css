@@ -1,0 +1,45 @@
+.partner-evento {
+    margin: 0.5rem 0; /* Espaciado entre eventos */
+}
+
+.partner-mis-evento {
+    margin: 0.5rem 0; /* Espaciado entre mis eventos */
+}
+/* Estilos para la página de Partners Home */
+.partners-home-container {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mis-eventos-container,
+.eventos-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    padding: 1rem; /* Añadido para más espacio interno */
+    overflow: hidden; /* Para evitar que el contenido sobresalga */
+}
+
+/* Ajuste del tamaño de la fuente de los eventos */
+.mis-eventos-container h2,
+.eventos-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.mis-eventos-container {
+    background-color: #cccc;
+}
+
+.eventos-container {
+    background-color: #cccc;
+}
+
+/* Ajustar el tamaño de los eventos en general */
+.partner-evento, .partner-mis-evento {
+    font-size: 0.9rem; /* Reduce el tamaño de la fuente de los eventos */
+}
