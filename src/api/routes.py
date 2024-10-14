@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, session
-from api.models import db, User, Intereses, Eventos, Entidad, Partners,Usuarios,Inscripciones,UsuariosIntereses,Imagenes
+from api.models import db, User, Intereses, Eventos, Entidad, Partners, Usuarios, Inscripciones, UsuariosIntereses, Imagenes, Chat
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -1084,7 +1084,50 @@ def get_interes_por_evento(evento_id):
         "nombre": interes.nombre
     }), 200
 
+@api.route('/chat/send', methods=['POST'])
+@jwt_required()
+def send_message():
+    data = request.get_json()
+    sender_id = get_jwt_identity()
+    receiver_id = data.get('receiver_id')
+    message = data.get('message')
+
+    if not receiver_id or not message:
+        return jsonify({"ERROR": "receiver_id y message son obligatorios."}), 400
+
+    new_message = Chat(sender_id=sender_id, receiver_id=receiver_id, message=message)
+    db.session.add(new_message)
+    db.session.commit()
+
+    return jsonify(new_message.serialize()), 201
+
+@api.route('/chat/messages/<int:receiver_id>', methods=['GET'])
+@jwt_required()
+def get_messages(receiver_id):
+    sender_id = get_jwt_identity()
+    messages = Chat.query.filter(
+        (Chat.sender_id == sender_id) & (Chat.receiver_id == receiver_id) |
+        (Chat.sender_id == receiver_id) & (Chat.receiver_id == sender_id)
+    ).all()
+
+    return jsonify([message.serialize() for message in messages]), 200
+
+@api.route('/chat/messages/<int:message_id>', methods=['DELETE'])
+@jwt_required()
+def delete_message(message_id):
+    message = Chat.query.get_or_404(message_id)
+    sender_id = get_jwt_identity()
+
+    if message.sender_id != sender_id:
+        return jsonify({"ERROR": "No tienes permiso para eliminar este mensaje."}), 403
+
+    db.session.delete(message)
+    db.session.commit()
+
+    return jsonify({"message": "Mensaje eliminado con éxito."}), 200
+
 
 
 if __name__ == '__main__':
     api.run(debug=True)
+    

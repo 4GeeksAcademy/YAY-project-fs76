@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             entidades: [],
             partners: [],
             inscripciones: [],
+            chatMessages: [],
             demo: [
                 {
                     title: "FIRST",
@@ -1226,7 +1227,77 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error loading interest from backend", error);
                     return null; // O maneja el error como prefieras
                 }
-            },            
+            },
+            
+            sendMessage: async (receiverId, message) => {
+                const token = localStorage.getItem('token');
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/chat/send`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ receiver_id: receiverId, message }),
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore(prevStore => ({
+                            ...prevStore,
+                            chatMessages: [...prevStore.chatMessages, data], // Agrega el nuevo mensaje al historial
+                        }));
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error al enviar el mensaje:", errorData);
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de envío de mensaje:", error);
+                }
+            },
+
+            getMessages: async (receiverId) => {
+                const token = localStorage.getItem('token');
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/chat/messages/${receiverId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({ chatMessages: data }); // Actualiza el historial de mensajes
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error al obtener los mensajes:", errorData);
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de obtención de mensajes:", error);
+                }
+            },
+
+            deleteMessage: async (messageId) => {
+                const token = localStorage.getItem('token');
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/chat/messages/${messageId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    });
+                    if (response.ok) {
+                        setStore(prevStore => ({
+                            ...prevStore,
+                            chatMessages: prevStore.chatMessages.filter(msg => msg.id !== messageId), // Elimina el mensaje del historial
+                        }));
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Error al eliminar el mensaje:", errorData);
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de eliminación de mensaje:", error);
+                }
+            },
 
             changeColor: (index, color) => {
                 const store = getStore();
@@ -1237,7 +1308,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
                 // Actualiza el store con los nuevos colores
                 setStore({ demo: demo });
-            }
+            },
         }
     };
 };

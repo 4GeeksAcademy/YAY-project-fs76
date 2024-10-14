@@ -184,6 +184,7 @@ class Imagenes(db.Model):
 
     def __repr__(self):
         return f'<Imagen {self.url}>'
+    
 class Inscripciones(db.Model):
     __tablename__ = 'inscripciones'
     id = db.Column(db.Integer, primary_key=True)
@@ -214,3 +215,26 @@ class UsuariosIntereses(db.Model):
 
     # Define las relaciones con las tablas Usuarios e Intereses
     tipo_usuario = db.relationship('Usuarios')
+
+class Chat(db.Model):
+    __tablename__ = 'chats'
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    sender = db.relationship('Usuarios', foreign_keys=[sender_id])
+    receiver = db.relationship('Usuarios', foreign_keys=[receiver_id])
+
+    def __repr__(self):
+        return f'<Chat from {self.sender_id} to {self.receiver_id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "sender_id": self.sender_id,
+            "receiver_id": self.receiver_id,
+            "message": self.message,
+            "timestamp": self.timestamp.isoformat()
+        }

@@ -65,17 +65,19 @@ export const Landing_Partner = () => {
                     <line className="bg-elements-10-1" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" x1="1577" y1="266.4" x2="1624.3" y2="213" />
                     <line className="bg-elements-10-1" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" x1="1577" y1="293.4" x2="1624.3" y2="240" />
                 </g>
-                </svg>
-                <div className="text-center mb-7 content-space-b-2" style={{ position: 'relative', zIndex: 1 }}>
+            </svg>
+            <div className="text-center mb-7 content-space-b-2" style={{ position: 'relative', zIndex: 1 }}>
                 <div className="mb-7 mt-5 pt-5">
-                    <h1 className='h1 mb-3'  style={{ letterSpacing: '3px' }}>¿Quieres organizar eventos en Yay?</h1>
-                    <h4 className='mb-3'  style={{fontWeight: '300'}}>Si tienes un negocio, eres una organización, asociación o agrupación, 
-                        <br/>
+                    <h1 className='h1 mb-3' style={{ letterSpacing: '3px' }}>¿Quieres organizar eventos en Yay?</h1>
+                    <h4 className='mb-3' style={{ fontWeight: '300' }}>Si tienes un negocio, eres una organización, asociación o agrupación,
+                        <br />
                         no pierdas la oportunidad de darte a conocer y construir comunidad junto anuestros usuarios. </h4>
                 </div>
-                <a className="btn btn-transition btn-lg mt-0"  style={{ backgroundColor: '#7c488f', color: 'white' }}>Hazte Partner</a>
+                <Link to="/partners-signup">
+                    <button className="btn btn-transition btn-lg mt-0" style={{ backgroundColor: '#7c488f', color: 'white' }}>Hazte Partner</button>
+                </Link>
             </div>
 
-        </div>
+        </div >
     );
 }
