@@ -19,12 +19,8 @@ import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
 import { Partner_Eventos } from "./component/partner_eventos";
 import { Partner_Evento_Card } from "./component/partner_evento_card";
-import { Partner_Login } from "./component/partner_login";
 import UserInterest from "./component/userInterest";
-import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
-import { Footer } from "./component/footer";
-import { Login } from "./component/login";
 import { Mapa } from "./component/mapa";
 import { NotFound } from "./pages/notFound";
 import Dashboard from "./component/dashboard";
@@ -37,20 +33,27 @@ import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
 import { EventosMapa } from "./component/eventosMapa";
-import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
 import { PartnerMisEventos } from "./component/partner_mis_eventos";
 import { CheckLoginPartner } from "./component/checkLoginPartner";
-import InformacionPartner from "./component/informacionPartner";
+import { useAuth } from "./store/authContext";
 
 // ------ DISEÑO ON -------
 import { Landing_Page } from "./pages/landing_page";
 import { Navbar } from "./component/diseñoON/navbar";
+import { Footer } from "./component/diseñoON/footer";
+import { Login } from "./component/diseñoON/login";
+import { Signup } from "./component/diseñoON/signup";
+import { Partner_Signup } from "./component/diseñoON/partner_signup";
+import { Forgot_Password } from "./component/diseñoON/forgot_password";
+import { SobreNosotros } from "./component/diseñoON/sobreNosotros";
+import { Partner_Login } from "./component/diseñoON/partner_login";
 
 
 function Layout() {
 
     const basename = process.env.BASENAME || "";
+    const { token } = useAuth(); // Obtén el token del contexto
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
@@ -74,9 +77,11 @@ function Layout() {
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
                         <Route element={<Partners_Home />} path="/partners_home" />
                         <Route element={<Partner_Login />} path="/partners-login" />
+                        <Route element={<Partner_Signup />} path="/partners-signup" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
                         <Route element={<Partner_Evento_Card />} path="/partner-evento/:theid" />
-                        <Route element={<Usuarios />} path="/usuarios" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<Forgot_Password />} path="/forgot-password" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Mapa />} path="/mapa" />
                         <Route element={<EventosMapa />} path="/eventos-mapa/:theid" />
@@ -100,9 +105,9 @@ function Layout() {
                         <Route path="/informacion-partner" element={<InformacionPartner />} />
 
                         <Route element={<Landing_Page />} path="/" />
-                        
+
                     </Routes>
-                    <Footer />
+                    <Footer token={token} />
                 </ScrollToTop>
             </BrowserRouter>
         </div>

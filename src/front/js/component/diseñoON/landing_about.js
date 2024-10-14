@@ -15,7 +15,7 @@ export const Landing_About = () => {
                         <div className="col-12 col-lg-9 mb-7 mb-md-0">
                             {/* Heading */}
                             <div className="col-10 w-md-65 mb-7 pe-5">
-                                <h2 className="h1">En Yay creemos que hacer comunidad es importante</h2>
+                                <h2 className="h1" style={{ letterSpacing: '3px' }}>En Yay creemos que hacer comunidad es importante</h2>
                                 <p>
                                     Imagina tener la posibilidad de conocer a gente de tu misma generación, con intereses comunes y sin tener que desplazarte largos trayectos. Además, qué mejor para dejar atrás la vergüenza que compartir hobbies y experiencias. Aquí tendrás todo eso y más.
                                 </p>
@@ -34,7 +34,7 @@ export const Landing_About = () => {
                                             </span>
                                             <h4 className="card-title mt-2">Fortalece la Comunidad</h4>
                                             <p className="card-text">Relacionarte con tus vecinos crea un ambiente más unido y seguro.</p>
-                                            <a className="card-link" href="#" style={{color: '#de8f79'}}>Conoce más <i className="fa-solid fa-chevron-right small ms-1"></i></a>
+                                            <a className="card-link" href="/sobre-nosotros" style={{color: '#de8f79'}}><h5>Conoce más <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
                                         </div>
                                     </div>
                                     {/* End Card */}
@@ -51,7 +51,7 @@ export const Landing_About = () => {
                                             </span>
                                             <h4 className="card-title mt-2">Explora Nuevas Oportunidades</h4>
                                             <p className="card-text">Participar en actividades te permite descubrir nuevos intereses y hacer amistades.</p>
-                                            <a className="card-link" href="#" style={{color: '#de8f79'}}>Descubre más <i className="fa-solid fa-chevron-right small ms-1"></i></a>
+                                            <a className="card-link" href="/sobre-nosotros" style={{color: '#de8f79'}}><h5>Descubre más <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
                                         </div>
                                     </div>
                                     {/* End Card */}
@@ -69,7 +69,7 @@ export const Landing_About = () => {
                                             </span>
                                             <h4 className="card-title mt-2">Crea Redes de Apoyo</h4>
                                             <p className="card-text">Tener amigos y amigas cerca, mejora la calidad de vida y ofrece una valiosa red de apoyo cernana.</p>
-                                            <a className="card-link" href="#" style={{color: '#de8f79'}}>Únete ahora <i className="fa-solid fa-chevron-right small ms-1"></i></a>
+                                            <a className="card-link" href="/sobre-nosotros" style={{color: '#de8f79'}}><h5>Únete ahora <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
                                         </div>
                                     </div>
                                     {/* End Card */}

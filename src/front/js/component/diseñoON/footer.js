@@ -1,7 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
+import { useLocation } from "react-router-dom";
 
-export const Footer = () => {
+export const Footer = ({ token }) => {
+	console.log("Token en Footer:", token);
+	const location = useLocation();
 
+	const isSignin = location.pathname === "/login" || 
+	location.pathname === "/signup" || 
+	location.pathname === "/partners-login" || 
+	location.pathname === "/partners-signup" || 
+	location.pathname === "/forgot-password" || 
+	location.pathname === "/logout";
+
+
+	if (isSignin) {
+		return null;
+	}
+
+
+	if (!token) {
 		return (
 			<footer className="bg-dark mt-5">
 				<div className="container pb-1 pb-lg-5">
@@ -14,17 +31,17 @@ export const Footer = () => {
 								</a>
 							</div>
 							{/* End Logo */}
-	
+
 							{/* List */}
 							<ul className="list-unstyled list-py-1">
-								<li><a className="link-sm link-light" ><i className="fa-solid fa-location-dot"></i>Passeig de Gràcia, 104 - 08007, Barcelona</a></li>
-								<li><a className="link-sm link-light" ><i class="fa-solid fa-mobile-screen"></i> (+34) 777 888 999</a></li>
-								<li><a className="link-sm link-light" ><i class="fa-solid fa-envelope"></i> info@yay.com</a></li>
+								<li><a className="link-sm link-light" ><i className="fa-solid fa-location-dot"></i> Passeig de Gràcia, 104 - 08007, Barcelona</a></li>
+								<li><a className="link-sm link-light" ><i className="fa-solid fa-mobile-screen"></i> (+34) 777 888 999</a></li>
+								<li><a className="link-sm link-light" ><i className="fa-solid fa-envelope"></i> info@yay.com</a></li>
 							</ul>
 							{/* End List */}
 						</div>
 						{/* End Col */}
-	
+
 						<div className="col-sm mb-7 mb-sm-0">
 							<h5 className="text-white mb-3">Compañia</h5>
 							{/* List */}
@@ -35,26 +52,20 @@ export const Footer = () => {
 								<li><a className="link-sm link-light" href="#">Reseñas<i className="bi-box-arrow-up-right small ms-1"></i></a></li>
 								<li><a className="link-sm link-light" href="#">Publicítate</a></li>
 							</ul>
-							{/* End List */}
 						</div>
-						{/* End Col */}
-	
+
 						<div className="col-sm mb-7 mb-sm-0">
 							<h5 className="text-white mb-3">Usuarios</h5>
-							{/* List */}
 							<ul className="list-unstyled list-py-1 mb-0">
 								<li><a className="link-sm link-light" href="#">Regístrate <i className="bi-box-arrow-up-right small ms-1"></i></a></li>
 								<li><a className="link-sm link-light" href="#">Inicio sesión</a></li>
 								<li><a className="link-sm link-light" href="#">Eventos</a></li>
 								<li><a className="link-sm link-light" href="#">Perfil</a></li>
 							</ul>
-							{/* End List */}
 						</div>
-						{/* End Col */}
-	
+
 						<div className="col-sm mb-7 mb-sm-0">
 							<h5 className="text-white mb-3">Partner</h5>
-							{/* List */}
 							<ul className="list-unstyled list-py-1 mb-0">
 								<li><a className="link-sm link-light" href="#">Registro</a></li>
 								<li><a className="link-sm link-light" href="#">Inicio sesión</a></li>
@@ -62,25 +73,20 @@ export const Footer = () => {
 								<li><a className="link-sm link-light" href="#">Inscripciones</a></li>
 								<li><a className="link-sm link-light" href="#">Eventos</a></li>
 							</ul>
-							{/* End List */}
 						</div>
-						{/* End Col */}
-	
+
+
 						<div className="col-sm">
 							<h5 className="text-white mb-3">Resources</h5>
-							{/* List */}
 							<ul className="list-unstyled list-py-1 mb-5">
 								<li><a className="link-sm link-light" href="#"><i className="bi-question-circle-fill me-1"></i> Ayuda</a></li>
 								<li><a className="link-sm link-light" href="#"><i className="bi-person-circle me-1"></i> Tu cuenta</a></li>
 							</ul>
-							{/* End List */}
 						</div>
-						{/* End Col */}
 					</div>
-					{/* End Row */}
-	
+
 					<div className="border-top border-white-10 my-7"></div>
-	
+
 					<div className="row mb-7">
 						<div className="col-sm mb-3 mb-sm-0">
 							{/* Socials */}
@@ -89,7 +95,7 @@ export const Footer = () => {
 									<a className="link-sm link-light" href="https://policies.google.com/privacy?hl=en-US" target="_blank">Política de Privacidad</a>
 								</li>
 								<li className="list-inline-item">
-									<a className="link-sm link-light" href="#">Términos y condiciones de uso</a>
+									<a className="link-sm link-light" href="https://policies.google.com/terms?hl=es">Términos y condiciones de uso</a>
 								</li>
 								<li className="list-inline-item">
 									<a className="link-sm link-light" href="#">Sitio Web</a>
@@ -97,7 +103,7 @@ export const Footer = () => {
 							</ul>
 							{/* End Socials */}
 						</div>
-	
+
 						<div className="col-sm-auto">
 							{/* Socials */}
 							<ul className="list-inline mb-0">
@@ -106,25 +112,25 @@ export const Footer = () => {
 										<i className="bi-linkedin text-white"></i>
 									</a>
 								</li>
-	
+
 								<li className="list-inline-item">
 									<a className="btn btn-soft-light btn-xs btn-icon" href="https://4geeksacademy.com/es/premios?lang=es" target="_blank">
 										<i className="bi-google text-white"></i>
 									</a>
 								</li>
-	
+
 								<li className="list-inline-item">
 									<a className="btn btn-soft-light btn-xs btn-icon" href="https://www.instagram.com/4geeksacademyes/?hl=es" target="_blank">
 										<i className="bi-instagram text-white"></i>
 									</a>
 								</li>
-	
+
 								<li className="list-inline-item">
 									<a className="btn btn-soft-light btn-xs btn-icon" href="https://github.com/4geeksacademy" target="_blank">
 										<i className="bi-github text-white"></i>
 									</a>
 								</li>
-	
+
 								<li className="list-inline-item">
 									{/* Button Group */}
 									<div className="btn-group">
@@ -134,7 +140,7 @@ export const Footer = () => {
 												<span>Español (SP)</span>
 											</span>
 										</button>
-	
+
 										<div className="dropdown-menu" aria-labelledby="footerSelectLanguage">
 											<a className="dropdown-item d-flex align-items-center" href="#">
 												<img className="avatar avatar-xss avatar-circle me-2" src="https://cdn-icons-png.flaticon.com/512/323/323365.png" alt="Image description" width="16" />
@@ -152,23 +158,54 @@ export const Footer = () => {
 							{/* End Socials */}
 						</div>
 					</div>
-	
+
 					{/* Copyright */}
 					<div className="w-md-85 text-lg-center mx-lg-auto">
 						<p className="text-white-50 small">©2024-Yay.Todos los derechos reservados.</p>
-						<p className="text-white-50 small">Si has llegado hasta aquí, y te ha gustado lo que has visto, no dudes en ponerte en contacto con nosotros. <br/> Estamos disponibles para incorporación inmediata y entuciasmados por empezar a ser profesionales en este sector.</p>
+						<p className="text-white-50 small">Si has llegado hasta aquí, y te ha gustado lo que has visto, no dudes en ponerte en contacto con nosotros. <br /> Estamos disponibles para incorporación inmediata y entusiasmados por empezar a ser profesionales en este sector.</p>
 					</div>
 					{/* End Copyright */}
 				</div>
 			</footer>
 		);
-	};
-	
 
-	// <footer className="footer opacity-75 mt-auto py-3 text-center">
-	// 	<p  style={{ color: '#593367' }}>
-	// 		Made by <b>Ramen</b> <i className="fa-solid fa-bowl-food"></i> in{" "}
-	// 		<a href="http://www.4geeksacademy.com">4Geeks Academy</a>
-	// 	</p>
-	// </footer>
+	} else {
+		return (
+			<footer className="bg-dark mt-5 small-footer d-flex align-item-center justify-content-between fixed-bottom px-5">
+				<div className="container mb-0 mt-1">
+					<a className="go-to-top text-white small  mt-2 mb-0" href="#">Volver arriba</a>
+				</div>
+
+				<div className="container ">
+					<p className="text-white-50 small mt-2 mb-0">©2024 - <b>YAY</b>   |   Todos los derechos reservados</p>
+				</div>
+				<div className="list-inline d-flex align-item-center">
+					<li className="list-inline-item">
+						<a className="btn btn-soft-light btn-xs btn-icon" href="https://es.linkedin.com/school/4geeksacademyes/" target="_blank">
+							<i className="bi-linkedin text-white"></i>
+						</a>
+					</li>
+
+					<li className="list-inline-item">
+						<a className="btn btn-soft-light btn-xs btn-icon" href="https://4geeksacademy.com/es/premios?lang=es" target="_blank">
+							<i className="bi-google text-white"></i>
+						</a>
+					</li>
+
+					<li className="list-inline-item">
+						<a className="btn btn-soft-light btn-xs btn-icon" href="https://www.instagram.com/4geeksacademyes/?hl=es" target="_blank">
+							<i className="bi-instagram text-white"></i>
+						</a>
+					</li>
+
+					<li className="list-inline-item">
+						<a className="btn btn-soft-light btn-xs btn-icon" href="https://github.com/4geeksacademy" target="_blank">
+							<i className="bi-github text-white"></i>
+						</a>
+					</li></div>
+			</footer>
+
+		);
+	};
+}
 
