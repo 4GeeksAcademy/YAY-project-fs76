@@ -85,7 +85,8 @@ export const Perfil_Usuario = () => {
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [interesesSeleccionados, setInteresesSeleccionados] = useState({});
-    const [misIntereses, setMisIntereses] = useState([]);
+    const [misIntereses, setMisIntereses] = useState([]); // Lista de intereses seleccionados
+    const [interesesDisponibles, setInteresesDisponibles] = useState([]);
     const [activeSection, setActiveSection] = useState("informacionPersonal");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -96,41 +97,33 @@ export const Perfil_Usuario = () => {
     };
 
     useEffect(() => {
-
-
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
-
         if (idToUse) {
             actions.getProfile(idToUse)
                 .then((data) => {
                     if (data) {
                         setProfile(data);
-                        const interesesDelUsuario = data.intereses || [];
-                        setMisIntereses(interesesDelUsuario);
-
-                        // Inicializar los intereses seleccionados
-                        const nuevosIntereses = {};
-                        interesesDelUsuario.forEach(interes => {
-                            nuevosIntereses[interes] = true;  // Marcar cada interés seleccionado como verdadero
-                        });
-                        setInteresesSeleccionados(nuevosIntereses);
+                        setMisIntereses(Array.isArray(data.intereses) ? data.intereses : []); // Asegúrate de que sea un array
                     }
                 })
-                .catch((error) => {
-                    console.error("Error al obtener el perfil:", error);
+                .catch(error => console.error("Error al obtener el perfil:", error));
+
+            // Obtener todos los intereses
+            actions.obtenerIntereses(idToUse)
+                .then(data => {
+                    setInteresesDisponibles(Array.isArray(data) ? data : []); // Asegúrate de que sea un array
                 });
         }
     }, [userId, store.user_id]);
-
-    const handleInteresesChange = (interes) => {
-        setInteresesSeleccionados((prevIntereses) => {
-            const nuevosIntereses = { ...prevIntereses, [interes]: !prevIntereses[interes] };
-
-            const nuevosMisIntereses = Object.keys(nuevosIntereses).filter(i => nuevosIntereses[i]);
-            setMisIntereses(nuevosMisIntereses);
-
-            return nuevosIntereses;
-        });
+    const handleInteresChange = (interesId) => {
+        // Actualiza el estado local de intereses
+        if (misIntereses.includes(interesId)) {
+            // Si ya está seleccionado, eliminar
+            setMisIntereses(misIntereses.filter(id => id !== interesId));
+        } else {
+            // Si no está seleccionado, agregar
+            setMisIntereses([...misIntereses, interesId]);
+        }
     };
 
     const handleChange = (e) => {
@@ -159,19 +152,25 @@ export const Perfil_Usuario = () => {
             .then(() => {
                 setAlertMessage("¡Cambios guardados exitosamente!");
                 setShowAlert(true);
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 5000);
+                setTimeout(() => setShowAlert(false), 5000);
             })
             .catch((error) => {
                 console.error("Error al actualizar el perfil:", error);
                 setAlertMessage("Hubo un error al guardar los cambios.");
                 setShowAlert(true);
-                setTimeout(() => {
-                    setShowAlert(false);
-                }, 5000);
+                setTimeout(() => setShowAlert(false), 5000);
             });
     };
+
+    const handleSubmitIntereses = async () => {
+        // Guardar intereses seleccionados
+        await Promise.all(misIntereses.map(interesId => actions.agregarInteres(profile.id, interesId)));
+        setAlertMessage("¡Intereses guardados exitosamente!");
+        setShowAlert(true);
+
+        setTimeout(() => setShowAlert(false), 5000);
+    };
+
 
     const confirmDeleteAccount = () => {
         actions.deleteAccount(userId)
@@ -384,37 +383,41 @@ export const Perfil_Usuario = () => {
                                 <h2 className="profile-card-header text-black">Mis Intereses</h2>
                                 <label>Selecciona tus intereses</label>
                                 <div>
-                                    {["Deporte", "Música", "Cine", "Literatura", "Viajes", "Actividades al aire libre", "Bailes", "Tecnología", "Agricultura", "Gastronomía", "Juegos de mesa", "Costura", "Fotografía"].map(interes => (
-                                        <button
-                                            key={interes}
-                                            type="button"
-                                            style={interesesSeleccionados[interes] ? styles.buttonRemove : styles.interestButton}
-                                            onClick={() => handleInteresesChange(interes)}
-                                        >
-                                            {interesesSeleccionados[interes] ? "Quitar" : "Añadir"} {interes}
-                                        </button>
-                                    ))}
+                                    {interesesDisponibles.length > 0 ? (
+                                        interesesDisponibles.map(interes => (
+                                            <button
+                                                key={interes.id}
+                                                type="button"
+                                                style={misIntereses.includes(interes.id) ? styles.buttonRemove : styles.interestButton}
+                                                onClick={() => handleInteresChange(interes.id)}
+                                            >
+                                                {misIntereses.includes(interes.id) ? "Quitar" : "Añadir"} {interes.nombre}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
+                                    )}
                                 </div>
                                 <label className='mt-5'>Tus intereses seleccionados:</label>
                                 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    {misIntereses.length > 0 ? (
-                                        misIntereses.map(interes => (
-                                            <div key={interes} style={{ marginRight: '10px', textAlign: 'center' }}>
-                                                <span style={styles.selectedButton}>{interes}</span>
-                                                <button type="button"
-                                                    className='bg-transparent'
-                                                    style={{ ...styles.buttonRemove, fontSize: '12px' }}
-                                                    onClick={() => handleInteresesChange(interes)}>Quitar</button>
-                                            </div>
+                                    {Array.isArray(interesesDisponibles) && interesesDisponibles.length > 0 ? (
+                                        interesesDisponibles.map(interes => (
+                                            <button
+                                                key={interes.id}
+                                                type="button"
+                                                style={misIntereses.includes(interes.id) ? styles.buttonRemove : styles.interestButton}
+                                                onClick={() => handleInteresChange(interes.id)}
+                                            >
+                                                {misIntereses.includes(interes.id) ? "Quitar" : "Añadir"} {interes.nombre}
+                                            </button>
                                         ))
                                     ) : (
-                                        <span className='text-danger fs-6'><b>Aún no has seleccionado ningún interés</b></span>
+                                        <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
                                     )}
                                 </div>
-                                <div className="form-actions d-flex justify-content-end mt-3">
-                                    <button type="button" className="btn btn-secondary me-2" onClick={() => setActiveSection("informacionPersonal")}>Cancelar</button>
-                                    <button type="button" style={styles.buttonSaveStyle} onClick={handleSubmit}>Guardar cambios</button>
-                                </div>
+                                <button type="button" onClick={handleSubmitIntereses} style={styles.buttonSaveStyle}>
+                                    Guardar Intereses
+                                </button>
                             </div>
                         )}
 

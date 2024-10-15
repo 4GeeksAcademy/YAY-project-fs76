@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../store/appContext';
 import { useNavigate } from 'react-router-dom';
 import { Mapa } from './mapa';
@@ -109,10 +109,33 @@ const CompletarDatosUsuario = () => {
     const [longitud, setLongitud] = useState(null);
     const [breve_descripcion, setDescripcion] = useState("");
     const [misIntereses, setMisIntereses] = useState([]);
-    const [interesesSeleccionados, setInteresesSeleccionados] = useState({});
+    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set()); 
+    const [interesesDisponibles, setInteresesDisponibles] = useState([]);
     const navigate = useNavigate();
     const userId = sessionStorage.getItem('userId');
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        let isMounted = true; // Variable de bandera para verificar el estado del componente
+    
+        const fetchIntereses = async () => {
+            try {
+                const data = await actions.getInteres();
+                if (isMounted) {
+                    setInteresesDisponibles(data);  
+                }
+            } catch (error) {
+                console.error("Error al cargar los intereses:", error);
+            }
+        };
+    
+        fetchIntereses();
+    
+        return () => {
+            isMounted = false; // Limpiar cuando el componente se desmonta
+        };
+    }, [actions]);
+
 
 
     const handleNextStep = () => {
@@ -149,40 +172,52 @@ const CompletarDatosUsuario = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (latitud === null || longitud === null) {
-            // alert("Por favor, selecciona una ubicación en el mapa.");
             return;
         }
 
-        const result = await actions.completarDatos(userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion);
+        const result = await actions.completarDatos(
+            localStorage.getItem('user_id'), // Usar stored user_id
+            nombre,
+            apellidos,
+            fecha_nacimiento,
+            direccion,
+            latitud,
+            longitud,
+            breve_descripcion
+        );
 
         if (result) {
-            await actions.updateProfile(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, misIntereses);
-            localStorage.setItem('selectedInterests', JSON.stringify(misIntereses));
-            // alert("Datos completados con éxito");
+            // Guardar los intereses seleccionados
+            await actions.editarInteres(Array.from(interesesSeleccionados));
+            localStorage.setItem('selectedInterests', JSON.stringify(Array.from(interesesSeleccionados)));
             navigate('/redirect-login');
         } else {
-            // alert("Error al completar los datos");
+            console.error("Error al completar los datos");
         }
     };
 
+   
     const handleInteresesChange = (interes) => {
-        setInteresesSeleccionados((prevIntereses) => ({
-            ...prevIntereses,
-            [interes]: !prevIntereses[interes],
-        }));
-
-        setMisIntereses((prevIntereses) => {
-            if (prevIntereses.includes(interes)) {
-                return prevIntereses.filter((i) => i !== interes);
-            } else {
-                return [...prevIntereses, interes];
-            }
-        });
+        if (interesesSeleccionados.has(interes)) {
+            // Si el interés ya está seleccionado, quitarlo
+            setInteresesSeleccionados(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(interes); // Eliminar el interés
+                return newSet;
+            });
+            setInteresesDisponibles(prev => [...prev, { id: interes }]); // Agregar de nuevo a disponibles
+        } else {
+            // Si no está seleccionado, lo añade
+            setInteresesSeleccionados(prev => {
+                const newSet = new Set(prev);
+                newSet.add(interes); // Añadir el interés
+                return newSet;
+            });
+            // Eliminar de los disponibles
+            setInteresesDisponibles(prev => prev.filter(i => i.id !== interes));
+        }
     };
-
-
-
-
+    
     return (
         <div style={styles.container}>
             <h2 className='display-3 mb-4' style={styles.heading}>Completa tu Perfil</h2>
@@ -220,7 +255,7 @@ const CompletarDatosUsuario = () => {
                 {step === 2 && (
                     <div>
                         {errors.ubicacion && <span className='text-danger float-end mb-1'>{errors.ubicacion}</span>}
-                        <label className='ms-1' style={styles.label}> *Dirección</label>
+                        <label className='ms-1' style={{minWidth: '800px'}}> *Dirección</label>
                         <Mapa
                             setDireccion={(direccion, latitud, longitud) => {
                                 setDireccion(direccion);
@@ -260,47 +295,48 @@ const CompletarDatosUsuario = () => {
                         </div>
                     </div>
                 )}
-                {step === 4 && (
+            {step === 4 && (
                     <div>
                         <label style={styles.label}>Selecciona algunos de tus intereses</label>
                         <div>
-                            {["Deporte", "Música", "Cine", "Literatura", "Viajes", "Actividades al aire libre", "Bailes", "Tecnología", "Agricultura", "Gastronomía", "Juegos de mesa", "Costura", "Fotografía"].filter(interes => !misIntereses.includes(interes)).map(interes => (
+                            {interesesDisponibles.map(interes => (
                                 <button
-                                    key={interes}
+                                    key={interes.id}
                                     type="button"
-                                    style={interesesSeleccionados[interes] ? styles.buttonRemove : styles.interestButton}
-                                    onClick={() => handleInteresesChange(interes)}
+                                    style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
+                                    onClick={() => handleInteresesChange(interes.id)}
                                 >
-                                    {interesesSeleccionados[interes] ? "Quitar" : ""} {interes}
+                                    {interes.nombre} {/* Quitar el texto "Quitar" aquí */}
                                 </button>
                             ))}
                         </div>
                         <br />
                         <label className='mt-5' style={styles.label}>Tus intereses seleccionados</label>
                         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                            {misIntereses.length > 0 ? (
-                                misIntereses.map(interes => (
-                                    <div key={interes} style={{ marginRight: '10px', textAlign: 'center' }}>
-                                        <span style={styles.selectedtButton}>{interes}</span>
+                            {Array.from(interesesSeleccionados).map(interesId => {
+                                const interes = interesesDisponibles.find(i => i.id === interesId);
+                                return (
+                                    <div key={interesId} style={{ marginRight: '10px', textAlign: 'center' }}>
+                                        <span style={styles.selectedtButton}>{interes?.nombre}</span>
                                         <div>
                                             <button
                                                 type="button"
                                                 className='bg-transparent'
                                                 style={{ ...styles.buttonRemove, fontSize: '12px' }}
-                                                onClick={() => handleInteresesChange(interes)}
+                                                onClick={() => handleInteresesChange(interesId)}
                                             >
                                                 Quitar
                                             </button>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <span className='text-danger fs-6'><b>Aún no has seleccionado ningún interés</b></span>
-                            )}
+                                );
+                            })}
                         </div>
                         {errors.fecha && <span className='text-danger float-end mb-0'>*Pulsa de nuevo para quitar interés</span>}
                         <div className="d-flex justify-content-between w-100 mt-3 px-5">
-                            <a className="card-link my-5" style={{ color: '#7c488f' }} onClick={handlePreviousStep}><h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></a>
+                            <a className="card-link my-5" style={{ color: '#7c488f' }} onClick={handlePreviousStep}>
+                                <h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5>
+                            </a>
                             <button type="submit" className="btn btn-lg my-5" style={styles.button}>Completar Registro</button>
                         </div>
                     </div>

@@ -1,0 +1,29 @@
+PARA RELLENAR EL BACK EN LA PRESENTACION
+
+TIPOS DE INTERESES----------------------------------------------------------
+    
+    Deporte
+    Música
+    Cine
+    Literatura
+    Viajes
+    Actividades al aire libre
+    Bailes
+    Tecnología
+    Agricultura
+    Gastronomía
+    Juegos de mesa
+    Costura
+    Fotografía
+
+
+
+
+TIPOS DE ENTIDADES----------------------------------------------------------
+
+    Empresa privada
+    Organismo público
+    Asociación sin ánimo de lucro
+    Agrupación social y/o comunitaria
+    Autónomo/a
+    Voluntario/a
