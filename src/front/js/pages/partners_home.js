@@ -14,7 +14,7 @@ export const Partners_Home = () => {
         if (!store.auth && !localStorage.getItem("token")) {
             navigate("/partner-login"); 
         }
-    }, [store.auth, navigate]);
+    }, []);
 
     return (
         <div className="partners-home-container container mt-5">

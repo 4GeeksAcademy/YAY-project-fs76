@@ -27,7 +27,7 @@ export const PartnerMisEventos = () => {
                     setError("Error al cargar eventos");
                 });
         }
-    }, [actions]);
+    }, []);
 
     const handleDeleteClick = (evento) => {
         // Implementa la lógica para eliminar el evento aquí.

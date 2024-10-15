@@ -15,7 +15,7 @@ export const Partner_Perfil = () => {
         entidad_id: '',
         image: ''
     });
-
+//
     useEffect(() => {
         if (partnerId) {
             actions.getEntidades();
