@@ -48,7 +48,7 @@ export const Signup = () => {
       actions.setUserId(response.user_id);
       sessionStorage.setItem('userId', response.user_id);
       navigate(`/completardatos/${response.user_id}`);
-      window.location.reload();
+
 
     } else {
       // alert("Error en el registro, revisa los datos");
@@ -205,7 +205,7 @@ export const Signup = () => {
                     </div>
 
                     <div className="text-center">
-                      <h5>¿Ya tienes cuenta en YAY? <Link to="/login" style={{ color: '#7c488f' }}>Inicia Sesión</Link></h5>
+                    <h5 style={{ fontWeight: '400' }}>¿Ya tienes cuenta en YAY? <Link to="/login" style={{ color: '#7c488f' }}>Inicia Sesión</Link></h5>
                     </div>
                   </form>
                 </div>

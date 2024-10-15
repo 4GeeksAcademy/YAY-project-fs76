@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 import { useParams, Link } from "react-router-dom";
 
-export const UserInscripciones = () => {
+export const MisEventos = () => {
     const { store, actions } = useContext(Context);
     const { userId } = useParams();
-    const [inscripciones, setInscripciones] = useState([]);
+    const [misEventos, setMisEventos] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchInscripciones = async () => {
+        const fetchEventos = async () => {
             setLoading(true);
             const eventosInscritos = [];
             for (const evento of store.eventos) {
@@ -18,46 +18,44 @@ export const UserInscripciones = () => {
                     eventosInscritos.push({ ...evento, inscripcionId: id });
                 }
             }
-            setInscripciones(eventosInscritos);
+            setMisEventos(eventosInscritos);
             setLoading(false);
         };
 
-        fetchInscripciones();
+        fetchEventos();
     }, [store.eventos, userId, actions]);
-
 
     return (
         <>
             {loading ? (
-                <p>Cargando inscripciones...</p>
+                <p>Cargando tus eventos...</p>
             ) : (
-
-                <div className="container m-5 mx-auto w-50">
-                    <h2>Tus Inscripciones</h2>
-                    {inscripciones.length > 0 ? (
+                <div className="container m-5 mx-auto w-75">
+                    <h2>Mis Eventos</h2>
+                    {misEventos.length > 0 ? (
                         <ul className="list-group">
-                            {inscripciones.map(inscripcion => (
-                                <li key={inscripcion.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
+                            {misEventos.map(evento => (
+                                <li key={evento.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
                                     <div className="d-flex justify-content-between flex-grow-1">
                                         <img
-                                            src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
-                                            alt="profileImage"
+                                            src={evento.imagen || "https://cdn-icons-png.freepik.com/512/3544/3544735.png"} // Asegúrate de que "evento.imagen" está disponible
+                                            alt="Evento"
                                             className="rounded-circle my-auto ms-4"
                                             style={{ height: '100%', maxHeight: '100px' }}
                                         />
                                         <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
-                                            <li className="fs-3" style={{ color: '#7c488f' }}>{inscripcion.nombre}</li>
+                                            <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                             <li className="text-muted fs-5">
-                                                <i className="fa-solid fa-calendar-days" style={{ color: '#7c488f' }}></i> {inscripcion.fecha}
+                                                <i className="fa-solid fa-calendar-days" style={{ color: '#7c488f' }}></i> {evento.fecha}
                                             </li>
                                             <li className="text-muted fs-6">
-                                                <i className="fa-solid fa-clock" style={{ color: '#7c488f' }}></i> {inscripcion.horario}
+                                                <i className="fa-solid fa-clock" style={{ color: '#7c488f' }}></i> {evento.horario}
                                             </li>
                                             <li className="text-muted fs-7">
-                                                <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i> {inscripcion.direccion}
+                                                <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i> {evento.direccion}
                                             </li>
                                             <li>
-                                                <Link to={`/evento/${inscripcion.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: 'white' }}>Saber más</Link>
+                                                <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f',  color: 'white' }}>Saber más</Link>
                                             </li>
                                         </ul>
                                     </div>
@@ -65,7 +63,7 @@ export const UserInscripciones = () => {
                             ))}
                         </ul>
                     ) : (
-                        <p>No tienes inscripciones.</p>
+                        <p>No tienes eventos registrados.</p>
                     )}
                 </div>
             )}

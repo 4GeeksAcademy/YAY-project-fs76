@@ -9,7 +9,7 @@ export const ScrollToTopButton = () => {
         <a
             className="js-go-to go-to position-fixed animated hs-go-to-prevent-event fadeInUp"
             href="javascript:;"
-            style={{ right: '2rem', bottom: '2rem' }}
+            style={{ right: '3rem', bottom: '3rem' }}
             onClick={handleClick}
             data-hs-go-to-options='{
                 "offsetTop": 700,

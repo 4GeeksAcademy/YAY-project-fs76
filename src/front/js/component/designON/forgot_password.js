@@ -90,7 +90,7 @@ export const Forgot_Password = () => {
                                         <div className="mb-3">
                                             <div className="d-flex justify-content-between align-items-center">
                                                 <label className="form-label" htmlFor="signupModalFormSignupPassword">Contraseña</label>
-                                                <Link to={-1}><span className="form-label-link" style={{color: '#7c488f'}}> <i className="fa-solid fa-chevron-left small me-1"></i>Volver al inicio de sesión</span></Link>
+                                                <Link to={-1}><span className="form-label-link" style={{color: '#7c488f', fontWeight: '500'}}> <i className="fa-solid fa-chevron-left small me-1"></i>Volver al inicio de sesión</span></Link>
                                             </div>
                                             <input
                                                 type="email"
@@ -109,7 +109,7 @@ export const Forgot_Password = () => {
                                             <button type="submit" className="btn btn-lg" style={{ backgroundColor: '#7c488f', color: 'white' }}>Enviar</button>
                                         </div>
                                         <div>
-                                            <h5>* Revisa tu bandeja de entrada</h5>
+                                            <h5 className="ms-3">* Revisa tu bandeja de entrada</h5>
                                         </div>
                                     </form>
                                 </div>

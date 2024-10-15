@@ -102,8 +102,9 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                     onPlaceChanged={onPlaceChanged}
                 >
                     <input
+                    className='w-75 fs-5'
                         type="text"
-                        placeholder="Buscar dirección"
+                        placeholder="Introduzca su dirección..."
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         onKeyDown={handleKeyPress}

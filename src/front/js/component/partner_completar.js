@@ -67,9 +67,9 @@ export const Partner_Completar = () => {
                         <input type="text" value={nuevoPartner.nif} onChange={(e) => setNuevoPartner({ ...nuevoPartner, nif: e.target.value })} className="form-control" id="nifInput" placeholder="Introduzca NIF o DNI..." />
                     </div>
                     <div className="mb-3">
-                 
-                            <Mapa setDireccion={setDireccion} initialDireccion={nuevoPartner.direccion} />
-                    
+
+                        <Mapa setDireccion={setDireccion} initialDireccion={nuevoPartner.direccion} />
+
                     </div>
                     <div className="mb-3">
                         <label htmlFor="sectorInput" className="form-label">Sector</label>
@@ -92,7 +92,7 @@ export const Partner_Completar = () => {
                         </select>
                     </div>
                     <div className="d-grid gap-2">
-                        <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
+                        <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                     </div>
 
                 </form>

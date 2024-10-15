@@ -30,7 +30,7 @@ export const Navbar_Prev = () => {
     const nombre = localStorage.getItem("nombre");
 
     return (
-        <nav className="navbar navbar-light" style={{ backgroundColor: '#de8f79' }}>
+        <nav className="navbar navbar-light" style={{ backgroundColor: '#7c488f' }}>
             <div className="container">
                 <Link to="/">
                     <img

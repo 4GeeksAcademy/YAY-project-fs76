@@ -1,81 +1,93 @@
-/* Contenedor principal de la tarjeta de perfil */
-.profile-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+.profile-container {
+    background-color: #f8f9fa;
     padding: 20px;
-    max-width: 900px;
-    margin: auto;
 }
 
-/* Cabecera de la tarjeta: contiene la imagen de perfil */
-.profile-card-header {
+.profile-header {
+    background-color: #7c488f;
+    padding: 20px;
+    color: white;
     text-align: center;
+}
+
+.profile-content {
+    display: flex;
+    margin-top: 20px;
+}
+
+.profile-sidebar {
+    width: 25%;
+    margin-right: 20px;
+}
+
+.profile-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     margin-bottom: 20px;
 }
 
-/* Imagen de perfil */
-.profile-card-header img {
+.profile-avatar {
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
-    border: 3px solid #7c488f; /* Bordes morados */
+    margin-bottom: 10px;
 }
 
-/* Cuerpo de la tarjeta: contiene detalles del perfil e imágenes del usuario */
-.profile-card-body {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+.profile-name {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
 }
 
-/* Información del perfil */
+.profile-email {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.profile-nav {
+    margin-top: 15px;
+}
+
+.profile-nav .nav-link {
+    display: block;
+    margin-bottom: 5px;
+}
+
 .profile-details {
     flex: 1;
 }
 
-/* Título del perfil */
-.profile-details h3 {
-    color: #7c488f; /* Color morado */
+.form-group {
     margin-bottom: 15px;
 }
 
-/* Imágenes de usuario */
-.profile-images {
-    flex: 1;
+.gender-options {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 10px;
+    gap: 15px;
+
 }
 
-/* Footer de la tarjeta: Intereses del usuario */
-.profile-card-footer {
-    margin-top: 20px;
-    text-align: center;
-}
-
-/* Botones */
-.btn-custom-primary {
-    background-color: #7c488f;
-    color: white;
+.btn {
+    padding: 10px 15px;
     border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
+    border-radius: 5px;
 }
 
-.btn-custom-primary:hover {
-    background-color: #643671;
-}
 
-.btn-custom-secondary {
-    background-color: #A7D0CD;
+.btn-save {
+    background-color: #007bff;
     color: white;
-    border: none;
-    padding: 10px 20px;
 }
 
-.btn-custom-secondary:hover {
-    background-color: #8ab8b6;
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-account {
+    background-color: #fff3f3;
+    border: 1px solid #dc3545;
 }

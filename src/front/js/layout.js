@@ -48,6 +48,9 @@ import { Partner_Signup } from "./component/designON/partner_signup";
 import { Forgot_Password } from "./component/designON/forgot_password";
 import { SobreNosotros } from "./component/designON/sobreNosotros";
 import { Partner_Login } from "./component/designON/partner_login";
+import { ScrollToTopButton } from "./component/designON/scrollToTopButton";
+import { Perfil_Usuario } from "./component/designON/perfil_usuario";
+
 
 
 function Layout() {
@@ -89,10 +92,8 @@ function Layout() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
                         <Route path="/imageUpload" element={<ImageUpload />} />
-                        <Route path="/editProfile" element={<EditProfile />} />
                         <Route path="/profilePicture" element={<ProfilePicture />} />
-                        <Route path="/profile/:userId" element={<Profile />} />
-                        <Route path="/editProfile/:userId" element={<EditProfile />} />
+                        <Route element={<Perfil_Usuario />} path="/editProfile/:userId" />
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
                         <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
@@ -102,11 +103,14 @@ function Layout() {
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
-
                         <Route element={<Landing_Page />} path="/" />
 
                     </Routes>
+                    
+            <ScrollToTopButton />
+            <div style={{paddingBottom: '100px' }}></div>
                     <Footer token={token} />
+         
                 </ScrollToTop>
             </BrowserRouter>
         </div>

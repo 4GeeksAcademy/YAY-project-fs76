@@ -6,7 +6,7 @@
 }
 
 .perfil-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #7c488f; /* Morado */
 }
 
@@ -22,7 +22,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 .perfil-image:hover {
     transform: scale(1.1); /* Crece un 10% en hover */
@@ -32,7 +32,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #de8f79; /* Naranja */
+    background-color: #7c488f; /* Naranja */
     color: white;
     border: none;
     border-radius: 50%;
@@ -46,7 +46,7 @@
 }
 
 .delete-button:hover {
-    background-color: #A7D0CD; /* Azul */
+    background-color: #7c488f; /* Azul */
 }
 
 .error-message {
@@ -93,7 +93,7 @@
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 .user-gallery-image {
@@ -108,7 +108,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: #de8f79; /* Naranja */
+    background-color: #7c488f; /* Naranja */
     color: white;
     border: none;
     border-radius: 50%;
@@ -122,7 +122,7 @@
 }
 
 .user-gallery-delete-button:hover {
-    background-color: #A7D0CD; /* Azul */
+    background-color: #7c488f; /* Azul */
 }
 
 /* Estilos del modal */

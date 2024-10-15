@@ -197,7 +197,7 @@ export const Login = () => {
                       </div>
 
                       <div className="text-center">
-                        <h5>¿Es tu primera vez aquí? <Link to="/signup" style={{ color: '#7c488f' }}>Regístrate</Link></h5>
+                      <h5 style={{ fontWeight: '400' }}>¿Es tu primera vez aquí? <Link to="/signup" style={{ color: '#7c488f' }}>Regístrate</Link></h5>
                       </div>
                     </form>
                   </div>

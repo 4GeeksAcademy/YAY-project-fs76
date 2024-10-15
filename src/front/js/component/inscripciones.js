@@ -10,13 +10,13 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
     useEffect(() => {
         const obtenerInscripcion = async () => {
             const inscripcion = await actions.getInscripcionUsuarioEventoInscrito(usuarioId, eventoId);
-            console.log(inscripcion); 
+            console.log(inscripcion);
             if (inscripcion && inscripcion.inscrito) {
                 setIsInscrito(true);
-                setInscripcionId(inscripcion.id); 
+                setInscripcionId(inscripcion.id);
             } else {
                 setIsInscrito(false);
-                setInscripcionId(null); 
+                setInscripcionId(null);
             }
         };
         obtenerInscripcion();
@@ -32,7 +32,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         const id = await actions.inscribirse(usuarioId, eventoId);
         if (id) {
             setIsInscrito(true);
-            setInscripcionId(id); 
+            setInscripcionId(id);
         } else {
             console.error('No se pudo obtener el ID de inscripción');
         }
@@ -51,7 +51,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         const result = await actions.desapuntarse(inscripcionId);
         if (result) {
             setIsInscrito(false);
-            setInscripcionId(null); 
+            setInscripcionId(null);
         } else {
             console.log('Error al eliminar la inscripción');
         }
@@ -62,8 +62,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
         <div>
             <button
                 key={eventoId}
-                className="btn text-black btn-lg"
-                style={{ color: '#494949', backgroundColor: isInscrito ? '#de8f79' : '#A7D0CD' }}
+                className={`btn btn-lg ${isInscrito ? 'btn-danger' : 'btn-success'}`}
                 onClick={isInscrito ? handleDesapuntarse : handleInscribirse}
             >
                 {isInscrito ? 'Me desapunto' : 'Me apunto'}
@@ -87,7 +86,7 @@ export const Inscripciones = ({ usuarioId, eventoId, inscripcionId, setInscripci
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar solicitud</button>
-                                <button type="button" className="btn text-white" style={{ backgroundColor: "#de8f79" }} onClick={confirmDesapuntarse}>Sí, quiero desapuntarme</button>
+                                <button type="button" className="btn text-white" style={{ backgroundColor: "#7c488f" }} onClick={confirmDesapuntarse}>Sí, quiero desapuntarme</button>
                             </div>
                         </div>
                     </div>

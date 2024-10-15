@@ -56,7 +56,7 @@ export const Evento_Card = () => {
         <>
             {evento ? (
                 <div className="container w-100 d-flex justify-content-center">
-                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ borderColor: '#ffc107' }}>
+                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                         <div className="profile me-3 col-6">
                             <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75 m-4" />
                         </div>

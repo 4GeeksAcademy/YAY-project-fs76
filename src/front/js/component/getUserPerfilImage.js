@@ -32,7 +32,6 @@ const GetUserPerfilImage = () => {
 
     return (
         <div className="perfil-image-container">
-            <h3 className="perfil-title">Imagen de Perfil</h3>
             {error && <p className="error-message">{error}</p>}
             {image ? (
                 <div className="image-wrapper">
@@ -47,6 +46,7 @@ const GetUserPerfilImage = () => {
                     >
                         x
                     </button>
+                    
                 </div>
             ) : (
                 <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} /> // Este componente se muestra si no hay imagen

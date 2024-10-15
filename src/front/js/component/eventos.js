@@ -23,14 +23,14 @@ export const Eventos = () => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id, [userId]: id }));
         console.log('Inscripcion IDs:', inscripcionIds);
     };
-    
+
     const userId = localStorage.getItem("user_id");
-    
+
     return (
         <div className="container m-5 mx-auto w-75">
             <div className="d-flex justify-content-center">
                 <button className="custom-button btn btn-lg mb-3"
-                    onClick={()  => navigate(`/eventos-mapa/${userId}`)}
+                    onClick={() => navigate(`/eventos-mapa/${userId}`)}
                     style={{
                         borderColor: '#ffc107',
                         color: '#494949'
@@ -41,7 +41,7 @@ export const Eventos = () => {
             </div>
             <ul className="list-group">
                 {Array.isArray(store.eventos) && store.eventos.map((evento) => (
-                    <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
+                    <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                         <div className="d-flex justify-content-between flex-grow-1">
                             <img
                                 src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
@@ -61,7 +61,7 @@ export const Eventos = () => {
                                     <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.direccion}
                                 </li>
                                 <li>
-                                    <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Saber más</Link>
+                                    <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: 'white' }}>Saber más</Link>
                                 </li>
                             </ul>
                         </div>

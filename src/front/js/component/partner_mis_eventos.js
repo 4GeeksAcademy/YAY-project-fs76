@@ -47,7 +47,7 @@ export const PartnerMisEventos = () => {
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
                 <Link to="/formulario-evento">
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>
+                    <button className="btn" style={{ backgroundColor: '#7c488f', color: '#494949' }} onFocus={(e) => e.target.blur()}>
                         Crear nuevo evento
                     </button>
                 </Link>
@@ -59,7 +59,7 @@ export const PartnerMisEventos = () => {
                     {Array.isArray(store.eventos) && store.eventos
                         .filter(evento => evento.partner_id === parseInt(localStorage.getItem("partner_id"))) // Filtra por partner_id
                         .map((evento) => (
-                            <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
+                            <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                                 <div className="d-flex justify-content-between flex-grow-1">
                                     <img
                                         src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
@@ -79,7 +79,7 @@ export const PartnerMisEventos = () => {
                                             <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i> {evento.direccion}
                                         </li>
                                         <li>
-                                            <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>
+                                            <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: '#494949' }}>
                                                 Ver detalles
                                             </Link>
                                         </li>

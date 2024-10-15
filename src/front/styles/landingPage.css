@@ -498,8 +498,8 @@ input:focus, textarea:focus {
     z-index: 9999;
     width: 3.125rem;
     height: 3.125rem;
-    background-color: rgba(113, 134, 157, .1);
-    color: #677788;
+    background-color: #7c488f17;
+    color: #7c488f;
     font-size: 1rem;
     opacity: .5;
     border-radius: 50%;
@@ -533,7 +533,7 @@ a {
 }
 
 .flecha-top:hover, .flecha-top:focu {
-    color: #de8f79
+    color: #7c488f
 }
 
 

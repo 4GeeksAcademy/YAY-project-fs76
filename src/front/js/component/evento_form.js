@@ -66,7 +66,7 @@ export const Evento_Form = () => {
             const formattedDate = new Date(fecha).toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
             const formattedStartTime = hora_inicio; // formato 'HH:MM'
             const formattedEndTime = hora_fin; // formato 'HH:MM'
-    
+
             const eventoData = {
                 ...nuevoEvento,
                 fecha: formattedDate,
@@ -74,7 +74,7 @@ export const Evento_Form = () => {
                 hora_fin: formattedEndTime,
                 partner_id: store.partnerId // Agregar el campo partner_id
             };
-    
+
             if (theid) {
                 actions.updateEvento(theid, eventoData, () => {
                     setAlert({ type: 'success', message: ' Evento updated successfully' });
@@ -176,7 +176,7 @@ export const Evento_Form = () => {
                     </select>
                 </div>
                 <div className="d-grid gap-2">
-                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                 </div>
                 <Link to="/partners-eventos" style={{ color: '#7c488f' }}>
                     o volver a la lista de eventos

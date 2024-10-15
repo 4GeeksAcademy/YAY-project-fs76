@@ -8,9 +8,9 @@ export const Landing_Fondo = () => {
                     {`
                         .bg-elements-10-0 { fill: none; stroke: #7c488f; }
                         .bg-elements-10-1 { fill: none; stroke: #FFFFFF; }
-                        .bg-elements-10-2 { fill: none; stroke: #A7D0CD; }
-                        .bg-elements-10-3 { fill: #A7D0CD; }
-                        .bg-elements-10-4 { fill: #de8f79; } 
+                        .bg-elements-10-2 { fill: none; stroke: #7c488f; }
+                        .bg-elements-10-3 { fill: #7c488f; }
+                        .bg-elements-10-4 { fill: #7c488f; } 
 
                     `}
                 </style>

@@ -198,7 +198,7 @@ export const Partner_Signup = () => {
                       </div>
 
                       <div className="text-center">
-                        <h5>¿Ya formas parte de YAY? <Link to="/partners-login" style={{ color: '#7c488f' }}>Inicia Sesión</Link></h5>
+                        <h5 style={{ fontWeight: '400' }}>¿Ya formas parte de YAY? <Link to="/partners-login" style={{ color: '#7c488f' }}>Inicia Sesión</Link></h5>
                       </div>
                     </form>
                   </div>

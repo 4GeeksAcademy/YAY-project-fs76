@@ -582,6 +582,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log("Usuario registrado exitosamente", data);
+
             
                         // Verificar si se recibió un token y un user_id en la respuesta
                         if (data.access_token && data.user_id) {
@@ -590,6 +591,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                             localStorage.setItem("token", data.access_token); // Guardamos el token
                             localStorage.setItem("user_id", data.user_id); 
                             localStorage.setItem("usuario_id", data.user_id); 
+                            
             
                             console.log("Token y ID del usuario guardados en localStorage");
             
@@ -599,6 +601,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                                 token: data.access_token,  // Guardamos el token
                                 user_id: data.user_id  // Guardamos el user_id
                             });
+
             
                             return {
                                 success: true,

@@ -6,6 +6,10 @@
     on that page only (the ones not reused in other pages).
 */
 
+body {
+    font-family: Arial, sans-serif;
+}
+
 .btn {
     transition: transform 0.5s; 
 }
@@ -30,12 +34,12 @@ h1, h2 {
 }
 
 .custom-button:hover {
-    background-color: #7c488f !important;
-    color: white !important;
+    border:  1.5px solid #7c488f !important;
+    color: black !important;
   }
   
   .custom-button:focus {
-    background-color: #7c488f !important;
-    color: white !important;
+    border:  1.5px solid #7c488f !important;
+    color: black !important;
     box-shadow: 0 0 0 0.2rem rgba(70, 69, 65, 0.5);
   }

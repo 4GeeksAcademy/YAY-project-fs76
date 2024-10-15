@@ -22,8 +22,8 @@ export const Navbar = () => {
     const token = localStorage.getItem("token");
 
 
-    const isSignin = location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/forgot-password" ;
-    const isPartner =  location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/partners-forgot-password";
+    const isSignin = location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/forgot-password";
+    const isPartner = location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/partners-forgot-password";
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light w-100" style={{ zIndex: '8' }}>
@@ -50,14 +50,14 @@ export const Navbar = () => {
                                     </Link>
                                 </li>
                                 {!isPartner ? (
-                                <Link to="/partners-login">
-                                    <button className="btn text-light ms-5 mb-0 mt-2" style={{ backgroundColor: '#7c488f', fontSize: '1.2rem', fontWeight: '300', color: '#333', letterSpacing: '0.05rem' }}>
-                                    <i class="fa-solid fa-user-tie fs-4"></i> Partner
-                                    </button>
-                                </Link>
+                                    <Link to="/partners-login">
+                                        <button className="btn text-light ms-5 mb-0 mt-2" style={{ backgroundColor: '#7c488f', fontSize: '1.2rem', fontWeight: '300', color: '#333', letterSpacing: '0.05rem' }}>
+                                            <i class="fa-solid fa-user-tie fs-4"></i> Partner
+                                        </button>
+                                    </Link>
                                 ) : null}
                             </>
-                            
+
                         ) : (
                             <>
                                 {!token && (
@@ -69,14 +69,14 @@ export const Navbar = () => {
                                         </li>
                                         <li className="nav-item dropdown">
                                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ textDecoration: 'none' }}>
-                                            Eventos
+                                                Eventos
                                             </a>
                                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <Link to="/#land-eventos">
-                                                <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Eventos destacados</a></li>
+                                                <Link to="/#land-eventos">
+                                                    <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Eventos destacados</a></li>
                                                 </Link>
                                                 <Link to="/#land-mapa">
-                                                <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Eventos en tu zona</a></li>
+                                                    <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Eventos en tu zona</a></li>
                                                 </Link>
                                             </ul>
                                         </li>
@@ -88,20 +88,20 @@ export const Navbar = () => {
                                                 Acerca de Yay
                                             </a>
                                             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <Link to="/#land-about">
-                                                <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Sobre nosotros</a></li>
+                                                <Link to="/#land-about">
+                                                    <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Sobre nosotros</a></li>
                                                 </Link>
                                                 <Link to="/#land-partner">
-                                                <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Conviértete en Partner</a></li>
+                                                    <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Conviértete en Partner</a></li>
                                                 </Link>
                                                 <Link to="/#land-contacto">
-                                                <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Pregúntanos</a></li>
+                                                    <li><a className="dropdown-item" href="#" style={{ textDecoration: 'none' }}>Pregúntanos</a></li>
                                                 </Link>
                                             </ul>
                                         </li>
                                         <li className="nav-item">
-                                        <Link to="/#land-contacto">
-                                            <a className="nav-link me-3" style={{ textDecoration: 'none' }}>Contacto</a>
+                                            <Link to="/#land-contacto">
+                                                <a className="nav-link me-3" style={{ textDecoration: 'none' }}>Contacto</a>
                                             </Link>
                                         </li>
                                         <Link to="/login">
@@ -114,28 +114,62 @@ export const Navbar = () => {
 
                                 {token && userId && (
                                     <>
-                                        <button className="btn me-3" onClick={() => navigate(`/profile/${userId}`)} style={{ backgroundColor: '#7c488f', color: 'white' }}>
-                                            Mi Perfil
-                                        </button>
-                                        <button className="btn me-3" onClick={() => navigate('/eventos')} style={{ backgroundColor: '#7c488f', color: 'white' }}>
-                                            Eventos Disponibles
-                                        </button>
+
+                                        <li className="nav-item">
+                                            <Link to={-1} className="nav-link" style={{ textDecoration: 'none' }}>
+                                                <i className="fa-solid fa-angle-left small me-1"></i>
+                                                Volver
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to={(`/editprofile/${userId}`)} className="nav-link" style={{ textDecoration: 'none' }}>
+
+                                                Mi Perfil
+                                            </Link>
+
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/eventos" className="nav-link" style={{ textDecoration: 'none' }}>
+
+                                                Eventos
+                                            </Link>
+                                        </li>
+
                                     </>
                                 )}
 
                                 {token && partnerId && (
-                                    <button className="btn me-3" onClick={() => navigate(`/partner-profile/${partnerId}`)} style={{ backgroundColor: '#7c488f', color: 'white' }}>
-                                        Mi Perfil de Partner
-                                    </button>
+                                    <li className="nav-item">
+                                        <Link to="{(`/partner-profile/${partnerId}`)}" className="nav-link" style={{ textDecoration: 'none' }}>
+
+                                            Mi Perfil
+                                        </Link>
+                                    </li>
+
                                 )}
 
                                 {token ? (
-                                    <button className="enter btn btn-secondary my-auto" onClick={handleLogout}>
-                                        Cerrar Sesión
+                                    <button
+                                        className="btn"
+                                        style={{
+                                            backgroundColor: '#444',
+                                            color: '#fff',
+                                            fontSize: '1.2rem',
+                                            fontWeight: '400',
+                                            letterSpacing: '0.05rem',
+                                            border: 'none',
+                                            borderRadius: '5px',
+                                            padding: '0.3rem 0.8rem',
+                                            marginLeft: '20px',
+                                            marginTop: '5px'
+                                        }}
+                                        onClick={handleLogout}
+                                    >
+                                        <i className="fa-solid fa-right-from-bracket fs-5"></i> Cerrar Sesión
                                     </button>
                                 ) : null}
                             </>
-                  
+
                         )}
                     </ul>
                 </div>
