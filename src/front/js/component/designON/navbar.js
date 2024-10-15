@@ -21,7 +21,6 @@ export const Navbar = () => {
     const partnerId = localStorage.getItem("partner_id");
     const token = localStorage.getItem("token");
 
-
     const isSignin = location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/forgot-password";
     const isPartner = location.pathname === "/partners-login" || location.pathname === "/partners-signup" || location.pathname === "/partners-forgot-password";
 
@@ -52,12 +51,18 @@ export const Navbar = () => {
                                 {!isPartner ? (
                                     <Link to="/partners-login">
                                         <button className="btn text-light ms-5 mb-0 mt-2" style={{ backgroundColor: '#7c488f', fontSize: '1.2rem', fontWeight: '300', color: '#333', letterSpacing: '0.05rem' }}>
-                                            <i class="fa-solid fa-user-tie fs-4"></i> Partner
+                                            <i className="fa-solid fa-user-tie fs-4"></i> Partner
+                                        </button>
+                                    </Link>
+                                ) : null}
+                                {isPartner ? (
+                                    <Link to="/login">
+                                        <button className="btn text-light ms-5 mb-0 mt-2" style={{ backgroundColor: '#7c488f', fontSize: '1.2rem', fontWeight: '300', color: '#333', letterSpacing: '0.05rem' }}>
+                                            <i className="fa-solid fa-circle-user fs-4"></i> Usuario
                                         </button>
                                     </Link>
                                 ) : null}
                             </>
-
                         ) : (
                             <>
                                 {!token && (
@@ -114,7 +119,6 @@ export const Navbar = () => {
 
                                 {token && userId && (
                                     <>
-
                                         <li className="nav-item">
                                             <Link to={-1} className="nav-link" style={{ textDecoration: 'none' }}>
                                                 <i className="fa-solid fa-angle-left small me-1"></i>
@@ -122,30 +126,36 @@ export const Navbar = () => {
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link to={(`/editprofile/${userId}`)} className="nav-link" style={{ textDecoration: 'none' }}>
-
+                                            <Link to={`/editprofile/${userId}`} className="nav-link" style={{ textDecoration: 'none' }}>
                                                 Mi Perfil
                                             </Link>
-
                                         </li>
                                         <li className="nav-item">
                                             <Link to="/eventos" className="nav-link" style={{ textDecoration: 'none' }}>
-
                                                 Eventos
                                             </Link>
                                         </li>
-
                                     </>
                                 )}
 
                                 {token && partnerId && (
-                                    <li className="nav-item">
-                                        <Link to="{(`/partner-profile/${partnerId}`)}" className="nav-link" style={{ textDecoration: 'none' }}>
-
-                                            Mi Perfil
-                                        </Link>
-                                    </li>
-
+                                    <>
+                                        <li className="nav-item">
+                                            <Link to="/partners-home" style={{ textDecoration: 'none' }}>
+                                                <a className="nav-link active">Home</a>
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to={`/partner-profile/${partnerId}`} className="nav-link" style={{ textDecoration: 'none' }}>
+                                                Perfil
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to={`/partner-mis-eventos/${partnerId}`} className="nav-link" style={{ textDecoration: 'none' }}>
+                                                Mis Eventos
+                                            </Link>
+                                        </li>
+                                    </>
                                 )}
 
                                 {token ? (
@@ -169,7 +179,6 @@ export const Navbar = () => {
                                     </button>
                                 ) : null}
                             </>
-
                         )}
                     </ul>
                 </div>

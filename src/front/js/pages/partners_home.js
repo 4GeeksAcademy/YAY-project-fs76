@@ -9,10 +9,10 @@ export const Partners_Home = () => {
     const { store } = useContext(Context);
     const navigate = useNavigate(); // Usar navigate
 
-    // Verificar autenticación cuando se monta el componente
+
     useEffect(() => {
-        if (!store.auth || !localStorage.getItem("token")) {
-            navigate("/partner-login"); // Redirigir a la página de login si no está autenticado
+        if (!store.auth && !localStorage.getItem("token")) {
+            navigate("/partner-login"); 
         }
     }, [store.auth, navigate]);
 

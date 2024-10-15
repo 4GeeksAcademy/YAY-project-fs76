@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Context } from '../../store/appContext';
+import { Link } from 'react-router-dom';
 import { Landing_Fondo } from './landing_fondo';
 
 export const Landing_Partner = () => {
@@ -73,7 +74,9 @@ export const Landing_Partner = () => {
                         <br/>
                         no pierdas la oportunidad de darte a conocer y construir comunidad junto a nuestros usuarios. </h4>
                 </div>
+                <Link to="/partners-signup">
                 <a className="btn btn-transition btn-lg mt-0"  style={{ backgroundColor: '#7c488f', color: 'white' }}>Hazte Partner</a>
+                </Link>
             </div>
 
         </div>

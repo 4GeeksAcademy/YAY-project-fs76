@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 export const Footer = ({ token }) => {
-	console.log("Token en Footer:", token);
+
 	const location = useLocation();
 
 	const isSignin = location.pathname === "/login" || 
@@ -14,8 +14,6 @@ export const Footer = ({ token }) => {
 
 	const notSignin = location.pathname === "/" || 
 	location.pathname === "/sobre-nosotros"; 
-
-
 
 	if (isSignin) {
 		return null;

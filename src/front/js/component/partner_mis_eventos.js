@@ -47,7 +47,7 @@ export const PartnerMisEventos = () => {
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
                 <Link to="/formulario-evento">
-                    <button className="btn" style={{ backgroundColor: '#7c488f', color: '#494949' }} onFocus={(e) => e.target.blur()}>
+                    <button className="btn" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>
                         Crear nuevo evento
                     </button>
                 </Link>
@@ -79,7 +79,7 @@ export const PartnerMisEventos = () => {
                                             <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i> {evento.direccion}
                                         </li>
                                         <li>
-                                            <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: '#494949' }}>
+                                            <Link to={`/partner-evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: 'white' }}>
                                                 Ver detalles
                                             </Link>
                                         </li>

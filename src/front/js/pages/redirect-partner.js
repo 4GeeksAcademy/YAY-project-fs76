@@ -4,7 +4,7 @@ import { Navigate, useNavigate, useLocation } from "react-router-dom";
 
 import "../../styles/loading.css";
 
-export const Logout = () => {
+export const Redirect_Partner = () => {
   const { store, actions } = useContext(Context);
   const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
@@ -13,21 +13,19 @@ export const Logout = () => {
   useEffect(() => {
     if (location.state && location.state.from) {
       const redirectTimeout = setTimeout(() => {
-        window.location.reload();
-        actions.logout()
         setRedirect(true);
       }, 3000);
 
       return () => clearTimeout(redirectTimeout);
     } else {
-      navigate("/", { replace: true });
+      navigate("/partners-login", { replace: true });
     }
 
   }, [location]);
 
   return (
     <>
-      {redirect ? <Navigate to="/" /> : null}
+      {redirect ? <Navigate to="/partners-login" /> : null}
       <div className="container text-center mx-auto shadow" style={{
         backgroundColor: "#f3f3f3",
         padding: '20px',
@@ -40,8 +38,9 @@ export const Logout = () => {
 
           </div>
           <div className="col-10">
-            <h1 className="display-4">¡Nos vemos pronto!</h1>
-            <h2 className="text-black">Cerrando sesión...</h2>
+          <h2 className="text-black">Ahora te toca...</h2>
+            <h1 className="display-4">Iniciar sesión y empezar en tu aventura en YAY</h1>
+
             <br></br>
             <div className="loader mx-auto "></div>
           </div>

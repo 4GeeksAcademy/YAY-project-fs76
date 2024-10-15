@@ -150,12 +150,11 @@ def get_eventos():
 @api.route('/eventos', methods=['POST'])
 @jwt_required(optional=True)  
 def add_evento():
-    request_body = request.get_json()
+    partner_id = get_jwt_identity()
     
-    if "nombre" not in request_body:
-        return jsonify({"ERROR": "La clave 'nombre' es requerida."}), 400
+    # Log para ver qué partner_id se está utilizando
+    print(f"Partner ID recibido: {partner_id}")
 
-    partner_id = get_jwt_identity()  
     partner = Partners.query.filter_by(id=partner_id).first()
     if partner is None:
         return jsonify({"ERROR": "Partner no encontrado"}), 404
@@ -273,10 +272,14 @@ def get_partners():
     return jsonify(results), 200
 
 @api.route('/partners/<int:partner_id>', methods=['GET'])
+@jwt_required()
 def get_partner(partner_id):
+    # Middleware que valida si el partner está activo
+    current_partner = get_jwt_identity()
     partner = Partners.query.filter_by(id=partner_id).first()
-    if partner is None:
-        return jsonify({"ERROR": "Partner no encontrado. Revise que el número de ID introducido, corresponda a un partner existente"}), 404
+    
+    if partner is None or partner.id != current_partner['partnerId']:
+        return jsonify({"ERROR": "Partner no encontrado."}), 404
 
     return jsonify(partner.serialize()), 200
 
@@ -284,11 +287,16 @@ def get_partner(partner_id):
 @jwt_required()
 def private_partner():
     current_partner = get_jwt_identity()
-    return jsonify(logged_in_as=current_partner, message="Has iniciado sesión y tienes acceso a la ruta privada."), 200
+    
+    # Log para verificar el partner actual que hizo la solicitud
+    print(f"Partner {current_partner} accediendo a la ruta privada.")
 
+    return jsonify(logged_in_as=current_partner, message="Has iniciado sesión y tienes acceso a la ruta privada."), 200
 @api.route("/logout-partner", methods=['POST'])
 @jwt_required()
 def logout_partner():
+    # Log antes de cerrar sesión
+    print("Cierre de sesión solicitado para el partner con JWT.")
     session.pop('jwt_token', None) 
     return jsonify({"msg": "Cierre de sesión con éxito"}), 200
 
@@ -364,13 +372,14 @@ def login_partner():
     # Crear el token con la identidad del ID del partner
     access_token = create_access_token(identity=partner.id)  # Cambiado a partner.id
     
-    # Retornar también el partnerId en la respuesta
+    # Log para ver el token generado
+    print(f"Token JWT generado para el partner {partner.id}: {access_token}")
+
     return jsonify({
         "message": "Inicio de sesión de Partner correcto", 
         "access_token": access_token, 
         "partner_id": partner.id
     }), 200
-
 
 @api.route('/completar-perfil-partner/<int:partner_id>', methods=['POST'])
 def complete_partner_profile(partner_id):

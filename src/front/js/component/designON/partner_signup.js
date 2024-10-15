@@ -41,7 +41,6 @@ export const Partner_Signup = () => {
       }
       actions.signupPartner(email, password).then(() => {
         navigate(`/partner_completar_perfil/${store.partner_id}`);
-        window.location.reload();
       });
     });
   }

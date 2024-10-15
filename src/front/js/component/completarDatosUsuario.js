@@ -159,7 +159,7 @@ const CompletarDatosUsuario = () => {
             await actions.updateProfile(userId, nombre, apellidos, fecha_nacimiento, direccion, breve_descripcion, misIntereses);
             localStorage.setItem('selectedInterests', JSON.stringify(misIntereses));
             // alert("Datos completados con éxito");
-            navigate(`/editprofile/${userId}`);
+            navigate('/redirect-login');
         } else {
             // alert("Error al completar los datos");
         }
@@ -242,7 +242,7 @@ const CompletarDatosUsuario = () => {
                             style={{ ...styles.input, border: errors.nombre ? '1px solid red' : '1px solid #ccc' }}
                             value={fecha_nacimiento}
                             onChange={(e) => setFechaNacimiento(e.target.value)}
-                            placeholder="Introduzca sus apellidos..."
+                            placeholder="Introduzca su fecha de nacimiento..."
                             required
                         />
                         {errors.fecha && <span className='text-danger float-end mb-0'>{errors.fecha}</span>}
@@ -251,7 +251,7 @@ const CompletarDatosUsuario = () => {
                             style={{ ...styles.textarea, height: '100px' }}
                             value={breve_descripcion}
                             onChange={(e) => setDescripcion(e.target.value)}
-                            placeholder="Introduzca sus apellidos..."
+                            placeholder="Breve descripción, una frase de una canción, una cita de una película..."
 
                         />
                         <div className="d-flex justify-content-between mt-3 px-5 w-100 ">

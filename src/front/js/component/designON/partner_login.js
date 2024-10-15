@@ -26,8 +26,8 @@ export const Partner_Login = () => {
   
       actions.loginPartner(email, password).then((success) => {
           if (success) {
-              navigate("/partners_home");
-              window.location.reload(); 
+              navigate("/partners-home");
+
           } else {
               setTimeout(() => {
                   if (!store.auth) {
@@ -45,7 +45,7 @@ export const Partner_Login = () => {
 
     return (
         <>
-         {store.auth === true ? <Navigate to="/partners_home" /> :
+         {store.auth === true ? <Navigate to="/partners-home" /> :
         <div className="d-flex align-items-center min-h-100 fondo-sigin">
           <main id="content" role="main" className="flex-grow-1">
             <div className="container-fluid">

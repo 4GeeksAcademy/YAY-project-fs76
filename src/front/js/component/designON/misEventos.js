@@ -35,7 +35,7 @@ export const MisEventos = () => {
                     {misEventos.length > 0 ? (
                         <ul className="list-group">
                             {misEventos.map(evento => (
-                                <li key={evento.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
+                                <li key={evento.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                                     <div className="d-flex justify-content-between flex-grow-1">
                                         <img
                                             src={evento.imagen || "https://cdn-icons-png.freepik.com/512/3544/3544735.png"} // Asegúrate de que "evento.imagen" está disponible

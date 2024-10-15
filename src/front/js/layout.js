@@ -50,6 +50,9 @@ import { SobreNosotros } from "./component/designON/sobreNosotros";
 import { Partner_Login } from "./component/designON/partner_login";
 import { ScrollToTopButton } from "./component/designON/scrollToTopButton";
 import { Perfil_Usuario } from "./component/designON/perfil_usuario";
+import { Redirect_Login } from "./pages/redirect-login";
+import { Redirect_Partner } from "./pages/redirect-partner";
+import { Partner_Perfil } from "./component/designON/partner_perfil";
 
 
 
@@ -78,7 +81,7 @@ function Layout() {
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
-                        <Route element={<Partners_Home />} path="/partners_home" />
+                        <Route element={<Partners_Home />} path="/partners-home" />
                         <Route element={<Partner_Login />} path="/partners-login" />
                         <Route element={<Partner_Signup />} path="/partners-signup" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
@@ -96,7 +99,7 @@ function Layout() {
                         <Route element={<Perfil_Usuario />} path="/editProfile/:userId" />
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
-                        <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route path="/partner-profile2/:partnerId" element={<PartnerProfile />} />
                         <Route path="/check-login" element={<CheckLoginPartner />} />
                         <Route element={<SobreNosotros />} path="/sobre-nosotros" />
                         <Route element={<EventosPublicos />} path="/eventos-yay" />
@@ -104,6 +107,9 @@ function Layout() {
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
                         <Route element={<Landing_Page />} path="/" />
+                        <Route element={<Redirect_Login />} path="/redirect-login" />
+                        <Route element={<Redirect_Partner />} path="/redirect-partner" />
+                        <Route element={<Partner_Perfil />} path="/partner-profile/:partnerId" />
 
                     </Routes>
                     

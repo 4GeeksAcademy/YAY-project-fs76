@@ -73,7 +73,8 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
 
     const mapContainerStyle = {
         height: "400px",
-        width: "800px",
+        with: 'auto',
+        maxWidth: "800px",
         cursor: 'pointer'
     };
 

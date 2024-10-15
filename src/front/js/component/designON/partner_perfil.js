@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../store/appContext";
+import { Context } from "../../store/appContext";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../styles/partnerProfiles.css";
-import fondoPartner from "../../../../docs/assets/fondoPartner.webp"; // Asegúrate de que esta ruta sea correcta
+import "../../../styles/partnerProfiles.css";
 
-const PartnerProfile = () => {
+export const Partner_Perfil = () => {
     const { store, actions } = useContext(Context);
     const { partnerId } = useParams();
     const navigate = useNavigate();
@@ -14,7 +13,7 @@ const PartnerProfile = () => {
         direccion: '',
         sector: '',
         entidad_id: '',
-        image: ''  // Este campo se puede eliminar si no lo necesitas
+        image: ''
     });
 
     useEffect(() => {
@@ -40,10 +39,13 @@ const PartnerProfile = () => {
     const tipoEntidad = entidad ? entidad.tipo : 'Entidad no encontrada';
 
     return (
-        <div className="container-fluid perfil-container" style={{ backgroundImage: `url(${fondoPartner})` }}>
-            <div className="row">
-                <div className="col-md-3 sidebar">
-                    <h5 className="text-center" style={{ color: '#7c488f' }}>Menú</h5>
+        <>                <header className="profile-header text-center">
+        <h1 className="text-white">Mi Perfil de Partner</h1>
+    </header>
+        <div className="container-fluid perfil-container">
+            <div className="row justify-content-center">
+                <div className="col-md-3 sidebar my-auto pb-3">
+                    <h3 className="text-center" style={{ color: '#7c488f' }}>Menú</h3>
                     <ul className="list-group">
                         <li className="list-group-item" onClick={() => navigate(`/editPartnerProfile/${partnerId}`)}>Editar Perfil</li>
                         <li className="list-group-item" onClick={() => navigate(`/formulario-evento`)}>Crear Evento</li>
@@ -54,9 +56,9 @@ const PartnerProfile = () => {
                         <li className="list-group-item" onClick={() => navigate(`/sobre-nosotros`)}>Sobre Nosotros</li>
                     </ul>
                 </div>
-                <div className="col-md-9">
-                    <div className="card p-4 profile-card shadow-sm">
-                        <h4 className="mb-4" style={{ color: '#7c488f' }}>Información del Partner</h4>
+                <div className="col-md-8">
+                    <div className="card p-4 profile-card shadow" style={{ backgroundColor: 'white', border: 'none' }}>
+                        <h2 className="mb-4" style={{ color: '#7c488f' }}>Información</h2>
                         <div className="form-group mb-3">
                             <label><strong>Nombre:</strong></label>
                             <p>{profile.nombre}</p>
@@ -81,7 +83,6 @@ const PartnerProfile = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
-
-export default PartnerProfile;

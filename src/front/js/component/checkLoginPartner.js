@@ -15,8 +15,11 @@ export const CheckLoginPartner = () => {
     // Función para manejar el logout
     const handleLogout = () => {
         alert("Tendrá que hacer login nuevamente.");
+        const token = localStorage.getItem("token");
+        if (!token) {
+            actions.logout(); 
+        }
         setLoggingOut(true);
-        actions.logout(); // Asegúrate de que esta acción actualice el estado de autenticación en el store
         localStorage.removeItem("token");
         localStorage.removeItem("user_id");
         localStorage.removeItem("nombre");

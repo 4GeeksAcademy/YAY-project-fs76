@@ -113,7 +113,7 @@ const EditPartnerProfile = () => {
                     </select>
                 </div>
                 <div className="d-grid gap-2">
-                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar Cambios</button>
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>Guardar Cambios</button>
                 </div>
             </form>
         </div>
