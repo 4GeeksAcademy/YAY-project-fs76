@@ -6,26 +6,31 @@ import { PartnerMisEventos } from "../component/partner_mis_eventos";
 import "../../styles/partnersHome.css";
 
 export const Partners_Home = () => {
-    const { store, actions } = useContext(Context); // Importar actions
+    const { store, actions } = useContext(Context); 
     const navigate = useNavigate();
+
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         const auth = localStorage.getItem("auth");
         const partner_id = localStorage.getItem("partner_id");
-
+    
         if (!token || !auth || !partner_id) {
-            // Redirige al login si falta algún dato de autenticación
-            navigate("/partner-login"); 
+            navigate("/partner-login");
         } else {
-            // Si existen los datos, setearlos en el store
             actions.setAuthStatePartner({
                 auth: auth,
                 token: token,
                 partner_id: partner_id,
             });
+            setLoading(false);
         }
-    }, [navigate, actions]); // Incluir actions como dependencia
+    }, [navigate, actions]);
+    
+    if (loading) {
+        return <div>Cargando...</div>; 
+    }
 
     return (
         <div className="partners-home-container container mt-5">

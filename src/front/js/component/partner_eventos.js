@@ -24,13 +24,13 @@ export const Partner_Eventos = () => {
         actions.loadEventosConUsuarios()
             .then(() => {
                 setLoading(false);
-                console.log(store.eventos); // Inspecciona el contenido de store.eventos
+                console.log(store.eventos); 
             })
             .catch(err => {
                 setLoading(false);
                 setError("Error al cargar eventos");
             });
-    }, [actions.loadEventosConUsuarios]);
+    }, []);
 
     const handleShowModal = (usuarios) => {
         setSelectedUsuarios(usuarios);
