@@ -16,17 +16,19 @@ export const Partners_Home = () => {
         const auth = localStorage.getItem("auth");
         const partner_id = localStorage.getItem("partner_id");
     
-        if (!token || !auth || !partner_id) {
+        actions.setAuthStatePartner({
+            auth: auth,
+            token: token,
+            partner_id: partner_id,
+        });
+    
+        setLoading(false);
+    
+        if (!token) {
             navigate("/partner-login");
-        } else {
-            actions.setAuthStatePartner({
-                auth: auth,
-                token: token,
-                partner_id: partner_id,
-            });
-            setLoading(false);
         }
-    }, [navigate, actions]);
+    }, []); // Mantengo el array vacío para que solo se ejecute una vez
+    
     
     if (loading) {
         return <div>Cargando...</div>; 
