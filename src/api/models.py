@@ -184,7 +184,9 @@ class Imagenes(db.Model):
 
     def __repr__(self):
         return f'<Imagen {self.url}>'
+    
 class Inscripciones(db.Model):
+
     __tablename__ = 'inscripciones'
     id = db.Column(db.Integer, primary_key=True)
     fecha_registro = db.Column(db.String(120), nullable=True)
@@ -214,3 +216,6 @@ class UsuariosIntereses(db.Model):
 
     # Define las relaciones con las tablas Usuarios e Intereses
     tipo_usuario = db.relationship('Usuarios')
+
+
+

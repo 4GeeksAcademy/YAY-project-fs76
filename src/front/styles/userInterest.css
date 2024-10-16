@@ -1,0 +1,49 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; 
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1061px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+  }
+  
+  .modal-content ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .modal-content ul li {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+
+  .modal-content ul li {
+    font-size: 1.25rem; /* Esto equivale a la clase fs-5 */
+  }
+
+  .modal-content .btn {
+    margin-top: 20px;
+  }
+  
+  body.modal-open {
+    overflow: hidden; 
+  }
+  

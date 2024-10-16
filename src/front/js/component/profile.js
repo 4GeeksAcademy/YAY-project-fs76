@@ -18,46 +18,28 @@ const Profile = () => {
     };
 
     useEffect(() => {
-
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
-
-
         if (idToUse) {
-
             actions.getProfile(idToUse)
-
                 .then((data) => {
-
                     if (data) {
-
                         setProfile(data);
-
                         const storedInterests = localStorage.getItem('selectedInterests');
-
                         if (storedInterests) {
-
                             setProfile((prevProfile) => ({ ...prevProfile, selectedInterests: JSON.parse(storedInterests) }));
-
                         }
 
                     } else {
-
                         console.error("No se pudo obtener el perfil");
-
                     }
-
                 })
-
                 .catch((error) => {
-
                     console.error("Error al obtener el perfil:", error);
 
                 });
             
         } else {
-
             console.error("No se proporcionó userId");
-
         }
     
     }, [userId, store.user_id]);
@@ -92,7 +74,7 @@ const Profile = () => {
                             <GetUserImages userId={userId || localStorage.getItem("userId") || store.user_id} />
                         </div>
                     </div>
-                    <UserInterest />
+                    <UserInterest selectedInterests={profile.selectedInterests} />
                 </>
             ) : (
                 <p>Cargando perfil...</p>
