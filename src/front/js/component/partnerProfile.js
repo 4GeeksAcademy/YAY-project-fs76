@@ -48,9 +48,9 @@ const PartnerProfile = () => {
                         <li className="list-group-item" onClick={() => navigate(`/editPartnerProfile/${partnerId}`)}>Editar Perfil</li>
                         <li className="list-group-item" onClick={() => navigate(`/formulario-evento`)}>Crear Evento</li>
                         <li className="list-group-item" onClick={() => navigate(`/partner-mis-eventos/${partnerId}`)}>Mis Eventos</li>
-                        <li className="list-group-item" onClick={() => navigate(`/partners_home`)}>Home</li>
-                        <li className="list-group-item" onClick={() => navigate(`/contactar`)}>Contactar con Yay</li>
-                        <li className="list-group-item" onClick={() => navigate(`/pedir-ayuda`)}>Pedir Ayuda</li>
+                        <li className="list-group-item" onClick={() => navigate(`/partners-home`)}>Home</li>
+                        <li className="list-group-item">Contactar con Yay</li>
+                        <li className="list-group-item">Pedir Ayuda</li>
                         <li className="list-group-item" onClick={() => navigate(`/sobre-nosotros`)}>Sobre Nosotros</li>
                     </ul>
                 </div>

@@ -4,14 +4,14 @@ import { Context } from "../store/appContext";
 
 import "../../styles/landingPage.css";
 
-import { Landing_Header } from "../component/diseñoON/landing_header";
-import { Landing_Card } from "../component/diseñoON/landing_card";
-import { Landing_About } from "../component/diseñoON/landing_about";
-import { Landing_Cifras } from "../component/diseñoON/landing_cifras";
-import { Landing_Maps } from "../component/diseñoON/landing_maps";
-import { Landing_Form } from "../component/diseñoON/landing_form";
-import { Landing_Partner } from "../component/diseñoON/landing_partner";
-import { ScrollToTopButton } from "../component/diseñoON/scrollToTopButton";
+import { Landing_Header } from "../component/designON/landing_header";
+import { Landing_Card } from "../component/designON/landing_card";
+import { Landing_About } from "../component/designON/landing_about";
+import { Landing_Cifras } from "../component/designON/landing_cifras";
+import { Landing_Maps } from "../component/designON/landing_maps";
+import { Landing_Form } from "../component/designON/landing_form";
+import { Landing_Partner } from "../component/designON/landing_partner";
+import { ScrollToTopButton } from "../component/designON/scrollToTopButton";
 
 
 export const Landing_Page = () => {

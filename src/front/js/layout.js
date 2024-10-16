@@ -40,14 +40,20 @@ import { useAuth } from "./store/authContext";
 
 // ------ DISEÑO ON -------
 import { Landing_Page } from "./pages/landing_page";
-import { Navbar } from "./component/diseñoON/navbar";
-import { Footer } from "./component/diseñoON/footer";
-import { Login } from "./component/diseñoON/login";
-import { Signup } from "./component/diseñoON/signup";
-import { Partner_Signup } from "./component/diseñoON/partner_signup";
-import { Forgot_Password } from "./component/diseñoON/forgot_password";
-import { SobreNosotros } from "./component/diseñoON/sobreNosotros";
-import { Partner_Login } from "./component/diseñoON/partner_login";
+import { Navbar } from "./component/designON/navbar";
+import { Footer } from "./component/designON/footer";
+import { Login } from "./component/designON/login";
+import { Signup } from "./component/designON/signup";
+import { Partner_Signup } from "./component/designON/partner_signup";
+import { Forgot_Password } from "./component/designON/forgot_password";
+import { SobreNosotros } from "./component/designON/sobreNosotros";
+import { Partner_Login } from "./component/designON/partner_login";
+import { ScrollToTopButton } from "./component/designON/scrollToTopButton";
+import { Perfil_Usuario } from "./component/designON/perfil_usuario";
+import { Redirect_Login } from "./pages/redirect-login";
+import { Redirect_Partner } from "./pages/redirect-partner";
+import { Partner_Perfil } from "./component/designON/partner_perfil";
+
 
 
 function Layout() {
@@ -75,7 +81,7 @@ function Layout() {
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
-                        <Route element={<Partners_Home />} path="/partners_home" />
+                        <Route element={<Partners_Home />} path="/partners-home" />
                         <Route element={<Partner_Login />} path="/partners-login" />
                         <Route element={<Partner_Signup />} path="/partners-signup" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
@@ -89,25 +95,28 @@ function Layout() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
                         <Route path="/imageUpload" element={<ImageUpload />} />
-                        <Route path="/editProfile" element={<EditProfile />} />
                         <Route path="/profilePicture" element={<ProfilePicture />} />
-                        <Route path="/profile/:userId" element={<Profile />} />
-                        <Route path="/editProfile/:userId" element={<EditProfile />} />
+                        <Route element={<Perfil_Usuario />} path="/editProfile/:userId" />
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
-                        <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route path="/partner-profile2/:partnerId" element={<PartnerProfile />} />
                         <Route path="/check-login" element={<CheckLoginPartner />} />
                         <Route element={<SobreNosotros />} path="/sobre-nosotros" />
                         <Route element={<EventosPublicos />} path="/eventos-yay" />
                         <Route element={<NotFound />} path="*" />
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
-                        <Route path="/informacion-partner" element={<InformacionPartner />} />
-
                         <Route element={<Landing_Page />} path="/" />
+                        <Route element={<Redirect_Login />} path="/redirect-login" />
+                        <Route element={<Redirect_Partner />} path="/redirect-partner" />
+                        <Route element={<Partner_Perfil />} path="/partner-profile/:partnerId" />
 
                     </Routes>
+                    
+            <ScrollToTopButton />
+            <div style={{paddingBottom: '100px' }}></div>
                     <Footer token={token} />
+         
                 </ScrollToTop>
             </BrowserRouter>
         </div>

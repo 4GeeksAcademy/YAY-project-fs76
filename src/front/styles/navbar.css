@@ -63,14 +63,14 @@
 .dropdown-item {
   font-size: 1.2rem;
   font-weight: 300;
-  color: #666;
+  color: black;
   transition: color 0.2s ease;
   padding: 1rem 2rem;
 }
 
 .dropdown-item:hover {
   color: #333;
-  background-color: #A7D0CD ;
+  background-color: #7c488f30 ;
 }
 
 .dropdown:hover .dropdown-menu {

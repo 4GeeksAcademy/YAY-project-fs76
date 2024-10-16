@@ -124,10 +124,14 @@ figure {
 }
 
 .avatarSignin {
-    border-radius: 100%;
+    margin-top: 10px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    width: 3.300rem; /* Asegúrate de que la anchura sea igual a la altura */
+    height: 3.300rem; 
 }
 
-.avatarSignin, .signin4 {
+ .signin4 {
     position: relative;
     display: inline-block;
     width: auto;

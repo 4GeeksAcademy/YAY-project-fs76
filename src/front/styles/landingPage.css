@@ -100,7 +100,7 @@
 
 
 .gradient-y-three-sm-primary {
-    background-image: linear-gradient(transparent, rgba(255, 89, 0, 0.075) 50%, transparent);
+    background-image: linear-gradient(transparent, rgb(88 73 137 / 13%) 50%, transparent);
 }
 /* -----------------------------------------------------------LANDING PAGE 1: HEADER--------------------------------------------------------------- */
 
@@ -136,14 +136,22 @@
     font-weight: 600;
     line-height: 1.2;
 }
-
+.display-3 {
+    font-size: calc(1.200rem + 2.0vw);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 2px
+}
+.title-header {
+    color: #494949 !important;
+}
 .h1,
 h1 {
     font-size: calc(1.375rem + 1.5vw);
 }
 
 .text-highlight-warning {
-    background-image: linear-gradient(to bottom, rgba(245, 202, 153, .5), rgba(245, 202, 153, .5));
+    background-image: linear-gradient(to bottom, rgba(173, 153, 245, 0.5), rgba(167, 153, 245, 0.5));
 }
 
 [class*=text-highlight-] {
@@ -243,19 +251,6 @@ svg {
     width: 100%;
 }
 
-.card-land .margen-body,
-.card-land .card-footer,
-.card-land .card-header,
-.card-land .collapse .margen-body {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.margen-body {
-    flex: 1 1 auto;
-    padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-    color: var(--bs-card-color);
-}
 
 
 @media (min-width: 1200px) {
@@ -317,14 +312,14 @@ small {
 }
 
 .landing-card:hover {
-    border: 1.5px solid #de8f79;
+    border: 1.5px solid #7c488f;
 }
 
 .landing-card {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1.5s, transform 1.5s;
-    /* increased transition duration to 1.5 seconds */
+    box-shadow: 0 .1875rem .375rem 0 rgba(140, 152, 164, .25);
 }
 
 .landing-card.animate {
@@ -332,23 +327,9 @@ small {
     transform: translateY(0);
 }
 
+
 .margen-body {
-    padding-inline: 0;
-    transition: padding-inline 0.3s ease-in-out;
-}
-
-.margen-body:hover {
-    padding-inline: 8px;
-}
-
-.descripcion-card {
-    padding-inline: 8px;
-    transition: padding-inline 0.3s ease-in-out;
-}
-
-.descripcion-card:hover {
-    padding-inline: 0px;
-
+    padding-inline: 16px;
 }
 
 .mb-5 {
@@ -387,6 +368,7 @@ small {
 .svg-icon>svg {
     width: 3.125rem;
     height: 3.125rem;
+    color: #7c488f
 
 }
 
@@ -410,7 +392,7 @@ small {
     right: 100%;
     width: 80%;
     height: 80%;
-    background-image: linear-gradient(transparent, rgba(252, 106, 15, 0.075) 50%, transparent);
+    background-image: linear-gradient(transparent, rgba(109, 105, 123, 0.118) 50%, transparent);
     content: "";
     transform: translateY(-50%);
 }
@@ -420,9 +402,9 @@ small {
     box-shadow: 0 .375rem 1.5rem 0 rgba(140, 152, 164, .125);
 }
 
-.gradiente-cifras{
-    background-image: linear-gradient( rgb(167, 208, 205, 0.1) 50%, transparent, transparent);
-}
+/* .gradiente-cifras{
+    background-image: linear-gradient( rgba(203, 194, 236, 0.044) 50%, transparent, transparent);
+} */
 
 
 /* --------------------------------------------------LANDING PAGE 4: MAPS---------------------------------------------------------------------- */
@@ -452,18 +434,18 @@ small {
 
 
 .nav-segment .nav-link.active {
-    color: #1e2022;
+    color: #302535;
     background-color: #fff;
     box-shadow: 0 .1875rem .375rem 0 rgba(140, 152, 164, .25);
 }
 .nav-segment .nav-link {
-    color: #677788;
+    color: #7c488f;
     font-size: .875rem;
     padding: .5rem 1rem;
     border-radius: .5rem;
 }
 .nav-link.active {
-    color: #21325b;
+    color: #4b2b57;
 }
 
 
@@ -491,6 +473,9 @@ small {
     box-shadow: 0 .375rem 1.5rem 0 rgba(140, 152, 164, .125);
 }
 
+input {
+    border-color: #7c488f
+}
 
 input:hover {
     box-shadow: none !important; /* Quita la sombra por defecto */
@@ -498,7 +483,7 @@ input:hover {
 
 input:focus, textarea:focus {
     box-shadow: none !important; /* Quita la sombra en el estado de focus */
-    border-color: #de8f79 !important;
+    border-color: #7c488f !important;
 }
 
 
@@ -513,8 +498,8 @@ input:focus, textarea:focus {
     z-index: 9999;
     width: 3.125rem;
     height: 3.125rem;
-    background-color: rgba(113, 134, 157, .1);
-    color: #677788;
+    background-color: #7c488f17;
+    color: #7c488f;
     font-size: 1rem;
     opacity: .5;
     border-radius: 50%;
@@ -548,7 +533,7 @@ a {
 }
 
 .flecha-top:hover, .flecha-top:focu {
-    color: #de8f79
+    color: #7c488f
 }
 
 
@@ -608,4 +593,3 @@ a {
 h5, h4 {
     font-weight: 350;
 }
-

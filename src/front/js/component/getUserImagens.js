@@ -32,6 +32,7 @@ const GetUserImages = () => {
     };
 
     const handleImageClick = (url) => {
+        console.log("Imagen seleccionada: ", url); // Verificar si se captura la imagen
         setSelectedImage(url); // Establece la imagen seleccionada
         setIsModalOpen(true); // Abre el modal
     };
@@ -49,9 +50,6 @@ const GetUserImages = () => {
         <div className="user-gallery-container">
             <h3 className="user-gallery-title">Tu galería de imágenes</h3>
             {error && <p className="user-gallery-error-message">{error}</p>}
-            {images.length >= 5 && (
-                <p className="user-gallery-good-captures-message">Muy buenas tomas</p>
-            )}
             <div className="user-gallery-wrapper">
                 {images.map((url, index) => (
                     <div key={index} className="user-gallery-image-card">
@@ -59,7 +57,7 @@ const GetUserImages = () => {
                             src={url}
                             alt={`Imagen ${index + 1}`}
                             className="user-gallery-image"
-                            onClick={() => handleImageClick(url)} // Muestra la imagen en el modal al hacer clic
+                            onClick={() => handleImageClick(url)} // Agregar onClick para abrir el modal
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 

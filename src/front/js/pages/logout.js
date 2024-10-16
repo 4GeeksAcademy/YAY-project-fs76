@@ -14,6 +14,7 @@ export const Logout = () => {
     if (location.state && location.state.from) {
       const redirectTimeout = setTimeout(() => {
         window.location.reload();
+        actions.logout()
         setRedirect(true);
       }, 3000);
 
@@ -21,23 +22,26 @@ export const Logout = () => {
     } else {
       navigate("/", { replace: true });
     }
-    
+
   }, [location]);
 
   return (
     <>
       {redirect ? <Navigate to="/" /> : null}
-      <div className="container text-center mx-auto" style={{	backgroundColor: '#de8f79',
-      padding: '20px',
-      margin: '20px',
-      borderRadius: '15px'}}>
+      <div className="container text-center mx-auto shadow" style={{
+        backgroundColor: "#f3f3f3",
+        padding: '20px',
+        margin: '20px',
+        padding: '100px',
+        borderRadius: '15px',
+      }}>
         <div className="row align-items-start mt-5">
           <div className="col">
 
           </div>
           <div className="col-10">
-            <h2 className="display-6" style={{ fontWeight: '500' }}>¡Nos vemos pronto!</h2>
-            <h4>Cerrando sesión...</h4>
+            <h1 className="display-4">¡Nos vemos pronto!</h1>
+            <h2 className="text-black">Cerrando sesión...</h2>
             <br></br>
             <div className="loader mx-auto "></div>
           </div>

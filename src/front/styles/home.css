@@ -6,6 +6,10 @@
     on that page only (the ones not reused in other pages).
 */
 
+body {
+    font-family: Arial, sans-serif;
+}
+
 .btn {
     transition: transform 0.5s; 
 }
@@ -23,13 +27,19 @@ h1, h2 {
     color:  #7c488f !important;
 }
 
+.custom-button {
+    border: 1.5px solid #7c488f;
+    color: '#494949';
+    font-weight: '500'
+}
+
 .custom-button:hover {
-    background-color: #A7D0CD !important;
-    color: #494949 !important;
+    border:  1.5px solid #7c488f !important;
+    color: black !important;
   }
   
   .custom-button:focus {
-    background-color: #A7D0CD !important;
-    color: #494949 !important;
-    box-shadow: 0 0 0 0.2rem rgba(255, 208, 0, 0.5);
+    border:  1.5px solid #7c488f !important;
+    color: black !important;
+    box-shadow: 0 0 0 0.2rem rgba(70, 69, 65, 0.5);
   }

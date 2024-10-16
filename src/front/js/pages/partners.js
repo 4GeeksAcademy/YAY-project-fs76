@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
-import { Partner_Signup } from "../component/diseñoON/partner_signup";
-import { Partner_Login } from "../component/diseñoON/partner_login";
+import { Partner_Signup } from "../component/designON/partner_signup";
+import { Partner_Login } from "../component/designON/partner_login";
 
 import "../../styles/home.css";
 

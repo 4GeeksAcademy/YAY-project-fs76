@@ -64,7 +64,7 @@ export const Partner_Evento_Card = () => {
         <>
             {evento ? (
                 <div className="container w-100 d-flex justify-content-center">
-                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ borderColor: '#ffc107' }}>
+                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                         <div className="profile me-3 col-6">
                             <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75 m-4" />
                         </div>
@@ -104,62 +104,62 @@ export const Partner_Evento_Card = () => {
                                 <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
                             </span>
                             {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
-                            <div className="usuarios-inscritos my-3 me-5">
-                                <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
-                                <div style={{ display: 'flex', gap: '10px' }}>
-                                {evento.usuarios && evento.usuarios.length > 0 ? (
-                                    <>
-                                    {evento.usuarios.slice(0, 7).map((usuario, index) => (
-                                        <div key={index} style={{ textAlign: 'center' }}>
-                                        <img
-                                            src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
-                                            alt={usuario.nombre}
-                                            className="rounded-circle mb-1"
-                                            style={{ width: '50px', height: '50px' }}
-                                        />
-                                        <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                        </div>
-                                    ))}
-                                    {evento.usuarios.length > 7 && (
-                                        <button
-                                        className="btn mb-1"
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            width: '50px',
-                                            height: '50px',
-                                            borderRadius: '50%',
-                                            backgroundColor: '#7c488f',
-                                            color: 'white',
-                                            cursor: 'pointer',
-                                        }}
-                                        onClick={() => handleShowModal(evento.usuarios)}
-                                        >
-                                        +{evento.usuarios.length - 7}
-                                        </button>
-                                    )}
-                                    </>
-                                ) : (
-                                    <p className="text-danger">No hay usuarios inscritos.</p>
-                                )}
+                                <div className="usuarios-inscritos my-3 me-5">
+                                    <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        {evento.usuarios && evento.usuarios.length > 0 ? (
+                                            <>
+                                                {evento.usuarios.slice(0, 7).map((usuario, index) => (
+                                                    <div key={index} style={{ textAlign: 'center' }}>
+                                                        <img
+                                                            src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                                            alt={usuario.nombre}
+                                                            className="rounded-circle mb-1"
+                                                            style={{ width: '50px', height: '50px' }}
+                                                        />
+                                                        <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
+                                                    </div>
+                                                ))}
+                                                {evento.usuarios.length > 7 && (
+                                                    <button
+                                                        className="btn mb-1"
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            width: '50px',
+                                                            height: '50px',
+                                                            borderRadius: '50%',
+                                                            backgroundColor: '#7c488f',
+                                                            color: 'white',
+                                                            cursor: 'pointer',
+                                                        }}
+                                                        onClick={() => handleShowModal(evento.usuarios)}
+                                                    >
+                                                        +{evento.usuarios.length - 7}
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <p className="text-danger">No hay usuarios inscritos.</p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
                             )}
 
                             <div className="d-flex justify-content-between align-items-end">
-                              {/* Botones de editar y eliminar */}
+                                {/* Botones de editar y eliminar */}
                                 {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
-                                <div className="d-flex justify-content-end align-items-start">
-                                    <button className="btn btn-icon"
-                                    onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
-                                    <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                    </button>
+                                    <div className="d-flex justify-content-end align-items-start">
+                                        <button className="btn btn-icon"
+                                            onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+                                            <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                        </button>
 
-                                    <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-                                    <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                    </button>
-                                </div>
+                                        <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
+                                            <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
+                                        </button>
+                                    </div>
                                 )}
                                 <Link to="/partners-eventos">
                                     <button className="btn btn btn-secondary me-5">Volver atrás</button>
@@ -274,7 +274,7 @@ export const Partner_Evento_Card = () => {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowModalDelete(false)}>Cancelar</button>
-                                <button type="button" className="btn text-white" style={{ backgroundColor: "#de8f79" }} onClick={handleConfirmDelete}>Eliminar evento</button>
+                                <button type="button" className="btn text-white" style={{ backgroundColor: "#7c488f" }} onClick={handleConfirmDelete}>Eliminar evento</button>
                             </div>
                         </div>
                     </div>

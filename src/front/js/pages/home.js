@@ -21,23 +21,23 @@ const CambiarLetra = () => {
 
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
 
-	return (
-		<><div style={{
-			position: 'fixed',
-			top: 0,
-			left: 0,
-			width: '100%',
-			height: '100%',
-			backgroundColor: '#de8f79',
-			zIndex: -1
-		}}></div>
-<div className="text-center" style={{ height: '75vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-<CambiarLetra /> 
-    <h3 style={{ backgroundColor: '#A7D0CD', color: '#494949', letterSpacing: '5px', padding: '5px' }}>HAZ DE TU BARRIO UN HOGAR</h3>
-    <img src="https://i.ibb.co/tbbV6G0/yay-fondo.png" alt="yay-fondo" border="0" className="h-25 mt-2"/>
-</div>
-		</>
-	);
+    return (
+        <><div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#7c488f',
+            zIndex: -1
+        }}></div>
+            <div className="text-center" style={{ height: '75vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <CambiarLetra />
+                <h3 style={{ backgroundColor: '#7c488f', color: 'white', letterSpacing: '5px', padding: '5px' }}>HAZ DE TU BARRIO UN HOGAR</h3>
+                <img src="https://i.ibb.co/tbbV6G0/yay-fondo.png" alt="yay-fondo" border="0" className="h-25 mt-2" />
+            </div>
+        </>
+    );
 };

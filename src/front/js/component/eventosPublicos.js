@@ -41,7 +41,7 @@ export const EventosPublicos = () => {
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
                 <Link to="/signup">
-                    <button className="btn" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Regístrate y YAY</button>
+                    <button className="btn" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>Regístrate y YAY</button>
                 </Link>
             </div>
             {loading ? (
@@ -49,7 +49,7 @@ export const EventosPublicos = () => {
             ) : (
                 <ul className="list-group ">
                     {Array.isArray(store.eventos) && store.eventos.map((evento) => (
-                        <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ borderColor: '#ffc107' }}>
+                        <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                             <div className="d-flex justify-content-between flex-grow-1">
                                 <img
                                     src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
@@ -69,7 +69,7 @@ export const EventosPublicos = () => {
                                         <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i>  {evento.direccion}
                                     </li>
                                     <li>
-                                        <button className="btn my-2" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onClick={handleShowInfoModal}>Ver detalles</button>
+                                        <button className="btn my-2" style={{ backgroundColor: '#7c488f', color: 'white' }} onClick={handleShowInfoModal}>Ver detalles</button>
                                     </li>
                                 </ul>
                             </div>
@@ -160,7 +160,7 @@ export const EventosPublicos = () => {
                             <div className="modal-body text-center mt-3">
                                 <h5>¿Quieres saber más de este evento?</h5>
                                 <Link to="/usuarios">
-                                    <button className="btn btn-lg mb-3" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Regístrate y YAY</button>
+                                    <button className="btn btn-lg mb-3" style={{ backgroundColor: '#7c488f', color: 'white' }}>Regístrate y YAY</button>
                                 </Link>
                             </div>
                             <div className="modal-footer">

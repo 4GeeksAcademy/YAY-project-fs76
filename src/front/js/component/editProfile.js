@@ -77,27 +77,27 @@ const EditProfile = () => {
             profileConIntereses.genero,
             profileConIntereses.intereses
         )
-        .then(() => {
-            localStorage.setItem('selectedInterests', JSON.stringify(profileConIntereses.intereses));
-            alert("Perfil actualizado exitosamente");
-            navigate(`/profile/${userId}`);
-        })
-        .catch((error) => {
-            console.error("Error al actualizar el perfil:", error);
-            alert("Error al actualizar el perfil");
-        });
+            .then(() => {
+                localStorage.setItem('selectedInterests', JSON.stringify(profileConIntereses.intereses));
+                // alert("Perfil actualizado exitosamente");
+                navigate(`/profile/${userId}`);
+            })
+            .catch((error) => {
+                console.error("Error al actualizar el perfil:", error);
+                // alert("Error al actualizar el perfil");
+            });
     };
 
     const handleDeleteAccount = () => {
         // Aquí va la lógica para eliminar la cuenta
         actions.deleteAccount(userId)
             .then(() => {
-                alert("Cuenta eliminada exitosamente");
+                // alert("Cuenta eliminada exitosamente");
                 navigate('/'); // Redirigir al inicio
             })
             .catch((error) => {
                 console.error("Error al eliminar la cuenta:", error);
-                alert("Error al eliminar la cuenta");
+                // alert("Error al eliminar la cuenta");
             });
     };
 
@@ -175,8 +175,8 @@ const EditProfile = () => {
                         setDireccion={(direccion, latitud, longitud) => setProfile({
                             ...profile,
                             direccion,
-                            latitud, 
-                            longitud 
+                            latitud,
+                            longitud
                         })}
                         initialDireccion={profile.direccion}
                     />
@@ -201,20 +201,20 @@ const EditProfile = () => {
                                 key={interes}
                                 className={`btn ${intereses.includes(interes) ? "text-white" : "btn-outline-dark"} me-2 mb-2`}
                                 style={{
-                                    backgroundColor: intereses.includes(interes) ? "#A7D0CD" : "transparent",
+                                    backgroundColor: intereses.includes(interes) ? "#7c488f" : "transparent",
                                     borderColor: "#7c488f",
                                     color: intereses.includes(interes) ? "#fff" : "#000",
                                 }}
                                 onClick={() => handleInteresChange(interes)}
                             >
-                                        {interes}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#de8f79", borderColor: "#de8f79", fontSize: "1.2rem" }}>Guardar Cambios</button>
-                        
-                    <div className="mt-4">
+                                {interes}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <button type="submit" className="btn btn-primary" style={{ backgroundColor: "#7c488f", borderColor: "#7c488f", fontSize: "1.2rem" }}>Guardar Cambios</button>
+
+                <div className="mt-4">
                     <h4 className="text-danger">Eliminar Cuenta</h4>
                     <p style={{ fontSize: "1rem", color: "#000" }}>
                         ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.

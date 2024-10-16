@@ -204,13 +204,25 @@ class Inscripciones(db.Model):
             "fecha_registro": self.fecha_registro
         }
 
+
 class UsuariosIntereses(db.Model):
-    
     __tablename__ = 'usuarios_intereses'
+    
+    # Si decides conservar el id, puedes dejarlo aquí
     id = db.Column(db.Integer, primary_key=True)
 
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
-    intereses_id = db.Column(db.Integer, db.ForeignKey('intereses.id'))
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    interes_id = db.Column(db.Integer, db.ForeignKey('intereses.id'), nullable=False)
 
     # Define las relaciones con las tablas Usuarios e Intereses
-    tipo_usuario = db.relationship('Usuarios')
+    usuario = db.relationship('Usuarios', backref=db.backref('usuarios_intereses', lazy=True))
+    interes = db.relationship('Intereses', backref=db.backref('usuarios_intereses', lazy=True))
+
+    def __repr__(self):
+        return f'<UsuariosIntereses usuario_id={self.usuario_id}, interes_id={self.interes_id}>'
+
+    def serialize(self):
+        return {
+            "usuario_id": self.usuario_id,
+            "interes_id": self.interes_id
+        }

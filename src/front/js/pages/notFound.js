@@ -14,6 +14,7 @@ export const NotFound = () => {
     useEffect(() => {
         const redirectTimeout = setTimeout(() => {
             setRedirect(true);
+            actions.logout()
         }, 3000);
 
         return () => clearTimeout(redirectTimeout);

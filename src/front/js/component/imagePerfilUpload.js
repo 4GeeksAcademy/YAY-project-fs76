@@ -37,7 +37,7 @@ const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilIm
     };
 
     return (
-        <div className="card shadow p-4">
+        <div className="card p-4">
             <div className="card-body">
                 <h5 className="card-title text-center mb-4">Subir Imagen de Perfil</h5>
                 
@@ -51,7 +51,8 @@ const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilIm
                 
                 <div className="mb-3 text-center">
                     <button 
-                        className={`btn btn-primary btn-sm ${loading ? "disabled" : ""}`}
+                        className={`btn text-white btn-sm ${loading ? "disabled" : ""}`}
+                        style={{ backgroundColor: '#7c488f'}}
                         onClick={handleUpload} 
                         disabled={loading}
                     >

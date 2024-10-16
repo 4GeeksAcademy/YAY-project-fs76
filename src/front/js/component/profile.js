@@ -53,7 +53,7 @@ const Profile = () => {
                 <div className="profile-card-body">
                     {/* Datos del perfil a la izquierda */}
                     <div className="profile-details">
-                        <h3>Perfil del Usuario</h3>
+                        <h1>Perfil del Usuario</h1>
                         {profile.nombre ? (
                             <>
                                 <p><strong>Nombre:</strong> {profile.nombre}</p>

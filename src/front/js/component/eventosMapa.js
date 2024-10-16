@@ -179,7 +179,7 @@ export const EventosMapa = () => {
             <div className="event-info d-flex justify-content-center align-items-center">
                 {selectedEvent ? (
                     <div className="container w-100 d-flex justify-content-center">
-                        <div className="card ms-5 mt-2" key={selectedEvent.id} style={{ borderColor: '#ffc107' }}>
+                        <div className="card ms-5 mt-2" key={selectedEvent.id} style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                             <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="card-img-top rounded-circle mx-auto mt-3" style={{ width: 'auto', height: '200px' }} />
                             <div className="card-body text-center">
                                 <h2 className="card-title">{selectedEvent.nombre}</h2>

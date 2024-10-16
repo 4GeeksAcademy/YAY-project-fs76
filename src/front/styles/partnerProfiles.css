@@ -1,25 +1,26 @@
-
+.perfil-container {
+    background-color: #f8f9fa; /* Fondo claro para mejorar la legibilidad */
+    padding: 20px;
+    max-width: 1000px;
+}
 
 .sidebar {
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar .list-group-item {
-    cursor: pointer;
-    color: #494949;
-    transition: background-color 0.3s;
-}
-
-.sidebar .list-group-item:hover {
-    background-color: #A7D0CD; /* Color de fondo al pasar el mouse */
-    color: #494949;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-card {
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para la lista de menú */
+.list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #e9ecef;
 }

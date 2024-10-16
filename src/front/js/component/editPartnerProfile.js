@@ -81,12 +81,12 @@ const EditPartnerProfile = () => {
                     <input type="text" name="nif" value={profile.nif} onChange={handleChange} className="form-control" id="nifInput" />
                 </div>
                 <div className="mb-3">
-                <Mapa
+                    <Mapa
                         setDireccion={(direccion, latitud, longitud) => setProfile({
                             ...profile,
                             direccion,
-                            latitud, 
-                            longitud 
+                            latitud,
+                            longitud
                         })}
                         initialDireccion={direccion}
                     />
@@ -104,20 +104,20 @@ const EditPartnerProfile = () => {
                         className="form-control"
                         id="entidad_idInput"
                     >
-                       <option value="">Seleccione una entidad</option>
-        {store.entidades.map((entidad) => (
-            <option key={entidad.id} value={entidad.id}>
-                {entidad.tipo}
-            </option>
-        ))}
-    </select>
-</div>
-<div className="d-grid gap-2">
-    <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar Cambios</button>
-</div>
-</form>
-</div>
-);
+                        <option value="">Seleccione una entidad</option>
+                        {store.entidades.map((entidad) => (
+                            <option key={entidad.id} value={entidad.id}>
+                                {entidad.tipo}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="d-grid gap-2">
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    );
 };
 
 export default EditPartnerProfile;
