@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             entidades: [],
             partners: [],
             inscripciones: [],
+            selectedInterests: [],
             demo: [
                 {
                     title: "FIRST",
@@ -1169,7 +1170,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
-                return fetch(`${process.env.BACKEND_URL}/inscripciones?usuario_id=${usuarioId}`, {                       
+                return fetch(`${process.env.BACKEND_URL}/api/inscripciones?usuario_id=${usuarioId}`, {                       
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -1252,21 +1253,20 @@ const getState = ({ getStore, getActions, setStore }) => {
             },            
 
             agregarInteres: async (interesesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            'Authorization': `Bearer ${localStorage.getItem('token')}` // Asegúrate de que el token es correcto
                         },
-                        body: JSON.stringify({ intereses_id: interesesId }) // comprobando que 'intereses_id' sea el nombre correcto
+                        body: JSON.stringify({ intereses_id: interesesId }) // Esto debe ser un objeto con un array
                     });
             
                     if (resp.ok) {
                         const data = await resp.json();
-                        console.log("Intereses añadidos:", data);
-                        return await getActions().obtenerIntereses(); // No se pasa usuarioId aquí
+                        console.log("Intereses añadidos:", data); // Información de respuesta
+                        return data;
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al agregar intereses:", errorData.message);
@@ -1275,39 +1275,35 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al agregar intereses:", error);
                 }
             },
-
-            // Obtener intereses de un usuario
+        
             obtenerIntereses: async () => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-            
+        
                     if (resp.ok) {
                         const data = await resp.json();
                         console.log("Intereses obtenidos:", data);
-                        setStore({ intereses: Array.isArray(data) ? data : [] }); // Asegúrate de que sea un array
+                        setStore({ intereses: Array.isArray(data) ? data : [] });
                         return Array.isArray(data) ? data : [];
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al obtener intereses:", errorData.message);
-                        return []; // Retorna un array vacío si hay un error
+                        return [];
                     }
                 } catch (error) {
                     console.error("Error al obtener intereses:", error);
-                    return []; // También retorna un array vacío en caso de error
+                    return [];
                 }
             },
-
-            // Editar intereses de un usuario
+        
             editarInteres: async (nuevosInteresesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1315,11 +1311,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify({ intereses_id: nuevosInteresesId })
                     });
-
+        
                     if (resp.ok) {
                         const data = await resp.json();
                         console.log("Intereses editados:", data);
-                        return await getActions().obtenerIntereses(); // Vuelve a obtener los intereses actualizados
+                        return await actions.obtenerIntereses(); 
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al editar intereses:", errorData.message);
@@ -1328,21 +1324,19 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al editar intereses:", error);
                 }
             },
-
-            // Eliminar un interés de un usuario
+        
             eliminarInteres: async (interesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses/${interesId}`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses/${interesId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-
+        
                     if (resp.ok) {
                         console.log("Interés eliminado correctamente.");
-                        return await getActions().obtenerIntereses(); // Vuelve a obtener los intereses actualizados
+                        return await actions.obtenerIntereses(); 
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al eliminar interés:", errorData.message);
@@ -1351,6 +1345,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al eliminar interés:", error);
                 }
             },
+        
 
 
         }

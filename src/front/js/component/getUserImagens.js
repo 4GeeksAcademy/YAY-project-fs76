@@ -56,6 +56,7 @@ const GetUserImages = () => {
                             src={url}
                             alt={`Imagen ${index + 1}`}
                             className="user-gallery-image"
+                            onClick={() => handleImageClick(url)} 
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 

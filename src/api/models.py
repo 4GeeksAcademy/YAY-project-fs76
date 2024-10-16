@@ -204,7 +204,6 @@ class Inscripciones(db.Model):
             "fecha_registro": self.fecha_registro
         }
 
-
 class UsuariosIntereses(db.Model):
     __tablename__ = 'usuarios_intereses'
     

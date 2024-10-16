@@ -1101,83 +1101,72 @@ def get_interes_por_evento(evento_id):
         "interes_id": interes.id,
         "nombre": interes.nombre
     }), 200
-
+    
 @api.route('/usuarios/intereses', methods=['POST'])
 @jwt_required()
 def agregar_interes():
-    current_user_id = get_jwt_identity()
-
-    # Obtener la lista de intereses del cuerpo de la solicitud
+    usuarioId = get_jwt_identity()
     data = request.get_json()
     if not data or 'intereses_id' not in data:
         return jsonify({"ERROR": "Se requiere la lista de intereses."}), 400
 
-    # Esperando 'intereses_id' como una lista
     intereses_id = data['intereses_id']
-
-    # Asegurar que todos los intereses existen y se almacenan
     for interes_id in intereses_id:
         interes = Intereses.query.get(interes_id)
         if not interes:
             return jsonify({"ERROR": f"Interés con ID {interes_id} no encontrado."}), 404
 
-        # Comprobar si ya existe la relación
-        existe_relacion = UsuariosIntereses.query.filter_by(usuario_id=current_user_id, interes_id=interes_id).first()
+        existe_relacion = UsuariosIntereses.query.filter_by(usuario_id=usuarioId, interes_id=interes_id).first()
         if existe_relacion is None:
-            nueva_relacion = UsuariosIntereses(usuario_id=current_user_id, interes_id=interes_id)
+            nueva_relacion = UsuariosIntereses(usuario_id=usuarioId, interes_id=interes_id)
             db.session.add(nueva_relacion)
 
-    # Commit a la base de datos
     db.session.commit()
     return jsonify({"message": "Intereses añadidos correctamente."}), 201
+
 
 @api.route('/usuarios/intereses', methods=['GET'])
 @jwt_required()
 def obtener_intereses():
-    current_user_id = get_jwt_identity()
-
-    # Obtener todos los intereses para el usuario autenticado
-    intereses = UsuariosIntereses.query.filter_by(usuario_id=current_user_id).all()
+    usuarioId = get_jwt_identity()
+    intereses = UsuariosIntereses.query.filter_by(usuario_id=usuarioId).all()
     return jsonify([{'id': inter.interes.id, 'nombre': inter.interes.nombre} for inter in intereses]), 200
+
 
 @api.route('/usuarios/intereses', methods=['PUT'])
 @jwt_required()
 def editar_intereses():
-    current_user_id = get_jwt_identity()
-    
+    usuarioId = get_jwt_identity()
     data = request.get_json()
     if not data or 'intereses_id' not in data:
         return jsonify({"ERROR": "Se requiere la lista de intereses."}), 400
 
     nuevos_intereses_id = data['intereses_id']
-    
-    # Eliminar relaciones existentes
-    UsuariosIntereses.query.filter_by(usuario_id=current_user_id).delete()
+    UsuariosIntereses.query.filter_by(usuario_id=usuarioId).delete()
 
-    # Crear nuevas relaciones
     for interes_id in nuevos_intereses_id:
         interes = Intereses.query.get(interes_id)
         if not interes:
             return jsonify({"ERROR": f"Interés con ID {interes_id} no encontrado."}), 404
         
-        nueva_relacion = UsuariosIntereses(usuario_id=current_user_id, interes_id=interes_id)
+        nueva_relacion = UsuariosIntereses(usuario_id=usuarioId, interes_id=interes_id)
         db.session.add(nueva_relacion)
 
     db.session.commit()
     return jsonify({"message": "Intereses actualizados correctamente."}), 200
 
+
 @api.route('/usuarios/intereses/<int:interes_id>', methods=['DELETE'])
 @jwt_required()
 def eliminar_interes(interes_id):
-    current_user_id = get_jwt_identity()
-
-    relacion = UsuariosIntereses.query.filter_by(usuario_id=current_user_id, interes_id=interes_id).first()
+    usuarioId = get_jwt_identity()
+    relacion = UsuariosIntereses.query.filter_by(usuario_id=usuarioId, interes_id=interes_id).first()
     if relacion:
         db.session.delete(relacion)
         db.session.commit()
         return jsonify({"message": "Interés eliminado correctamente."}), 200
     else:
         return jsonify({"ERROR": "Relación no encontrada."}), 404
-
+    
 if __name__ == '__main__':
     api.run(debug=True)
