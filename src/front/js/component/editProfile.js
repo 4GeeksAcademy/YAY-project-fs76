@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Mapa } from "./mapa";
 import GetUserPerfilImage from "./getUserPerfilImage";
 
+
 const EditProfile = () => {
     const { store, actions } = useContext(Context);
     const { userId } = useParams();
