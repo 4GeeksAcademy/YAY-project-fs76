@@ -97,22 +97,26 @@ def delete_entidad(id):
 @api.route('/interes', methods=['GET', 'POST'])
 def handle_intereses():
     if request.method == 'GET':
-
-        intereses = Intereses.query.all()
-        all_intereses = [interes.serialize() for interes in intereses]
-        return jsonify(all_intereses), 200
+        try:
+            intereses = Intereses.query.all()
+            all_intereses = [interes.serialize() for interes in intereses]
+            return jsonify(all_intereses), 200
+        except Exception as e:
+            return jsonify({"message": "Error al recuperar intereses", "error": str(e)}), 500
 
     if request.method == 'POST':
         data = request.get_json()
         if not data or not data.get('nombre') or not data.get('descripcion'):
             return jsonify({"message": "Faltan datos"}), 400
 
-        nuevo_interes = Intereses(nombre=data['nombre'], descripcion=data['descripcion'])
-        db.session.add(nuevo_interes)
-        db.session.commit()
-        return jsonify(nuevo_interes.serialize()), 201
-
-
+        try:
+            nuevo_interes = Intereses(nombre=data['nombre'], descripcion=data['descripcion'])
+            db.session.add(nuevo_interes)
+            db.session.commit()
+            return jsonify(nuevo_interes.serialize()), 201
+        except Exception as e:
+            return jsonify({"message": "Error al crear interés", "error": str(e)}), 500
+        
 @api.route('/interes/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_interes(id):
     print(f"Recibiendo solicitud para el ID {id}")  # Imprime el ID recibido
@@ -1218,7 +1222,7 @@ def upload_evento_image(evento_id):
         return jsonify({"error": str(e)}), 500
     
 @api.route('/evento/<int:evento_id>/image', methods=['GET'])
-def get_evento_image(evento_id):
+def get_evento_image(evento_id): 
     # Buscar el evento por su ID
     evento = Eventos.query.get(evento_id)
 

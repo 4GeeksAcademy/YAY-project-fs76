@@ -43,7 +43,7 @@ const styles = {
         resize: 'none',
     },
     button: {
-        backgroundColor: '#7c488f#7',
+        backgroundColor: '#7c488f',
         color: 'white',
         padding: '5px 5px',
         border: 'none',
@@ -109,14 +109,14 @@ const CompletarDatosUsuario = () => {
     const [longitud, setLongitud] = useState(null);
     const [breve_descripcion, setDescripcion] = useState("");
     const [misIntereses, setMisIntereses] = useState([]);
-    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set()); 
+    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set());
     const [interesesDisponibles, setInteresesDisponibles] = useState([]);
     const navigate = useNavigate();
     const userId = sessionStorage.getItem('userId');
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        let isMounted = true; 
+        let isMounted = true;
 
         const fetchIntereses = async () => {
             try {
@@ -170,7 +170,7 @@ const CompletarDatosUsuario = () => {
         if (latitud === null || longitud === null) {
             return; // Manejo de errores
         }
-    
+
         const result = await actions.completarDatos(
             localStorage.getItem('user_id'),
             nombre,
@@ -191,7 +191,7 @@ const CompletarDatosUsuario = () => {
         }
     };
 
-   
+
     const handleInteresesChange = (interesId) => {
         setInteresesSeleccionados(prev => {
             const newSet = new Set(prev);
@@ -205,7 +205,7 @@ const CompletarDatosUsuario = () => {
             return newSet; // Devuelve el nuevo Set
         });
     };
-    
+
     return (
         <div style={styles.container}>
             <h2 className='display-3 mb-4' style={styles.heading}>Completa tu Perfil</h2>
@@ -235,7 +235,11 @@ const CompletarDatosUsuario = () => {
                         />
                         {errors.nombre && <span className='text-danger float-end mb-4'>{errors.nombre}</span>}
                         <div className="d-flex justify-content-end w-100 mt-3 px-5">
-                            <a className="card-link mb-5" style={{ color: '#7c488f' }} onClick={handleNextStep}><h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
+                            <button className="custom-button btn btn-lg pt-3"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handleNextStep}
+                            >
+                                <h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></button>
                         </div>
                     </div>
                 )}
@@ -243,7 +247,7 @@ const CompletarDatosUsuario = () => {
                 {step === 2 && (
                     <div>
                         {errors.ubicacion && <span className='text-danger float-end mb-1'>{errors.ubicacion}</span>}
-                        <label className='ms-1' style={{minWidth: '800px'}}> *Dirección</label>
+                        <label className='ms-1' style={{ minWidth: '800px' }}> *Dirección</label>
                         <Mapa
                             setDireccion={(direccion, latitud, longitud) => {
                                 setDireccion(direccion);
@@ -252,8 +256,16 @@ const CompletarDatosUsuario = () => {
                             }}
                         />
                         <div className="d-flex justify-content-between w-100 mt-3 px-5">
-                            <a className="card-link mb-5" style={{ color: '#7c488f' }} onClick={handlePreviousStep}><h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></a>
-                            <a className="card-link mb-5" style={{ color: '#7c488f' }} onClick={handleNextStep}><h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
+                            <button className="custom-button btn btn-lg pt-3"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handlePreviousStep}
+                            >
+                                <h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></button>
+                            <button className="custom-button btn btn-lg pt-3"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handleNextStep}
+                            >
+                                <h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></button>
                         </div>
                     </div>
                 )}
@@ -278,12 +290,19 @@ const CompletarDatosUsuario = () => {
 
                         />
                         <div className="d-flex justify-content-between mt-3 px-5 w-100 ">
-                            <a className="card-link mb-5" style={{ color: '#7c488f' }} onClick={handlePreviousStep}><h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></a>
-                            <a className="card-link mb-5" style={{ color: '#7c488f' }} onClick={handleNextStep}><h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></a>
+                            <button className="custom-button btn btn-lg pt-3"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handlePreviousStep}
+                            >
+                                <h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></button>
+                            <button className="custom-button btn btn-lg pt-3"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handleNextStep}
+                            ><h5>Siguiente <i className="fa-solid fa-chevron-right small ms-1"></i></h5></button>
                         </div>
                     </div>
                 )}
-            {step === 4 && (
+                {step === 4 && (
                     <div>
                         <label style={styles.label}>Selecciona algunos de tus intereses</label>
                         <div>
@@ -294,7 +313,7 @@ const CompletarDatosUsuario = () => {
                                     style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
                                     onClick={() => handleInteresesChange(interes.id)}
                                 >
-                                    {interes.nombre} 
+                                    {interes.nombre}
                                 </button>
                             ))}
                         </div>
@@ -321,11 +340,13 @@ const CompletarDatosUsuario = () => {
                             })}
                         </div>
                         {errors.fecha && <span className='text-danger float-end mb-0'>*Pulsa de nuevo para quitar interés</span>}
-                        <div className="d-flex justify-content-between w-100 mt-3 px-5">
-                            <a className="card-link my-5" style={{ color: '#7c488f' }} onClick={handlePreviousStep}>
-                                <h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5>
-                            </a>
-                            <button type="submit" className="btn btn-lg my-5" style={styles.button}>Completar Registro</button>
+                        <div className="d-flex justify-content-between mt-3 px-5 w-100 ">
+                            <button className="btn btn-lg custom-button  pt-3 my-5"
+                                style={{ borderColor: '#7c488f', backgroundColor: '#7c488f26', borderWidth: '2px', color: '#494949', fontWeight: '500' }}
+                                onClick={handlePreviousStep}
+                            >
+                                <h5><i className="fa-solid fa-chevron-left small ms-1"></i> Anterior</h5></button>
+                            <button type="submit" className="btn btn-lg my-5" style={{ backgroundColor: '#7c488f', color: 'white', fontWeight: '500' }}>Completar Registro</button>
                         </div>
                     </div>
                 )}

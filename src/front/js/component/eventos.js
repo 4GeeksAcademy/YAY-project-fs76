@@ -30,11 +30,12 @@ export const Eventos = () => {
     return (
         <div className="container m-5 mx-auto w-75">
             <div className="d-flex justify-content-center">
-                <button className="custom-button btn btn-lg mb-3"
+                <button className="custom-button btn btn-lg mb-3 fs-4"
                     onClick={() => navigate(`/eventos-mapa/${userId}`)}
                     style={{
                         borderColor: '#ffc107',
-                        color: '#494949'
+                        color: '#494949',
+                        backgroundColor: '#7c488f26'
                     }}
                 >
                     Ver en Mapa  <i className="fa-solid fa-map-location-dot" style={{ color: '#7c488f' }}></i>

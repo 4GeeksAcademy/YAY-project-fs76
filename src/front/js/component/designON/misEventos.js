@@ -38,9 +38,13 @@ export const MisEventos = () => {
                             {misEventos.map(evento => (
                                 <li key={evento.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                                     <div className="d-flex justify-content-between flex-grow-1 m-0 p-0">
-                                    <div style={{ maxWidth: '240px', height: '240px', margin: '0', padding: '0', objectFit:'cover' }}>
-                                <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
-                            </div>
+                                        <div className='d-flex justify-content-center flex-column' style={{ maxWidth: '240px', height: '240px', margin: '0', padding: '0', objectFit: 'cover' }}>
+                                            <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
+
+                                            <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f', color: 'white' }}>Saber más</Link>
+
+
+                                        </div>
                                         <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
                                             <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                             <li className="text-muted fs-5">
@@ -52,9 +56,7 @@ export const MisEventos = () => {
                                             <li className="text-muted fs-7">
                                                 <i className="fa-solid fa-location-dot" style={{ color: '#7c488f' }}></i> {evento.direccion}
                                             </li>
-                                            <li>
-                                                <Link to={`/evento/${evento.id}`} className="btn my-2" style={{ backgroundColor: '#7c488f',  color: 'white' }}>Saber más</Link>
-                                            </li>
+
                                         </ul>
                                     </div>
                                 </li>

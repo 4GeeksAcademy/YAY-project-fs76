@@ -63,6 +63,9 @@ const EditPartnerProfile = () => {
 
     return (
         <div>
+
+            
+            <form onSubmit={handleSubmit} className="container m-5 mx-auto w-50" style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
             <h1 className="text-center">Editar Perfil del Partner</h1>
             {alert && (
                 <div className={`alert fade show alert-${alert.type}`} role="alert">
@@ -71,7 +74,6 @@ const EditPartnerProfile = () => {
                     <i type="button" className="btn-close float-end" data-bs-dismiss="alert" aria-label="Close" onClick={() => setAlert(null)}></i>
                 </div>
             )}
-            <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
                 <div className="mb-3">
                     <label htmlFor="nombreInput" className="form-label">Nombre</label>
                     <input type="text" name="nombre" value={profile.nombre} onChange={handleChange} className="form-control" id="nombreInput" required />
