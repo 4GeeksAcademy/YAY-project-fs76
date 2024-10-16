@@ -32,6 +32,7 @@ const GetUserImages = () => {
     };
 
     const handleImageClick = (url) => {
+        console.log("Imagen seleccionada: ", url); // Verificar si se captura la imagen
         setSelectedImage(url); // Establece la imagen seleccionada
         setIsModalOpen(true); // Abre el modal
     };

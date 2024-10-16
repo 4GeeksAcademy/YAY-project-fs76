@@ -32,7 +32,7 @@ export const PartnerMisEventos = () => {
                     setError("Error al cargar eventos");
                 });
         }
-    }, [actions]);
+    }, []);
 
     const handleShowModal = (usuarios) => {
         setSelectedUsuarios(usuarios);

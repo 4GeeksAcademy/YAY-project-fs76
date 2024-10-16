@@ -15,9 +15,10 @@ import cloudinary.uploader
 from cloudinary.api import resources_by_tag
 from flask import Flask
 from flask_cors import CORS
-from flask_cors import CORS
+from datetime import timedelta 
 
-from flask_cors import CORS
+
+
 
 
 app = Flask(__name__)
@@ -283,11 +284,11 @@ def get_partners():
 @api.route('/partners/<int:partner_id>', methods=['GET'])
 @jwt_required()
 def get_partner(partner_id):
-    # Middleware que valida si el partner está activo
-    current_partner = get_jwt_identity()
+   
+ 
     partner = Partners.query.filter_by(id=partner_id).first()
     
-    if partner is None or partner.id != current_partner['partnerId']:
+    if not partner:
         return jsonify({"ERROR": "Partner no encontrado."}), 404
 
     return jsonify(partner.serialize()), 200
@@ -378,16 +379,25 @@ def login_partner():
     if partner is None or not check_password_hash(partner.password, password):
         return jsonify({"msg": "Email y/o contraseña incorrectos"}), 400
 
-    # Crear el token con la identidad del ID del partner
-    access_token = create_access_token(identity=partner.id)  # Cambiado a partner.id
+    # Crear el token con la identidad del partner y agregar el nombre como claim adicional
+    additional_claims = {
+        "partner_id": partner.id,
+        "nombre": partner.nombre  
+    }
+
+       # Establecer la duración del token a 1 día
+    expires = timedelta(days=1)
+
+    # Crear el access token con los claims adicionales y la duración de 1 día
+    access_token = create_access_token(identity=partner.id, additional_claims=additional_claims, expires_delta=expires)
     
-    # Log para ver el token generado
     print(f"Token JWT generado para el partner {partner.id}: {access_token}")
 
     return jsonify({
         "message": "Inicio de sesión de Partner correcto", 
-        "access_token": access_token, 
-        "partner_id": partner.id
+        "access_token": access_token,
+        "partner_id": partner.id,
+        "nombre": partner.nombre,
     }), 200
 
 @api.route('/completar-perfil-partner/<int:partner_id>', methods=['POST'])

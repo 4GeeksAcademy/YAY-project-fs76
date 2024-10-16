@@ -1,20 +1,38 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 import { Partner_Eventos } from "../component/partner_eventos";
 import { PartnerMisEventos } from "../component/partner_mis_eventos";
-import "../../styles/partnersHome.css"; // Archivo de CSS para estilos personalizados
+import "../../styles/partnersHome.css";
 
 export const Partners_Home = () => {
-    const { store } = useContext(Context);
-    const navigate = useNavigate(); // Usar navigate
+    const { store, actions } = useContext(Context); 
+    const navigate = useNavigate();
 
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
-        if (!store.auth && !localStorage.getItem("token")) {
-            navigate("/partner-login"); 
+        const token = localStorage.getItem("token");
+        const auth = localStorage.getItem("auth");
+        const partner_id = localStorage.getItem("partner_id");
+    
+        actions.setAuthStatePartner({
+            auth: auth,
+            token: token,
+            partner_id: partner_id,
+        });
+    
+        setLoading(false);
+    
+        if (!token) {
+            navigate("/partner-login");
         }
-    }, [store.auth, navigate]);
+    }, []); // Mantengo el array vacío para que solo se ejecute una vez
+    
+    
+    if (loading) {
+        return <div>Cargando...</div>; 
+    }
 
     return (
         <div className="partners-home-container container mt-5">
