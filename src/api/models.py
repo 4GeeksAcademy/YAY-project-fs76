@@ -65,6 +65,7 @@ class Eventos(db.Model):
     precio = db.Column(db.Integer, nullable=True)
     cupo = db.Column(db.Integer, nullable=True)
     observaciones = db.Column(db.String(120), nullable=True)
+    foto_evento = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     partner_id = db.Column(db.Integer, db.ForeignKey('partners.id'), nullable=True)
     partner = db.relationship('Partners', backref='eventos', lazy=True),
@@ -207,15 +208,23 @@ class Inscripciones(db.Model):
         }
 
 class UsuariosIntereses(db.Model):
-    
     __tablename__ = 'usuarios_intereses'
+    
+    # Si decides conservar el id, puedes dejarlo aquí
     id = db.Column(db.Integer, primary_key=True)
 
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
-    intereses_id = db.Column(db.Integer, db.ForeignKey('intereses.id'))
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    interes_id = db.Column(db.Integer, db.ForeignKey('intereses.id'), nullable=False)
 
     # Define las relaciones con las tablas Usuarios e Intereses
-    tipo_usuario = db.relationship('Usuarios')
+    usuario = db.relationship('Usuarios', backref=db.backref('usuarios_intereses', lazy=True))
+    interes = db.relationship('Intereses', backref=db.backref('usuarios_intereses', lazy=True))
 
+    def __repr__(self):
+        return f'<UsuariosIntereses usuario_id={self.usuario_id}, interes_id={self.interes_id}>'
 
-
+    def serialize(self):
+        return {
+            "usuario_id": self.usuario_id,
+            "interes_id": self.interes_id
+        }

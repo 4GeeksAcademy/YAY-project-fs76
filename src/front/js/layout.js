@@ -19,12 +19,8 @@ import { Partner_Completar } from "./component/partner_completar";
 import { Partners_Home } from "./pages/partners_home";
 import { Partner_Eventos } from "./component/partner_eventos";
 import { Partner_Evento_Card } from "./component/partner_evento_card";
-import { Partner_Login } from "./component/partner_login";
 import UserInterest from "./component/userInterest";
-import { Usuarios } from "./pages/usuarios";
 import { Logout } from "./pages/logout";
-import { Footer } from "./component/footer";
-import { Login } from "./component/login";
 import { Mapa } from "./component/mapa";
 import { NotFound } from "./pages/notFound";
 import Dashboard from "./component/dashboard";
@@ -37,19 +33,34 @@ import EditPartnerProfile from "./component/editPartnerProfile";
 import EditProfile from "./component/editProfile";
 import { UserInscripciones } from "./component/userInscripciones";
 import { EventosMapa } from "./component/eventosMapa";
-import { SobreNosotros } from "./component/sobreNosotros";
 import { EventosPublicos } from "./component/eventosPublicos";
 import { PartnerMisEventos } from "./component/partner_mis_eventos";
 import { CheckLoginPartner } from "./component/checkLoginPartner";
+import { useAuth } from "./store/authContext";
 
 // ------ DISEÑO ON -------
 import { Landing_Page } from "./pages/landing_page";
-import { Navbar } from "./component/diseñoON/navbar";
+import { Navbar } from "./component/designON/navbar";
+import { Footer } from "./component/designON/footer";
+import { Login } from "./component/designON/login";
+import { Signup } from "./component/designON/signup";
+import { Partner_Signup } from "./component/designON/partner_signup";
+import { Forgot_Password } from "./component/designON/forgot_password";
+import { SobreNosotros } from "./component/designON/sobreNosotros";
+import { Partner_Login } from "./component/designON/partner_login";
+import { ScrollToTopButton } from "./component/designON/scrollToTopButton";
+import { Perfil_Usuario } from "./component/designON/perfil_usuario";
+import { Redirect_Login } from "./pages/redirect-login";
+import { Redirect_Partner } from "./pages/redirect-partner";
+import { Partner_Perfil } from "./component/designON/partner_perfil";
+import { Evento_Form_Editar } from "./component/evento_form_editar";
+
 
 
 function Layout() {
 
     const basename = process.env.BASENAME || "";
+    const { token } = useAuth(); // Obtén el token del contexto
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
@@ -66,16 +77,17 @@ function Layout() {
                         <Route element={<UserInterest />} path="/userInterest" />
                         <Route element={<Evento_Card />} path="/evento/:theid" />
                         <Route element={<Evento_Form />} path="/formulario-evento" />
-                        <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
                         <Route element={<Partner_Completar />} path="/partner_completar_perfil/:theid" />
-                        <Route element={<Partners_Home />} path="/partners_home" />
+                        <Route element={<Partners_Home />} path="/partners-home" />
                         <Route element={<Partner_Login />} path="/partners-login" />
+                        <Route element={<Partner_Signup />} path="/partners-signup" />
                         <Route element={<Partner_Eventos />} path="/partners-eventos" />
                         <Route element={<Partner_Evento_Card />} path="/partner-evento/:theid" />
-                        <Route element={<Usuarios />} path="/usuarios" />
+                        <Route element={<Signup />} path="/signup" />
+                        <Route element={<Forgot_Password />} path="/forgot-password" />
                         <Route element={<Logout />} path="/logout" />
                         <Route element={<Mapa />} path="/mapa" />
                         <Route element={<EventosMapa />} path="/eventos-mapa/:theid" />
@@ -83,13 +95,11 @@ function Layout() {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/completardatos/:userId" element={<CompletarDatosUsuario />} />
                         <Route path="/imageUpload" element={<ImageUpload />} />
-                        <Route path="/editProfile" element={<EditProfile />} />
                         <Route path="/profilePicture" element={<ProfilePicture />} />
-                        <Route path="/profile/:userId" element={<Profile />} />
-                        <Route path="/editProfile/:userId" element={<EditProfile />} />
+                        <Route element={<Perfil_Usuario />} path="/editProfile/:userId" />
                         <Route path="/editPartnerProfile/:partnerId" element={<EditPartnerProfile />} />
                         <Route path="/inscripciones/:userId" element={<UserInscripciones />} />
-                        <Route path="/partner-profile/:partnerId" element={<PartnerProfile />} />
+                        <Route path="/partner-profile2/:partnerId" element={<PartnerProfile />} />
                         <Route path="/check-login" element={<CheckLoginPartner />} />
                         <Route element={<SobreNosotros />} path="/sobre-nosotros" />
                         <Route element={<EventosPublicos />} path="/eventos-yay" />
@@ -97,9 +107,18 @@ function Layout() {
                         <Route element={<NotFound />} path="/notFound" />
                         <Route path="/partner-mis-eventos/:partnerId" element={<PartnerMisEventos />} />
                         <Route element={<Landing_Page />} path="/" />
-                        
+                        <Route element={<Redirect_Login />} path="/redirect-login" />
+                        <Route element={<Redirect_Partner />} path="/redirect-partner" />
+                        <Route element={<Partner_Perfil />} path="/partner-profile/:partnerId" />
+                        <Route element={<Evento_Form_Editar />} path="/formulario-evento-editar/:theid" />
+
+
                     </Routes>
-                    <Footer />
+                    
+            <ScrollToTopButton />
+            <div style={{paddingBottom: '100px' }}></div>
+                    <Footer token={token} />
+         
                 </ScrollToTop>
             </BrowserRouter>
         </div>

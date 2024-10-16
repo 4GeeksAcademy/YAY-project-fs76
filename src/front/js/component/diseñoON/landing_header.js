@@ -90,8 +90,10 @@ export const Landing_Header = () => {
                                 {/* End Heading */}
 
                                 <div className="d-flex gap-3">
+                                    <Link to="/signup">
                                     <button className="btn btn-lg btn-transition registraYay" style={{ backgroundColor: '#A7D0CD', color: '#494949' }}>Regístrate en YAY</button>
-                                    <a className="btn btn-link saberMas" href="#" style={{ color: '#A7D0CD', fontSize: '25px' }}> Saber más<i className="fa-solid fa-chevron-right small ms-1"></i></a>
+                                    </Link>
+                                    <a className="btn btn-link saberMas" href="/sobre-nosotros" style={{ color: '#A7D0CD', fontSize: '25px' }}> Saber más<i className="fa-solid fa-chevron-right small ms-1"></i></a>
                                 </div>
 
                                 <p className="form-text small">

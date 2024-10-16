@@ -1,37 +1,52 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 import { Partner_Eventos } from "../component/partner_eventos";
-import { Navigate } from "react-router-dom";
-import "../../styles/home.css";
+import { PartnerMisEventos } from "../component/partner_mis_eventos";
+import "../../styles/partnersHome.css";
 
 export const Partners_Home = () => {
-	const { store } = useContext(Context);
-	const navigate = useNavigate(); // Usar navigate
-	// Verificar autenticación cuando se monta el componente
-	useEffect(() => {
-		// Si el usuario no está autenticado o no tiene un partner_id, redirigir a la página de login
-		if (!store.auth || !localStorage.getItem("token")) {
-			navigate("/partner-login"); // Redirigir a la página de login si no está autenticado
-		}
-	}, [store.auth, navigate]);
+    const { store, actions } = useContext(Context); 
+    const navigate = useNavigate();
 
-	return (
-		<>		
-			<div className="text-center my-5">
-				<h1>Estás en el área privada de esta cuenta de Partner</h1>
-			</div>
-			{/* Verificar si el usuario está autenticado y tiene un partner_id */}
-			{/* {store.auth && store.partner_id && (  // Cambiar partnerId por partner_id
-				<button
-					className="btn btn-info me-3"
-					onClick={() => navigate(`/partner-profile/${store.partner_id}`)} // Usar partner_id del store
-					style={{ backgroundColor: '#A7D0CD' }}
-				>
-					Mi Perfil de Partner
-				</button>
-			)} */}
-			<Partner_Eventos />
-		</>
-	);
+    const [loading, setLoading] = React.useState(true);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const auth = localStorage.getItem("auth");
+        const partner_id = localStorage.getItem("partner_id");
+    
+        actions.setAuthStatePartner({
+            auth: auth,
+            token: token,
+            partner_id: partner_id,
+        });
+    
+        setLoading(false);
+    
+        if (!token) {
+            navigate("/partner-login");
+        }
+    }, []); // Mantengo el array vacío para que solo se ejecute una vez
+    
+    
+    if (loading) {
+        return <div>Cargando...</div>; 
+    }
+
+    return (
+        <div className="partners-home-container container mt-5">
+            <div className="text-center mb-5">
+                <h1>Bienvenidos a Yay</h1>
+            </div>
+            <div className="eventos-container p-3">
+                <h2 className="text-center">Mis Eventos</h2>
+                <PartnerMisEventos />
+            </div>
+            <div className="eventos-container p-3">
+                <h2 className="text-center">Eventos</h2>
+                <Partner_Eventos />
+            </div>
+        </div>
+    );
 };

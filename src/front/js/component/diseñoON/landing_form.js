@@ -10,19 +10,45 @@ export const Landing_Form = () => {
             <div className="row justify-content-lg-between align-items-md-center">
                 <div className="col-md-5 mb-7 mb-md-0">
                     <div className="mb-5">
-                        <h1>Pasar el tiempo en tu barrio, con los tuyos</h1>
+                        <h1  style={{ letterSpacing: '3px' }}>Pasar el tiempo en tu barrio, con los tuyos</h1>
                         <h4 style={{fontWeight: '300'}}>Especializados en conectar personas de la misma generación para crear nuevos recuerdos y nuevas amistades.</h4>
                     </div>
 
                     <h3>¿Por qué YAY?</h3>
 
                     {/* List Checked */}
-                    <ul className="list-checked landing-check list-checked-primary">
+                    <ul className="list-checked landing-check list-checked-primary mb-5">
                         <li className="list-checked-item landing-check-item" style={{ fontSize: '20px' }}><i className="fa-solid fa-check" style={{ color: '#7c488f' }}></i> Plataforma de uso gratuito</li>
                         <li className="list-checked-item landing-check-item" style={{ fontSize: '20px' }}><i className="fa-solid fa-check" style={{ color: '#7c488f' }}></i> Fácil manejo y sin permanencia </li>
                         <li className="list-checked-item landing-check-item" style={{ fontSize: '20px' }}><i className="fa-solid fa-check" style={{ color: '#7c488f' }}></i> Chat en directo con IA <span className="badge text-dark rounded-pill ms-1" style={{ backgroundColor: '#A7D0CD'}}>Beta</span></li>
                     </ul>
                     {/* End List Checked */}
+
+                    <ul className="list-inline mb-0 text-center rounded mt-5" style={{ backgroundColor: '#7c488f' }}>
+								<li className="list-inline-item">
+									<a className="btn btn-soft-light btn-lg btn-icon" href="https://es.linkedin.com/school/4geeksacademyes/" target="_blank">
+										<i className="bi-linkedin text-white"></i>
+									</a>
+								</li>
+
+								<li className="list-inline-item">
+									<a className="btn btn-soft-light btn-lg btn-icon" href="https://4geeksacademy.com/es/premios?lang=es" target="_blank">
+										<i className="bi-google text-white"></i>
+									</a>
+								</li>
+
+								<li className="list-inline-item">
+									<a className="btn btn-soft-light btn-lg btn-icon" href="https://www.instagram.com/4geeksacademyes/?hl=es" target="_blank">
+										<i className="bi-instagram text-white"></i>
+									</a>
+								</li>
+
+								<li className="list-inline-item">
+									<a className="btn btn-soft-light btn-lg btn-icon" href="https://github.com/4geeksacademy" target="_blank">
+										<i className="bi-github text-white"></i>
+									</a>
+								</li>
+                                </ul>
                 </div>
                 {/* End Col */}
 

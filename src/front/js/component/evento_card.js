@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Inscripciones } from "./inscripciones";
+import { GetEventoImage } from "./getEventoImage";
 
 export const Evento_Card = () => {
     const { store, actions } = useContext(Context);
@@ -50,67 +51,75 @@ export const Evento_Card = () => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id }));
         console.log('Inscripcion IDs:', inscripcionIds);
     };
-    
 
     return (
         <>
             {evento ? (
-                <div className="container w-100 d-flex justify-content-center">
-                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ borderColor: '#ffc107' }}>
-                        <div className="profile me-3 col-6">
-                            <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75 m-4" />
+                <div className="container w-100 d-flex justify-content-center align-items-start shadow ">
+                    <div className="card-header p-0 mt-5">
+                            <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
+                            <div className="d-flex justify-content-center align-items-end">
+                            <Link to={-1}>
+                                        <button className="btn btn-secondary btn-lg me-5 mt-3">Volver atrás</button>
+                                    </Link>
+                                    <Inscripciones
+                                        className='mt-3'
+                                        usuarioId={actions.getUserId()}
+                                        eventoId={evento.id}
+                                        nombreEvento={evento.nombre}
+                                        inscripcionId={inscripcionIds[evento.id]}
+                                        setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
+                                    />
+
+                                </div>
                         </div>
-                        <div className="my-5 w-100">
-                            <h2 className="mb-3" style={{ color: '#7c488f' }}>{evento.nombre}</h2>
-                            <span className="text-muted d-block mb-3">
-                                <b>Fecha</b>: {evento.fecha}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Horario</b>: {evento.horario}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Ubicacion</b>: {evento.direccion}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Descripción</b>: {evento.breve_descripcion}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Plazas</b>: {evento.cupo}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Dificultad</b>: {evento.dificultad}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Precio</b>: {evento.precio} €
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Observaciones</b>: {evento.observaciones}
-                            </span>
-                            {loading ? (
-                                <p>Cargando interés...</p>
-                            ) : (
+                             <div className="card-body mx-5">
+                             <h1 className="mb-3 mt-3" style={{ color: '#7c488f' }}>{evento.nombre}</h1>
+                             <div className="d-flex justify-content-between mb-3 fs-5">
                                 <span className="text-muted d-block mb-3">
-                                    <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
+                                    <b>Fecha</b>: {evento.fecha}
                                 </span>
-                            )}
-                            <div className="d-flex justify-content-between align-items-end">
-                                <Inscripciones
-                                    className='mt-3'
-                                    usuarioId={actions.getUserId()}
-                                    eventoId={evento.id}
-                                    nombreEvento={evento.nombre}
-                                    inscripcionId={inscripcionIds[evento.id]}
-                                    setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id)}
-                                />
-                                <Link to={-1}>
-                                    <button className="btn btn-secondary me-5 mt-3">Volver atrás</button>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
+                                <span className="text-muted d-block mb-3">
+                                    <b>Horario</b>: {evento.horario}
+                                </span>
+                                </div>
+                                <div className="d-flex justify-content-between mb-3 fs-5">
+                                <span className="text-muted d-block mb-3">
+                                    <b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}
+                                </span>
+                                <span className="text-muted d-block mb-3">
+                                    <b>Plazas</b>: {evento.cupo}
+                                </span>
+                                </div>
+                                <div className="d-flex justify-content-between mb-3 fs-5">
+
+                                <span className="text-muted d-block mb-3">
+                                    <b>Dificultad</b>: {evento.dificultad}
+                                </span>
+                                <span className="text-muted d-block mb-3">
+                                    <b>Precio</b>: {evento.precio} €
+                                </span>
+                                </div>
+                                <span className="text-muted d-block mb-3 fs-5">
+                                    <b>Descripción</b>: {evento.breve_descripcion}
+                                </span>
+                                <span className="text-muted d-block mb-3 fs-5">
+                                    <b>Observaciones</b>: {evento.observaciones}
+                                </span>
+                                <span className="text-muted d-block mb-3 fs-5">
+                                    <b>Ubicacion</b>: {evento.direccion}
+                                </span>
+
+                                {loading ? (
+                                    <p>Cargando interés...</p>
+                                ) : (
+                                    <span className="text-muted d-block mb-3 fs-5">
+                                        <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
+                                    </span>
+                                )}
+                               
+                            </div>   
+                 
                 </div>
             ) : (
                 <h1 className="m-5 p-3 alert-danger rounded">

@@ -73,7 +73,8 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
 
     const mapContainerStyle = {
         height: "400px",
-        width: "800px",
+        with: 'auto',
+        maxWidth: "800px",
         cursor: 'pointer'
     };
 
@@ -102,8 +103,9 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                     onPlaceChanged={onPlaceChanged}
                 >
                     <input
+                    className='w-75 fs-5'
                         type="text"
-                        placeholder="Buscar dirección"
+                        placeholder="Introduzca su dirección..."
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         onKeyDown={handleKeyPress}

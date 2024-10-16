@@ -63,14 +63,14 @@
 .dropdown-item {
   font-size: 1.2rem;
   font-weight: 300;
-  color: #666;
+  color: black;
   transition: color 0.2s ease;
   padding: 1rem 2rem;
 }
 
 .dropdown-item:hover {
   color: #333;
-  background-color: #A7D0CD ;
+  background-color: #7c488f30 ;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -110,3 +110,23 @@ a, .nav-link {
   cursor: pointer;
 }
 
+/* --------------------------------------------------------------FOOOTER----------------------------------------.------------------------------------------ */
+
+.footer {
+  position: relative;
+  width: 100%;
+  background-color: #343a40; /* Color de fondo */
+  color: white; /* Color del texto */
+  padding: 20px; /* Espaciado interno */
+  bottom: 0;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegúrate de que el contenedor principal tenga al menos la altura de la ventana */
+}
+
+.content {
+  flex: 1; /* Esto permite que el contenido ocupe el espacio disponible */
+}

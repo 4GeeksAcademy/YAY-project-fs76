@@ -1,0 +1,213 @@
+.perfil-image-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.perfil-title {
+    font-size: 2rem;
+    color: #7c488f; /* Morado */
+}
+
+.image-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.perfil-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+       transition: transform 0.3s ease;
+}
+.perfil-image:hover {
+    transform: scale(1.05); /* Crece un 10% en hover */
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #7c488f; /* Naranja */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    background-color: #7c488f; /* Azul */
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+/* Contenedor de la galería */
+.user-gallery-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.user-gallery-title {
+    font-size: 1.8rem;
+    color: #7c488f; /* Morado */
+}
+
+.user-gallery-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.user-gallery-good-captures-message {
+    color: #28a745;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Wrapper para las imágenes de la galería */
+.user-gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Estilos para las tarjetas de imagen */
+.user-gallery-image-card {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ccc;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);    
+    transition: transform 0.3s ease;
+}
+
+.user-gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Botón de eliminar imagen */
+.user-gallery-delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #7c488f; /* Naranja */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-gallery-delete-button:hover {
+    background-color: #7c488f; /* Azul */
+}
+
+/* Estilos del modal */
+.user-gallery-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.user-gallery-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-gallery-modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.user-gallery-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    color: #333;
+    cursor: pointer;
+}
+/* Efecto hover para que la imagen crezca */
+.user-gallery-image-card:hover .user-gallery-image {
+    transform: scale(1.05); /* Crece un 10% en hover */
+}
+
+.evento-image-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centrar verticalmente */
+    margin: 0;
+    padding: 0;
+    transition: transform 0.3s ease;
+    width: 100%; /* O el ancho que desees */
+    height: auto; /* Mantiene la altura automática según el contenido */
+
+}
+
+.evento-image-container:hover {
+    transform: scale(1.03); /* Crece un 10% en hover */
+}
+
+.image-wrapper {
+    align-items: center; 
+    max-width: 100%; 
+    overflow: hidden;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+/* Centra verticalmente */
+
+}
+
+.evento-image {
+    max-width: 100%; /* Asegura que la imagen no exceda el ancho del contenedor */
+    max-height: 100%; /* Asegura que la imagen no exceda el alto del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    width: auto;  /* Mantiene la proporción de aspecto de la imagen */ /* Altura máxima para asegurarse de que no sea demasiado alta */
+    object-fit: cover; /* Impide que la imagen se distorsione y cubre el contenedor */
+}
+

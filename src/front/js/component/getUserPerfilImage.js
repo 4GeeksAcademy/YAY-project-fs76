@@ -1,59 +1,85 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../store/appContext';
-import ImageUploadPerfil from './imagePerfilUpload';
+import ImageUploadPerfil from './imagePerfilUpload'; 
+import "../../styles/imagenes.css";
 
 const GetUserPerfilImage = () => {
     const [image, setImage] = useState(null);
     const [error, setError] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const { store, actions } = useContext(Context);
 
-    
     const fetchPerfilImage = async () => {
         try {
-            // Llama a la acción para obtener la imagen de perfil
-            const response = await actions.getUserPerfilImage(); 
-            setImage(response.foto_perfil); // Actualiza el estado de la imagen
+            const response = await actions.getUserPerfilImage();
+            setImage(response.foto_perfil);
         } catch (error) {
-            setError("No se pudo cargar la imagen de perfil.");
+            setError(<span style={{ color: 'grey' }}>Sube una imagen de perfil</span>);
         }
     };
 
-    const handleDeleteClick = async () => {
+    const handleDeleteClick = async (image) => {
+        const usuario_id = store.user_id; 
+        const public_id = image.split('/').pop().split('.')[0]; 
+        
+        // Verifica los valores
+        console.log("Usuario ID:", usuario_id);
+        console.log("Public ID:", public_id);
+        
         try {
-            await actions.deletePerfilImage(); // Llama a la acción para eliminar la imagen
-            setImage(null); // Actualiza el estado de la imagen
+            await actions.deleteImage(usuario_id, public_id);
+            setImage(null); // Clear the image after deletion
         } catch (error) {
-            setError("No se pudo eliminar la imagen de perfil.");
+            setError("No se pudo eliminar la imagen.");
         }
+    };
+
+    const handleImageClick = (url) => {
+        setSelectedImage(url); 
+        setIsModalOpen(true); 
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); 
+        setSelectedImage(null); 
     };
 
     useEffect(() => {
-        fetchPerfilImage(); // Llama a la función al montar el componente
+        fetchPerfilImage();
     }, []);
 
     return (
-        <div>
-            <h3>Imagen de Perfil</h3>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="perfil-image-container">
+            {error && <p className="error-message">{error}</p>}
             {image ? (
-                <div style={{ position: 'relative' }}>
+                <div className="image-wrapper">
                     <img
                         src={image}
                         alt="Imagen de Perfil"
-                        style={{ maxWidth: '200px', height: 'auto', margin: '10px' }}
+                        className="perfil-image"
+                        onClick={() => handleImageClick(image)} 
                     />
                     <button 
-                        onClick={handleDeleteClick} 
-                        style={{ position: 'absolute', bottom: '5px', left: '5px' }}
+                        onClick={() => handleDeleteClick(image)} 
+                        className="delete-button"
                     >
-                        Eliminar
+                        x
                     </button>
                 </div>
             ) : (
-                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} /> // Muestra el componente de carga si no hay imagen
+                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} />
             )}
-        </div>
-    );
-};
+                {isModalOpen && (
+                    <div className="user-gallery-modal" onClick={closeModal}>
+                        <div className="user-gallery-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <span className="user-gallery-modal-close" onClick={closeModal}>&times;</span>
+                            <img src={selectedImage} alt="Imagen grande" className="user-gallery-modal-image" />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
 export default GetUserPerfilImage;

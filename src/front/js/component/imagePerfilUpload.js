@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Context } from '../store/appContext'; // Importar el contexto de Flux
 
 const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilImage como prop
@@ -6,6 +6,7 @@ const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilIm
     const [error, setError] = useState(null); // Para manejar errores
     const [loading, setLoading] = useState(false); // Para manejar el estado de carga
     const { actions } = useContext(Context); // Acceder a las acciones de Flux
+    const fileInputRef = useRef(null); // Referencia para el input de archivo
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -29,18 +30,43 @@ const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilIm
             } finally {
                 setLoading(false); // Finalizar carga
             }
+        } else {
+            // Si no hay archivo, abrir el selector de archivos
+            fileInputRef.current.click();
         }
     };
 
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload} disabled={loading}>
-                {loading ? "Subiendo..." : "Subir Imagen de Perfil"}
-            </button>
+        <div className="card p-4">
+            <div className="card-body">
+                <h5 className="card-title text-center mb-4">Subir Imagen de Perfil</h5>
+                
+                <input 
+                    type="file" 
+                    className="d-none" // Ocultar el input de archivo
+                    ref={fileInputRef} // Usar la referencia
+                    onChange={handleFileChange} 
+                    accept="image/*" // Solo permitir imágenes
+                />
+                
+                <div className="mb-3 text-center">
+                    <button 
+                        className={`btn text-white btn-sm ${loading ? "disabled" : ""}`}
+                        style={{ backgroundColor: '#7c488f'}}
+                        onClick={handleUpload} 
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            "Subiendo..."
+                        ) : (
+                            file ? "aceptar" : "Elegir Imagen"
+                        )}
+                    </button>
+                </div>
 
-            {/* Mostrar errores si los hay */}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+                {/* Mostrar errores si los hay */}
+                {error && <p className="text-danger text-center">{error}</p>}
+            </div>
         </div>
     );
 };

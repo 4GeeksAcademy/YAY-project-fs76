@@ -6,7 +6,7 @@ export const Landing_Partner = () => {
     const { store, actions } = useContext(Context);
 
     return (
-        <div className='mb-7' style={{ position: 'relative', marginInline: '10rem' }}>
+        <div className='mb-10 pt-5 pb-5' style={{ position: 'relative', marginInline: '5rem' }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 330" style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
                 <style type="text/css">
                     {`
@@ -68,8 +68,8 @@ export const Landing_Partner = () => {
                 </svg>
                 <div className="text-center mb-7 content-space-b-2" style={{ position: 'relative', zIndex: 1 }}>
                 <div className="mb-7 mt-5 pt-5">
-                    <h2>¿Quieres organizar eventos en Yay?</h2>
-                    <h4  style={{fontWeight: '300'}}>Si tienes un negocio, eres una organización, asociación o agrupación, 
+                    <h1 className='h1 mb-3'  style={{ letterSpacing: '3px' }}>¿Quieres organizar eventos en Yay?</h1>
+                    <h4 className='mb-3'  style={{fontWeight: '300'}}>Si tienes un negocio, eres una organización, asociación o agrupación, 
                         <br/>
                         no pierdas la oportunidad de darte a conocer y construir comunidad junto anuestros usuarios. </h4>
                 </div>
