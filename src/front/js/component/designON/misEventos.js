@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 import { useParams, Link } from "react-router-dom";
+import { GetEventoImage } from "../getEventoImage";
 
 export const MisEventos = () => {
     const { store, actions } = useContext(Context);
@@ -36,13 +37,10 @@ export const MisEventos = () => {
                         <ul className="list-group">
                             {misEventos.map(evento => (
                                 <li key={evento.inscripcionId} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
-                                    <div className="d-flex justify-content-between flex-grow-1">
-                                        <img
-                                            src={evento.imagen || "https://cdn-icons-png.freepik.com/512/3544/3544735.png"} // Asegúrate de que "evento.imagen" está disponible
-                                            alt="Evento"
-                                            className="rounded-circle my-auto ms-4"
-                                            style={{ height: '100%', maxHeight: '100px' }}
-                                        />
+                                    <div className="d-flex justify-content-between flex-grow-1 m-0 p-0">
+                                    <div style={{ maxWidth: '240px', height: '240px', margin: '0', padding: '0', objectFit:'cover' }}>
+                                <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
+                            </div>
                                         <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
                                             <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                             <li className="text-muted fs-5">

@@ -930,25 +930,25 @@ def upload_perfil_image():
     file.seek(0)  # Volver al inicio del archivo
 
     try:
-        # Subir la imagen a Cloudinary
-        upload_result = cloudinary.uploader.upload(file)
-        
-        # Obtener el ID del usuario que está subiendo la imagen
-        usuario_id = get_jwt_identity()
-        usuario = Usuarios.query.get(usuario_id)
-
-        # Actualizar el campo foto_perfil del usuario
-        usuario.foto_perfil = upload_result['secure_url']
-        usuario.public_id_perfil = upload_result['public_id']
-        db.session.commit()
-        
-        # Devolver la URL de la imagen subida
-        return jsonify({
-            "message": "Imagen de perfil subida con éxito",
-            "url": upload_result['secure_url']
-        }), 201
+            # Crear un public_id único para las imágenes de usuarios
+            usuario_id = get_jwt_identity()
+            public_id = f"user_{usuario_id}"
+            
+            # Subir la imagen a Cloudinary
+            upload_result = cloudinary.uploader.upload(file, public_id=public_id)
+            
+            # Actualizar el campo foto_perfil del usuario
+            usuario = Usuarios.query.get(usuario_id)
+            usuario.foto_perfil = upload_result['secure_url']
+            usuario.public_id_perfil = public_id  # Almacena el public_id
+            db.session.commit()
+            
+            return jsonify({
+                "message": "Imagen de perfil subida con éxito",
+                "url": upload_result['secure_url']
+            }), 201
+    
     except Exception as e:
-        print(f"Error al subir imagen: {e}")  # Loggear el error exacto
         return jsonify({"error": str(e)}), 500
 
 
@@ -984,20 +984,18 @@ def delete_perfil_image(usuario_id, public_id):
             if usuario.public_id_perfil != public_id:
                 return jsonify({"ERROR": "Imagen de perfil no encontrada"}), 404
 
-            # Eliminar la imagen de Cloudinary
-            result = cloudinary.uploader.destroy(usuario.public_id_perfil)
-            if result.get('result') == 'ok':
-                # Actualizar el campo foto_perfil del usuario
-                usuario.foto_perfil = None
-                usuario.public_id_perfil = None
-                db.session.commit()
-                return jsonify({"message": "Imagen de perfil eliminada con éxito"}), 200
-            else:
-                return jsonify({"ERROR": "Error al eliminar la imagen en Cloudinary."}), 400
+            # Aquí solo actualizamos los campos en la base de datos
+            usuario.foto_perfil = None  # Eliminar la referencia a la imagen
+            usuario.public_id_perfil = None  # Eliminar el public ID
+            db.session.commit()  # Guardar los cambios en la base de datos
+            
+            return jsonify({"message": "Imagen de perfil eliminada con éxito"}), 200
+            
         except Exception as e:
             return jsonify({"ERROR": str(e)}), 500
     else:
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
+    
     
 @api.route('/perfil/upload-image/partner', methods=['POST'])
 @jwt_required()
@@ -1111,83 +1109,190 @@ def get_interes_por_evento(evento_id):
         "interes_id": interes.id,
         "nombre": interes.nombre
     }), 200
-
+    
 @api.route('/usuarios/intereses', methods=['POST'])
 @jwt_required()
 def agregar_interes():
-    current_user_id = get_jwt_identity()
-
-    # Obtener la lista de intereses del cuerpo de la solicitud
+    usuarioId = get_jwt_identity()
     data = request.get_json()
     if not data or 'intereses_id' not in data:
         return jsonify({"ERROR": "Se requiere la lista de intereses."}), 400
 
-    # Esperando 'intereses_id' como una lista
     intereses_id = data['intereses_id']
-
-    # Asegurar que todos los intereses existen y se almacenan
     for interes_id in intereses_id:
         interes = Intereses.query.get(interes_id)
         if not interes:
             return jsonify({"ERROR": f"Interés con ID {interes_id} no encontrado."}), 404
 
-        # Comprobar si ya existe la relación
-        existe_relacion = UsuariosIntereses.query.filter_by(usuario_id=current_user_id, interes_id=interes_id).first()
+        existe_relacion = UsuariosIntereses.query.filter_by(usuario_id=usuarioId, interes_id=interes_id).first()
         if existe_relacion is None:
-            nueva_relacion = UsuariosIntereses(usuario_id=current_user_id, interes_id=interes_id)
+            nueva_relacion = UsuariosIntereses(usuario_id=usuarioId, interes_id=interes_id)
             db.session.add(nueva_relacion)
 
-    # Commit a la base de datos
     db.session.commit()
     return jsonify({"message": "Intereses añadidos correctamente."}), 201
+
 
 @api.route('/usuarios/intereses', methods=['GET'])
 @jwt_required()
 def obtener_intereses():
-    current_user_id = get_jwt_identity()
-
-    # Obtener todos los intereses para el usuario autenticado
-    intereses = UsuariosIntereses.query.filter_by(usuario_id=current_user_id).all()
+    usuarioId = get_jwt_identity()
+    intereses = UsuariosIntereses.query.filter_by(usuario_id=usuarioId).all()
     return jsonify([{'id': inter.interes.id, 'nombre': inter.interes.nombre} for inter in intereses]), 200
+
 
 @api.route('/usuarios/intereses', methods=['PUT'])
 @jwt_required()
 def editar_intereses():
-    current_user_id = get_jwt_identity()
-    
+    usuarioId = get_jwt_identity()
     data = request.get_json()
     if not data or 'intereses_id' not in data:
         return jsonify({"ERROR": "Se requiere la lista de intereses."}), 400
 
     nuevos_intereses_id = data['intereses_id']
-    
-    # Eliminar relaciones existentes
-    UsuariosIntereses.query.filter_by(usuario_id=current_user_id).delete()
+    UsuariosIntereses.query.filter_by(usuario_id=usuarioId).delete()
 
-    # Crear nuevas relaciones
     for interes_id in nuevos_intereses_id:
         interes = Intereses.query.get(interes_id)
         if not interes:
             return jsonify({"ERROR": f"Interés con ID {interes_id} no encontrado."}), 404
         
-        nueva_relacion = UsuariosIntereses(usuario_id=current_user_id, interes_id=interes_id)
+        nueva_relacion = UsuariosIntereses(usuario_id=usuarioId, interes_id=interes_id)
         db.session.add(nueva_relacion)
 
     db.session.commit()
     return jsonify({"message": "Intereses actualizados correctamente."}), 200
 
+
 @api.route('/usuarios/intereses/<int:interes_id>', methods=['DELETE'])
 @jwt_required()
 def eliminar_interes(interes_id):
-    current_user_id = get_jwt_identity()
-
-    relacion = UsuariosIntereses.query.filter_by(usuario_id=current_user_id, interes_id=interes_id).first()
+    usuarioId = get_jwt_identity()
+    relacion = UsuariosIntereses.query.filter_by(usuario_id=usuarioId, interes_id=interes_id).first()
     if relacion:
         db.session.delete(relacion)
         db.session.commit()
         return jsonify({"message": "Interés eliminado correctamente."}), 200
     else:
         return jsonify({"ERROR": "Relación no encontrada."}), 404
+    
+@api.route('/evento/<int:evento_id>/upload-image', methods=['POST'])
+@jwt_required()
+def upload_evento_image(evento_id):
+    # Obtener el archivo subido
+    file = request.files.get('file')
+    
+    if not file:
+        return jsonify({"ERROR": "No se proporcionó un archivo."}), 400
 
+    # Verificar si el archivo es una imagen
+    if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+        return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
+    
+    # Verificar el tamaño del archivo
+    file.seek(0, 2)  # Mover el cursor al final del archivo para obtener el tamaño
+    if file.tell() > 1024 * 1024 * 5:  # 5MB
+        return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
+    file.seek(0)  # Volver al inicio del archivo
+
+    try:
+        # Subir la imagen a Cloudinary con un public_id único para el evento
+        public_id = f"evento_{evento_id}"
+        upload_result = cloudinary.uploader.upload(file, public_id=public_id)
+        
+        # Actualizar el campo foto_evento del evento
+        evento = Eventos.query.get(evento_id)
+        if not evento:
+            return jsonify({"ERROR": "Evento no encontrado"}), 404
+
+        evento.foto_evento = upload_result['secure_url']
+        db.session.commit()
+        
+        # Devolver la URL de la imagen subida
+        return jsonify({
+            "message": "Imagen del evento subida con éxito",
+            "url": upload_result['secure_url']
+        }), 201
+    except Exception as e:
+        print(f"Error al subir imagen: {e}")  # Loggear el error exacto
+        return jsonify({"error": str(e)}), 500
+    
+@api.route('/evento/<int:evento_id>/image', methods=['GET'])
+def get_evento_image(evento_id):
+    # Buscar el evento por su ID
+    evento = Eventos.query.get(evento_id)
+
+    if evento:
+        return jsonify({"foto_evento": evento.foto_evento}), 200
+    else:
+        return jsonify({"ERROR": "Evento no encontrado"}), 404
+    
+@api.route('/evento/<int:evento_id>/upload-image', methods=['PUT'])
+@jwt_required()
+def update_evento_image(evento_id):
+    # Obtener el archivo subido
+    file = request.files.get('file')
+
+    if not file:
+        return jsonify({"ERROR": "No se proporcionó un archivo."}), 400
+
+    # Verificar si el archivo es una imagen
+    if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
+        return jsonify({"ERROR": "Solo se permiten archivos de imagen"}), 400
+
+    # Verificar el tamaño del archivo
+    file.seek(0, 2)  # Mover el cursor al final del archivo para obtener el tamaño
+    if file.tell() > 1024 * 1024 * 5:  # 5MB
+        return jsonify({"ERROR": "El archivo es demasiado grande"}), 400
+    file.seek(0)  # Volver al inicio del archivo
+
+    try:
+        # Buscar el evento
+        evento = Eventos.query.get(evento_id)
+        if not evento:
+            return jsonify({"ERROR": "Evento no encontrado"}), 404
+
+        # Eliminar la imagen anterior de Cloudinary si existe
+        if evento.foto_evento:
+            public_id = f"evento_{evento_id}"
+            cloudinary.uploader.destroy(public_id)
+
+        # Subir la nueva imagen a Cloudinary
+        upload_result = cloudinary.uploader.upload(file, public_id=public_id)
+
+        # Actualizar el campo foto_evento del evento
+        evento.foto_evento = upload_result['secure_url']
+        db.session.commit()
+
+        return jsonify({
+            "message": "Imagen del evento actualizada con éxito",
+            "url": upload_result['secure_url']
+        }), 200
+    except Exception as e:
+        print(f"Error al actualizar imagen: {e}")  # Loggear el error exacto
+        return jsonify({"error": str(e)}), 500
+    
+    
+@api.route('/evento/<int:evento_id>/image', methods=['DELETE'])
+@jwt_required()
+def delete_evento_image(evento_id):
+    # Buscar el evento por su ID
+    evento = Eventos.query.get(evento_id)
+
+    if not evento:
+        return jsonify({"ERROR": "Evento no encontrado"}), 404
+
+    try:
+        # Limpiar el campo foto_evento en la base de datos
+        if evento.foto_evento:
+            evento.foto_evento = None
+            db.session.commit()
+            return jsonify({"message": "La URL de la imagen del evento ha sido eliminada con éxito"}), 200
+        else:
+            return jsonify({"ERROR": "No existe ninguna imagen para eliminar."}), 404
+    except Exception as e:
+        print(f"Error al eliminar URL de imagen: {e}")  # Loggear el error exacto
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     api.run(debug=True)

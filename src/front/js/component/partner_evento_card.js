@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { GetEventoImage } from "./getEventoImage";
 
 export const Partner_Evento_Card = () => {
     const { store, actions } = useContext(Context);
@@ -63,108 +64,94 @@ export const Partner_Evento_Card = () => {
     return (
         <>
             {evento ? (
-                <div className="container w-100 d-flex justify-content-center">
-                    <div className="card my-5 d-flex flex-row w-100" key={evento.id} style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
-                        <div className="profile me-3 col-6">
-                            <img src="https://cdn-icons-png.freepik.com/512/3544/3544735.png" alt="profileImage" className="rounded-circle w-75 m-4" />
-                        </div>
-                        <div className="my-5 w-100">
-                            <h2 className="mb-3" style={{ color: '#7c488f' }}>{evento.nombre}</h2>
-                            <span className="text-muted d-block mb-3">
-                                <b>Fecha</b>: {evento.fecha}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Horario</b>: {evento.horario}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Ubicacion</b>: {evento.direccion}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Plazas</b>: {evento.cupo}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Dificultad</b>: {evento.dificultad}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Precio</b>: {evento.precio} €
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Observaciones</b>: {evento.observaciones}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Descripción</b>: {evento.breve_descripcion}
-                            </span>
-                            <span className="text-muted d-block mb-3">
-                                <b>Creador del evento</b>: {evento.partner_nombre}
-                            </span>
-                            <span>
-                                <b>Interés</b>: {interes ? interes.nombre : 'No especificado'}
-                            </span>
-                            {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
-                                <div className="usuarios-inscritos my-3 me-5">
-                                    <h5 style={{ color: '#7c488f' }}><b>Usuarios Inscritos</b></h5>
-                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                        {evento.usuarios && evento.usuarios.length > 0 ? (
-                                            <>
-                                                {evento.usuarios.slice(0, 7).map((usuario, index) => (
-                                                    <div key={index} style={{ textAlign: 'center' }}>
-                                                        <img
-                                                            src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
-                                                            alt={usuario.nombre}
-                                                            className="rounded-circle mb-1"
-                                                            style={{ width: '50px', height: '50px' }}
-                                                        />
-                                                        <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                                    </div>
-                                                ))}
-                                                {evento.usuarios.length > 7 && (
-                                                    <button
-                                                        className="btn mb-1"
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            width: '50px',
-                                                            height: '50px',
-                                                            borderRadius: '50%',
-                                                            backgroundColor: '#7c488f',
-                                                            color: 'white',
-                                                            cursor: 'pointer',
-                                                        }}
-                                                        onClick={() => handleShowModal(evento.usuarios)}
-                                                    >
-                                                        +{evento.usuarios.length - 7}
-                                                    </button>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <p className="text-danger">No hay usuarios inscritos.</p>
-                                        )}
+                <div className="container w-100 d-flex justify-content-center align-items-start shadow"> 
+
+                    {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
+                        <>
+                            <div className="card shadow-sm me-5 mt-5" style={{ width: '250px' }}>
+                                <div className="card-body">
+
+                                    <h5 className="text-center mb-3" style={{ color: '#7c488f' }}>Acciones del Evento</h5>
+                                    <button className="btn mb-2 w-100" onClick={() => navigate(`/formulario-evento-editar/${evento.id}`)}>
+                                        <i className="fa-solid fa-pencil me-2" style={{ color: '#7c488f' }} /> Editar Evento
+                                    </button>
+                                    <button className="btn text-danger w-100" onClick={() => handleDeleteClick(evento)}>
+                                        <i className="fa-solid fa-trash me-2" style={{ color: '#7c488f' }} /> Eliminar Evento
+                                    </button>
+
+                                    <div className="mt-4">
+                                        <h5 className="text-center mb-3" style={{ color: '#7c488f' }}>Usuarios Inscritos</h5>
+                                        <div className="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                                            {evento.usuarios && evento.usuarios.length > 0 ? (
+                                                <>
+                                                    {evento.usuarios.slice(0, 7).map((usuario, index) => (
+                                                        <div key={index} style={{ textAlign: 'center' }}>
+                                                            <img
+                                                                src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                                                alt={usuario.nombre}
+                                                                className="rounded-circle mb-1"
+                                                                style={{ width: '50px', height: '50px' }}
+                                                            />
+                                                            <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
+                                                        </div>
+                                                    ))}
+                                                    {evento.usuarios.length > 7 && (
+                                                        <button
+                                                            className="btn mb-1"
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                width: '50px',
+                                                                height: '50px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: '#7c488f',
+                                                                color: 'white',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                            onClick={() => handleShowModal(evento.usuarios)}
+                                                        >
+                                                            +{evento.usuarios.length - 7}
+                                                        </button>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <p className="text-danger text-center fs-5">No hay usuarios inscritos.</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            )}
+                         </div>
+                     </>
+                    )}
 
-                            <div className="d-flex justify-content-between align-items-end">
-                                {/* Botones de editar y eliminar */}
-                                {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
-                                    <div className="d-flex justify-content-end align-items-start">
-                                        <button className="btn btn-icon"
-                                            onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
-                                            <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                        </button>
 
-                                        <button className="btn btn-icon" onClick={() => handleDeleteClick(evento)} tabIndex="-1">
-                                            <i className="fa-solid fa-trash" style={{ color: '#7c488f' }} tabIndex="-1" />
-                                        </button>
-                                    </div>
-                                )}
-                                <Link to="/partners-eventos">
-                                    <button className="btn btn btn-secondary me-5">Volver atrás</button>
-                                </Link>
+                    <div className="card my-5" style={{ width: '500px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none' }}>
+                        <div className="card-header p-0">
+                            <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
+                        </div>
+                        <div className="card-body">
+                            <h1 className="mb-3 mt-3" style={{ color: '#7c488f' }}>{evento.nombre}</h1>
+                            <div className="d-flex justify-content-between mb-3 fs-5">
+                                <span className="text-muted"><b>Fecha</b>: {evento.fecha}</span>
+                                <span className="text-muted"><b>Horario</b>: {evento.horario}</span>
                             </div>
+                            <div className="d-flex justify-content-between mb-3 fs-5">
+                                <span className="text-muted"><b>Accesibilidad</b>: {evento.accesibilidad ? 'Sí' : 'No'}</span>
+                                <span className="text-muted"><b>Plazas</b>: {evento.cupo}</span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-3 fs-5">
+                                <span className="text-muted"><b>Dificultad</b>: {evento.dificultad}</span>
+                                <span className="text-muted"><b>Precio</b>: {evento.precio} €</span>
+                            </div>
+                            <span className="text-muted d-block mb-3 fs-5"><b>Ubicación</b>: {evento.direccion}</span>
+                            <span className="text-muted d-block mb-3 fs-5"><b>Descripción</b>: {evento.breve_descripcion}</span>
+                            <span className="text-muted d-block mb-3 fs-5"><b>Observaciones</b>: {evento.observaciones}</span>
+                            <span className="text-muted d-block mb-3 fs-5"><b>Creador del evento</b>: {evento.partner_nombre}</span>
+                            <span className="text-muted d-block mb-3 fs-5"><b>Interés</b>: {interes ? interes.nombre : 'No especificado'}</span>
+                            <Link to="/partners-eventos">
+                                <button className="btn btn btn-secondary me-5 float-end">Volver atrás</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -203,36 +190,7 @@ export const Partner_Evento_Card = () => {
                     </div>
                 </div>
             )}
-            {showModal && (
-                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Usuarios Inscritos</h5>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={() => setShowModal(false)} aria-label="Close" onFocus={(e) => e.target.blur()}></button>
-                            </div>
-                            <div className="modal-body">
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                                    {selectedUsuarios.map((usuario) => (
-                                        <div key={usuario.id} style={{ textAlign: 'center' }}>
-                                            <img
-                                                src={usuario.foto_perfil || "https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png"}
-                                                alt={usuario.nombre}
-                                                className="rounded-circle mb-1"
-                                                style={{ width: '50px', height: '50px' }}
-                                            />
-                                            <span className="badge" style={{ display: 'block', backgroundColor: '#7c488f' }}>{usuario.nombre}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)} onFocus={(e) => e.target.blur()}>Cerrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+
             {showModalWarning && (
                 <div className="modal show" style={{ display: 'block' }}>
                     <div className="modal-dialog">
@@ -288,3 +246,4 @@ export const Partner_Evento_Card = () => {
 Partner_Evento_Card.propTypes = {
     match: PropTypes.object
 };
+

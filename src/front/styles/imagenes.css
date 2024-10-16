@@ -23,9 +23,10 @@
     object-fit: cover;
     border: 2px solid #ccc;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+       transition: transform 0.3s ease;
 }
 .perfil-image:hover {
-    transform: scale(1.1); /* Crece un 10% en hover */
+    transform: scale(1.05); /* Crece un 10% en hover */
 }
 
 .delete-button {
@@ -93,7 +94,8 @@
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #ccc;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);    
+    transition: transform 0.3s ease;
 }
 
 .user-gallery-image {
@@ -101,6 +103,7 @@
     height: 100%;
     object-fit: cover;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 /* Botón de eliminar imagen */
@@ -167,5 +170,44 @@
 }
 /* Efecto hover para que la imagen crezca */
 .user-gallery-image-card:hover .user-gallery-image {
-    transform: scale(1.1); /* Crece un 10% en hover */
+    transform: scale(1.05); /* Crece un 10% en hover */
 }
+
+.evento-image-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centrar verticalmente */
+    margin: 0;
+    padding: 0;
+    transition: transform 0.3s ease;
+    width: 100%; /* O el ancho que desees */
+    height: auto; /* Mantiene la altura automática según el contenido */
+
+}
+
+.evento-image-container:hover {
+    transform: scale(1.03); /* Crece un 10% en hover */
+}
+
+.image-wrapper {
+    align-items: center; 
+    max-width: 100%; 
+    overflow: hidden;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100%; 
+/* Centra verticalmente */
+
+}
+
+.evento-image {
+    max-width: 100%; /* Asegura que la imagen no exceda el ancho del contenedor */
+    max-height: 100%; /* Asegura que la imagen no exceda el alto del contenedor */
+    height: auto; /* Mantiene la proporción de la imagen */
+    width: auto;  /* Mantiene la proporción de aspecto de la imagen */ /* Altura máxima para asegurarse de que no sea demasiado alta */
+    object-fit: cover; /* Impide que la imagen se distorsione y cubre el contenedor */
+}
+

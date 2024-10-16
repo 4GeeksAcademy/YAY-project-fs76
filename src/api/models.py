@@ -65,6 +65,7 @@ class Eventos(db.Model):
     precio = db.Column(db.Integer, nullable=True)
     cupo = db.Column(db.Integer, nullable=True)
     observaciones = db.Column(db.String(120), nullable=True)
+    foto_evento = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     partner_id = db.Column(db.Integer, db.ForeignKey('partners.id'), nullable=True)
     partner = db.relationship('Partners', backref='eventos', lazy=True),
@@ -203,7 +204,6 @@ class Inscripciones(db.Model):
             "evento_id": self.evento_id,
             "fecha_registro": self.fecha_registro
         }
-
 
 class UsuariosIntereses(db.Model):
     __tablename__ = 'usuarios_intereses'

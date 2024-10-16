@@ -70,7 +70,7 @@ export const Signup = () => {
                   {/* Blockquote */}
                   <figure className="text-center">
 
-                    <blockquote className="blockquote blockquote-light fs-3">“¿Pensaron alguna vez que si no fuera <br/>  por todos, nadie sería nada? ”</blockquote>
+                  <blockquote className="blockquote blockquote-light fs-3 mx-4">“¿Pensaron alguna vez que si no fuera por todos, nadie sería nada? ”</blockquote>
 
                     <figcaption className="blockquote-footer blockquote-light">
                       <div className="mb-3 ">

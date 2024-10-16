@@ -43,7 +43,7 @@ const styles = {
         resize: 'none',
     },
     button: {
-        backgroundColor: '#7c488f',
+        backgroundColor: '#7c488f#7',
         color: 'white',
         padding: '5px 5px',
         border: 'none',
@@ -116,27 +116,25 @@ const CompletarDatosUsuario = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        let isMounted = true; // Variable de bandera para verificar el estado del componente
-    
+        let isMounted = true; 
+
         const fetchIntereses = async () => {
             try {
                 const data = await actions.getInteres();
                 if (isMounted) {
-                    setInteresesDisponibles(data);  
+                    setInteresesDisponibles(data);
                 }
             } catch (error) {
                 console.error("Error al cargar los intereses:", error);
             }
         };
-    
+
         fetchIntereses();
-    
+
         return () => {
             isMounted = false; // Limpiar cuando el componente se desmonta
         };
     }, [actions]);
-
-
 
     const handleNextStep = () => {
         let newErrors = {};
@@ -145,7 +143,7 @@ const CompletarDatosUsuario = () => {
         const age = currentDate.getFullYear() - birthDate.getFullYear();
         const monthDifference = currentDate.getMonth() - birthDate.getMonth();
 
-        if (step === 1 && !nombre || step === 1 && !apellidos) {
+        if (step === 1 && !nombre) {
             newErrors.nombre = "*Por favor, rellene este campo.";
         }
         if (step === 2 && (latitud === null || longitud === null)) {
@@ -155,7 +153,6 @@ const CompletarDatosUsuario = () => {
             newErrors.fecha = "*Debe ser mayor de 60 años para registrarse";
         }
 
-
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
@@ -164,19 +161,18 @@ const CompletarDatosUsuario = () => {
         }
     };
 
-
     const handlePreviousStep = () => {
         setStep(step - 1);
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevenir envío de formulario
         if (latitud === null || longitud === null) {
-            return;
+            return; // Manejo de errores
         }
-
+    
         const result = await actions.completarDatos(
-            localStorage.getItem('user_id'), // Usar stored user_id
+            localStorage.getItem('user_id'),
             nombre,
             apellidos,
             fecha_nacimiento,
@@ -185,11 +181,10 @@ const CompletarDatosUsuario = () => {
             longitud,
             breve_descripcion
         );
-
         if (result) {
             // Guardar los intereses seleccionados
-            await actions.editarInteres(Array.from(interesesSeleccionados));
-            localStorage.setItem('selectedInterests', JSON.stringify(Array.from(interesesSeleccionados)));
+            await actions.agregarInteres(Array.from(interesesSeleccionados)); // Asegúrate de que se envían correctamente
+            console.log(Array.from(interesesSeleccionados));
             navigate('/redirect-login');
         } else {
             console.error("Error al completar los datos");
@@ -197,25 +192,18 @@ const CompletarDatosUsuario = () => {
     };
 
    
-    const handleInteresesChange = (interes) => {
-        if (interesesSeleccionados.has(interes)) {
-            // Si el interés ya está seleccionado, quitarlo
-            setInteresesSeleccionados(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(interes); // Eliminar el interés
-                return newSet;
-            });
-            setInteresesDisponibles(prev => [...prev, { id: interes }]); // Agregar de nuevo a disponibles
-        } else {
-            // Si no está seleccionado, lo añade
-            setInteresesSeleccionados(prev => {
-                const newSet = new Set(prev);
-                newSet.add(interes); // Añadir el interés
-                return newSet;
-            });
-            // Eliminar de los disponibles
-            setInteresesDisponibles(prev => prev.filter(i => i.id !== interes));
-        }
+    const handleInteresesChange = (interesId) => {
+        setInteresesSeleccionados(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(interesId)) {
+                newSet.delete(interesId); // Si ya está, quita
+                setInteresesDisponibles(prev => [...prev, { id: interesId }]); // Agrega nuevamente a disponibles
+            } else {
+                newSet.add(interesId); // Si no está, añade
+                setInteresesDisponibles(prev => prev.filter(i => i.id !== interesId)); // Quita de los disponibles
+            }
+            return newSet; // Devuelve el nuevo Set
+        });
     };
     
     return (
@@ -306,7 +294,7 @@ const CompletarDatosUsuario = () => {
                                     style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
                                     onClick={() => handleInteresesChange(interes.id)}
                                 >
-                                    {interes.nombre} {/* Quitar el texto "Quitar" aquí */}
+                                    {interes.nombre} 
                                 </button>
                             ))}
                         </div>

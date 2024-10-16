@@ -29,7 +29,7 @@ const styles = {
         marginRight: '10px',
         marginBottom: '10px',
     },
-    selectedButton: {
+    selectedtButton: {
         backgroundColor: '#444',
         color: 'white',
         padding: '10px 15px',
@@ -40,6 +40,7 @@ const styles = {
         marginRight: '10px',
         marginBottom: '10px',
     },
+
     buttonSaveStyle: {
         backgroundColor: '#7c488f',
         color: 'white',
@@ -84,7 +85,7 @@ export const Perfil_Usuario = () => {
     });
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [interesesSeleccionados, setInteresesSeleccionados] = useState({});
+    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set());
     const [misIntereses, setMisIntereses] = useState([]); // Lista de intereses seleccionados
     const [interesesDisponibles, setInteresesDisponibles] = useState([]);
     const [activeSection, setActiveSection] = useState("informacionPersonal");
@@ -103,27 +104,37 @@ export const Perfil_Usuario = () => {
                 .then((data) => {
                     if (data) {
                         setProfile(data);
-                        setMisIntereses(Array.isArray(data.intereses) ? data.intereses : []); // Asegúrate de que sea un array
+                        setMisIntereses(Array.isArray(data.intereses) ? data.intereses.map(i => i.id) : []); // Ajustes para asegurarte de que traes solo IDs
                     }
                 })
                 .catch(error => console.error("Error al obtener el perfil:", error));
 
             // Obtener todos los intereses
-            actions.obtenerIntereses(idToUse)
+            actions.obtenerIntereses()
                 .then(data => {
                     setInteresesDisponibles(Array.isArray(data) ? data : []); // Asegúrate de que sea un array
                 });
+
+            actions.loadEventosConUsuarios()
+                .then(() => setLoading(false), actions.loadInscripciones())
+                .catch(err => {
+                    setLoading(false);
+                    setError("Error al cargar eventos");
+                });
+
         }
-    }, [userId, store.user_id]);
+
+
+    }, [userId, store.user_id, actions.loadEventosConUsuarios]);
+
     const handleInteresChange = (interesId) => {
-        // Actualiza el estado local de intereses
-        if (misIntereses.includes(interesId)) {
-            // Si ya está seleccionado, eliminar
-            setMisIntereses(misIntereses.filter(id => id !== interesId));
-        } else {
-            // Si no está seleccionado, agregar
-            setMisIntereses([...misIntereses, interesId]);
-        }
+        setMisIntereses(prev => {
+            if (prev.includes(interesId)) {
+                return prev.filter(id => id !== interesId);
+            } else {
+                return [...prev, interesId];
+            }
+        });
     };
 
     const handleChange = (e) => {
@@ -207,6 +218,20 @@ export const Perfil_Usuario = () => {
         setNotificationsEnabled(prev => !prev);
     };
 
+
+    const handleInteresesChange = (interesId) => {
+        setInteresesSeleccionados(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(interesId)) {
+                newSet.delete(interesId);
+                setInteresesDisponibles(prev => [...prev, { id: interesId }]);
+            } else {
+                newSet.add(interesId); // Si no está, añade
+                setInteresesDisponibles(prev => prev.filter(i => i.id !== interesId));
+            }
+            return newSet; // Devuelve el nuevo Set
+        });
+    };
 
     return (
         <>
@@ -381,43 +406,30 @@ export const Perfil_Usuario = () => {
                         {activeSection === 'misIntereses' && (
                             <div className="profile-card">
                                 <h2 className="profile-card-header text-black">Mis Intereses</h2>
-                                <label>Selecciona tus intereses</label>
+                                <label>Tus intereses</label>
                                 <div>
                                     {interesesDisponibles.length > 0 ? (
                                         interesesDisponibles.map(interes => (
                                             <button
                                                 key={interes.id}
                                                 type="button"
-                                                style={misIntereses.includes(interes.id) ? styles.buttonRemove : styles.interestButton}
-                                                onClick={() => handleInteresChange(interes.id)}
+                                                style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
+                                                onClick={() => handleInteresesChange(interes.id)}
                                             >
-                                                {misIntereses.includes(interes.id) ? "Quitar" : "Añadir"} {interes.nombre}
+                                                {interes.nombre}
                                             </button>
                                         ))
                                     ) : (
                                         <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
                                     )}
                                 </div>
-                                <label className='mt-5'>Tus intereses seleccionados:</label>
-                                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    {Array.isArray(interesesDisponibles) && interesesDisponibles.length > 0 ? (
-                                        interesesDisponibles.map(interes => (
-                                            <button
-                                                key={interes.id}
-                                                type="button"
-                                                style={misIntereses.includes(interes.id) ? styles.buttonRemove : styles.interestButton}
-                                                onClick={() => handleInteresChange(interes.id)}
-                                            >
-                                                {misIntereses.includes(interes.id) ? "Quitar" : "Añadir"} {interes.nombre}
-                                            </button>
-                                        ))
-                                    ) : (
-                                        <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
-                                    )}
+
+
+                                <div className="d-flex justify-content-end">
+                                    <button type="button" onClick={handleSubmitIntereses} style={styles.buttonSaveStyle}>
+                                        Guardar Intereses
+                                    </button>
                                 </div>
-                                <button type="button" onClick={handleSubmitIntereses} style={styles.buttonSaveStyle}>
-                                    Guardar Intereses
-                                </button>
                             </div>
                         )}
 
@@ -470,6 +482,7 @@ export const Perfil_Usuario = () => {
                             </div>
                         )}
                     </section>
+
                 </div>
             </main>
         </>

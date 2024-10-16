@@ -57,7 +57,7 @@ const GetUserImages = () => {
                             src={url}
                             alt={`Imagen ${index + 1}`}
                             className="user-gallery-image"
-                            onClick={() => handleImageClick(url)} // Agregar onClick para abrir el modal
+                            onClick={() => handleImageClick(url)} 
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 

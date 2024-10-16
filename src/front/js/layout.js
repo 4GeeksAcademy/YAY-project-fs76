@@ -53,6 +53,7 @@ import { Perfil_Usuario } from "./component/designON/perfil_usuario";
 import { Redirect_Login } from "./pages/redirect-login";
 import { Redirect_Partner } from "./pages/redirect-partner";
 import { Partner_Perfil } from "./component/designON/partner_perfil";
+import { Evento_Form_Editar } from "./component/evento_form_editar";
 
 
 
@@ -76,7 +77,6 @@ function Layout() {
                         <Route element={<UserInterest />} path="/userInterest" />
                         <Route element={<Evento_Card />} path="/evento/:theid" />
                         <Route element={<Evento_Form />} path="/formulario-evento" />
-                        <Route element={<Evento_Form />} path="/formulario-evento/:theid" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Entidades />} path="/entidades" />
                         <Route element={<Partners />} path="/partners" />
@@ -110,6 +110,8 @@ function Layout() {
                         <Route element={<Redirect_Login />} path="/redirect-login" />
                         <Route element={<Redirect_Partner />} path="/redirect-partner" />
                         <Route element={<Partner_Perfil />} path="/partner-profile/:partnerId" />
+                        <Route element={<Evento_Form_Editar />} path="/formulario-evento-editar/:theid" />
+
 
                     </Routes>
                     

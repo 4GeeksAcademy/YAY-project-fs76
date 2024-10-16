@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../store/appContext';
-import ImageUploadPerfil from './imagePerfilUpload'; // Asegúrate de que el nombre y la ruta sean correctos
+import ImageUploadPerfil from './imagePerfilUpload'; 
 import "../../styles/imagenes.css";
 
 const GetUserPerfilImage = () => {
     const [image, setImage] = useState(null);
     const [error, setError] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const { store, actions } = useContext(Context);
 
     const fetchPerfilImage = async () => {
@@ -17,13 +19,30 @@ const GetUserPerfilImage = () => {
         }
     };
 
-    const handleDeleteClick = async () => {
+    const handleDeleteClick = async (image) => {
+        const usuario_id = store.user_id; 
+        const public_id = image.split('/').pop().split('.')[0]; 
+        
+        // Verifica los valores
+        console.log("Usuario ID:", usuario_id);
+        console.log("Public ID:", public_id);
+        
         try {
-            await actions.deletePerfilImage();
-            setImage(null);
+            await actions.deleteImage(usuario_id, public_id);
+            setImage(null); // Clear the image after deletion
         } catch (error) {
-            setError("No se pudo eliminar la imagen de perfil.");
+            setError("No se pudo eliminar la imagen.");
         }
+    };
+
+    const handleImageClick = (url) => {
+        setSelectedImage(url); 
+        setIsModalOpen(true); 
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); 
+        setSelectedImage(null); 
     };
 
     useEffect(() => {
@@ -39,20 +58,28 @@ const GetUserPerfilImage = () => {
                         src={image}
                         alt="Imagen de Perfil"
                         className="perfil-image"
+                        onClick={() => handleImageClick(image)} 
                     />
                     <button 
-                        onClick={handleDeleteClick} 
+                        onClick={() => handleDeleteClick(image)} 
                         className="delete-button"
                     >
                         x
                     </button>
-                    
                 </div>
             ) : (
-                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} /> // Este componente se muestra si no hay imagen
+                <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} />
             )}
-        </div>
-    );
-};
+                {isModalOpen && (
+                    <div className="user-gallery-modal" onClick={closeModal}>
+                        <div className="user-gallery-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <span className="user-gallery-modal-close" onClick={closeModal}>&times;</span>
+                            <img src={selectedImage} alt="Imagen grande" className="user-gallery-modal-image" />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
 export default GetUserPerfilImage;

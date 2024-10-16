@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             entidades: [],
             partners: [],
             inscripciones: [],
+            selectedInterests: [],
             demo: [
                 {
                     title: "FIRST",
@@ -331,12 +332,14 @@ const getState = ({ getStore, getActions, setStore }) => {
                             throw new Error(`Error ${resp.status}: ${data.message}`); // Lanza error con mensaje específico
                         });
                     }
-                    return resp.json();
+                    return resp.json(); // Esta línea retorna el objeto del evento recién creado
                 })
                 .then(data => {
                     const store = getStore();
                     setStore({ eventos: [...store.eventos, data] });
-                    onSuccess();
+            
+                    // Asegúrate de que el `data` contenga el ID del nuevo evento
+                    onSuccess(data.id); // Cambiar aquí para pasar el ID del nuevo evento
                 })
                 .catch(error => {
                     console.error("Error al agregar el evento:", error);
@@ -1048,7 +1051,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             
             deletePerfilImage: async (usuario_id, public_id) => {
                 const token = localStorage.getItem('token');
-                const userId = parseInt(localStorage.getItem('user_id')); // Revisar si el userId se obtiene correctamente
+                const userId = parseInt(localStorage.getItem('user_id'));
             
                 // Imprimir los valores para verificar que no son undefined
                 console.log("Usuario ID:", usuario_id, "Public ID:", public_id, "User ID desde localStorage:", userId);
@@ -1057,7 +1060,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Faltan parámetros: usuario_id o public_id están undefined");
                     return;
                 }
-            
+                
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/perfil/image/${usuario_id}/${public_id}`, {
                         method: "DELETE",
@@ -1071,7 +1074,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         const errorData = await response.json();
                         throw new Error(errorData.ERROR || 'Error al eliminar la imagen de perfil');
                     }
-            
+                    
                     const data = await response.json();
                     return data; // Retornar la respuesta del servidor
                 } catch (error) {
@@ -1079,6 +1082,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
+
             uploadPartnerImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
@@ -1185,7 +1189,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getUserInscripciones: (usuarioId) => {
                 const token = localStorage.getItem('token');
-                return fetch(`${process.env.BACKEND_URL}/inscripciones?usuario_id=${usuarioId}`, {                       
+                return fetch(`${process.env.BACKEND_URL}/api/inscripciones?usuario_id=${usuarioId}`, {                       
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -1268,21 +1272,20 @@ const getState = ({ getStore, getActions, setStore }) => {
             },            
 
             agregarInteres: async (interesesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            'Authorization': `Bearer ${localStorage.getItem('token')}` // Asegúrate de que el token es correcto
                         },
-                        body: JSON.stringify({ intereses_id: interesesId }) // comprobando que 'intereses_id' sea el nombre correcto
+                        body: JSON.stringify({ intereses_id: interesesId }) // Esto debe ser un objeto con un array
                     });
             
                     if (resp.ok) {
                         const data = await resp.json();
-                        console.log("Intereses añadidos:", data);
-                        return await getActions().obtenerIntereses(); // No se pasa usuarioId aquí
+                        console.log("Intereses añadidos:", data); // Información de respuesta
+                        return data;
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al agregar intereses:", errorData.message);
@@ -1291,39 +1294,35 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al agregar intereses:", error);
                 }
             },
-
-            // Obtener intereses de un usuario
+        
             obtenerIntereses: async () => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-            
+        
                     if (resp.ok) {
                         const data = await resp.json();
                         console.log("Intereses obtenidos:", data);
-                        setStore({ intereses: Array.isArray(data) ? data : [] }); // Asegúrate de que sea un array
+                        setStore({ intereses: Array.isArray(data) ? data : [] });
                         return Array.isArray(data) ? data : [];
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al obtener intereses:", errorData.message);
-                        return []; // Retorna un array vacío si hay un error
+                        return [];
                     }
                 } catch (error) {
                     console.error("Error al obtener intereses:", error);
-                    return []; // También retorna un array vacío en caso de error
+                    return [];
                 }
             },
-
-            // Editar intereses de un usuario
+        
             editarInteres: async (nuevosInteresesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1331,11 +1330,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify({ intereses_id: nuevosInteresesId })
                     });
-
+        
                     if (resp.ok) {
                         const data = await resp.json();
                         console.log("Intereses editados:", data);
-                        return await getActions().obtenerIntereses(); // Vuelve a obtener los intereses actualizados
+                        return await actions.obtenerIntereses(); 
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al editar intereses:", errorData.message);
@@ -1344,27 +1343,147 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al editar intereses:", error);
                 }
             },
-
-            // Eliminar un interés de un usuario
+        
             eliminarInteres: async (interesId) => {
-                const usuarioId = localStorage.getItem("user_id"); // Obtener el userId de localStorage
                 try {
-                    const resp = await fetch(`${process.env.BACKEND_URL}/usuarios/intereses/${interesId}`, {
+                    const resp = await fetch(`${process.env.BACKEND_URL}/api/usuarios/intereses/${interesId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
                     });
-
+        
                     if (resp.ok) {
                         console.log("Interés eliminado correctamente.");
-                        return await getActions().obtenerIntereses(); // Vuelve a obtener los intereses actualizados
+                        return await actions.obtenerIntereses(); 
                     } else {
                         const errorData = await resp.json();
                         console.log("Error al eliminar interés:", errorData.message);
                     }
                 } catch (error) {
                     console.error("Error al eliminar interés:", error);
+                }
+            },
+        
+            uploadEventoImage: async (evento_id, file) => {
+                const token = localStorage.getItem('token');
+                
+                if (!evento_id || !file) {
+                    console.error("Faltan parámetros: evento_id o file están undefined");
+                    return;
+                }
+            
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+            
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/evento/${evento_id}/upload-image`, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: formData // Enviar el archivo como FormData
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al subir la imagen del evento');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al subir la imagen del evento:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
+                }
+            },
+
+            getEventoImage: async (evento_id) => {
+                if (!evento_id) {
+                    console.error("Falta el parámetro: evento_id está undefined");
+                    return;
+                }
+            
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/evento/${evento_id}/image`, {
+                        method: "GET",
+                        headers: {
+                            // No se necesita el token aquí
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al obtener la imagen del evento');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al obtener la imagen del evento:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
+                }
+            },
+
+            updateEventoImage: async (evento_id, file) => {
+                const token = localStorage.getItem('token');
+                
+                if (!evento_id || !file) {
+                    console.error("Faltan parámetros: evento_id o file están undefined");
+                    return;
+                }
+            
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+            
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/evento/${evento_id}/upload-image`, {
+                        method: "PUT",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: formData // Enviar el archivo como FormData
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al actualizar la imagen del evento');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al actualizar la imagen del evento:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
+                }
+            },
+
+            deleteEventoImage: async (evento_id) => {
+                const token = localStorage.getItem('token');
+                
+                if (!evento_id) {
+                    console.error("Falta el parámetro: evento_id está undefined");
+                    return;
+                }
+            
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/evento/${evento_id}/image`, {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+            
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.ERROR || 'Error al eliminar la imagen del evento');
+                    }
+            
+                    const data = await response.json();
+                    return data; // Retornar la respuesta del servidor
+                } catch (error) {
+                    console.error("Error al eliminar la imagen del evento:", error);
+                    throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
 

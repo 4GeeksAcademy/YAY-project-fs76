@@ -4,6 +4,7 @@ import { Context } from '../../store/appContext';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { CustomMarker } from '../customMarker';
+import { GetEventoImage } from '../getEventoImage';
 
 
 export const Landing_Maps = () => {
@@ -217,11 +218,17 @@ export const Landing_Maps = () => {
                             {/* Card */}
                             <div className={`card landing-card card-flush card-land h-100 ${isVisible ? 'animate' : ''}`}>
                                 <div className="card-pinned card-ancla">
-                                    <img
-                                        className="card-img card-imgagenLand"
-                                        src="https://fastly.picsum.photos/id/548/480/320.jpg?hmac=F-cPw28Zn_C4ipB9LGe52Azc63qetaHJbX6f9XFosso"
-                                        alt="Image Description"
-                                    />
+                                    <div className="card-img card-imgagenLand no-hover">
+                                        <GetEventoImage
+                                            eventoId={selectedEvent.id}
+                                            setImagenUrl={(url) => {
+                                                if (selectedEvent && selectedEvent.foto_evento) {
+                                                    selectedEvent.foto_evento = url;
+                                                }
+                                            }}
+                                            partnerId={selectedEvent.partner_id === parseInt(localStorage.getItem("partner_id"))}
+                                        />                               
+                                        </div>
                                 </div>
                                 {/* Body */}
                                 <div className="card-body margen-body">
