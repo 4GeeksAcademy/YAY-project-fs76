@@ -85,7 +85,7 @@ export const Perfil_Usuario = () => {
     });
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set()); 
+    const [interesesSeleccionados, setInteresesSeleccionados] = useState(new Set());
     const [misIntereses, setMisIntereses] = useState([]); // Lista de intereses seleccionados
     const [interesesDisponibles, setInteresesDisponibles] = useState([]);
     const [activeSection, setActiveSection] = useState("informacionPersonal");
@@ -114,8 +114,18 @@ export const Perfil_Usuario = () => {
                 .then(data => {
                     setInteresesDisponibles(Array.isArray(data) ? data : []); // Asegúrate de que sea un array
                 });
+
+            actions.loadEventosConUsuarios()
+                .then(() => setLoading(false), actions.loadInscripciones())
+                .catch(err => {
+                    setLoading(false);
+                    setError("Error al cargar eventos");
+                });
+
         }
-    }, [userId, store.user_id]);
+
+
+    }, [userId, store.user_id, actions.loadEventosConUsuarios]);
 
     const handleInteresChange = (interesId) => {
         setMisIntereses(prev => {
@@ -213,11 +223,11 @@ export const Perfil_Usuario = () => {
         setInteresesSeleccionados(prev => {
             const newSet = new Set(prev);
             if (newSet.has(interesId)) {
-                newSet.delete(interesId); 
-                setInteresesDisponibles(prev => [...prev, { id: interesId }]); 
+                newSet.delete(interesId);
+                setInteresesDisponibles(prev => [...prev, { id: interesId }]);
             } else {
                 newSet.add(interesId); // Si no está, añade
-                setInteresesDisponibles(prev => prev.filter(i => i.id !== interesId)); 
+                setInteresesDisponibles(prev => prev.filter(i => i.id !== interesId));
             }
             return newSet; // Devuelve el nuevo Set
         });
@@ -394,58 +404,34 @@ export const Perfil_Usuario = () => {
                         )}
 
                         {activeSection === 'misIntereses' && (
-                               <div className="profile-card">
-                               <h2 className="profile-card-header text-black">Mis Intereses</h2>
-                               <label>Selecciona tus intereses</label>
-                               <div>
-                                   {interesesDisponibles.length > 0 ? (
-                                       interesesDisponibles.map(interes => (
-                                           <button
-                                               key={interes.id}
-                                               type="button"
-                                               style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
-                                               onClick={() => handleInteresesChange(interes.id)}
-                                           >
-                                               {interes.nombre}
-                                           </button>
-                                       ))
-                                   ) : (
-                                       <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
-                                   )}
-                               </div>
-                       
-                               <label className='mt-5'>Tus intereses seleccionados:</label>
-                               <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                   {interesesSeleccionados.size > 0 ? (  // Verifica si hay intereses seleccionados usando la propiedad size
-                                       Array.from(interesesSeleccionados).map(interesId => {
-                                           const interes = interesesDisponibles.find(i => i.id === interesId);
-                                           return (
-                                               <div key={interesId} style={{ marginRight: '10px', textAlign: 'center' }}>
-                                                   <span style={styles.selectedtButton}>{interes?.nombre}</span>
-                                                   <div>
-                                                       <button
-                                                           type="button"
-                                                           className='bg-transparent'
-                                                           style={{ ...styles.buttonRemove, fontSize: '12px' }}
-                                                           onClick={() => handleInteresesChange(interesId)}
-                                                       >
-                                                           Quitar
-                                                       </button>
-                                                   </div>
-                                               </div>
-                                           );
-                                       })
-                                   ) : (
-                                       <span className='text-danger fs-6'><b>No has seleccionado intereses</b></span>
-                                   )}
-                               </div>
-                               <div className="d-flex justify-content-end">
-            <button type="button" onClick={handleSubmitIntereses} style={styles.buttonSaveStyle}>
-                Guardar Intereses
-            </button>
-        </div>
-    </div>
-)}
+                            <div className="profile-card">
+                                <h2 className="profile-card-header text-black">Mis Intereses</h2>
+                                <label>Tus intereses</label>
+                                <div>
+                                    {interesesDisponibles.length > 0 ? (
+                                        interesesDisponibles.map(interes => (
+                                            <button
+                                                key={interes.id}
+                                                type="button"
+                                                style={interesesSeleccionados.has(interes.id) ? styles.buttonRemove : styles.interestButton}
+                                                onClick={() => handleInteresesChange(interes.id)}
+                                            >
+                                                {interes.nombre}
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <span className='text-danger fs-6'><b>No hay intereses disponibles</b></span>
+                                    )}
+                                </div>
+
+
+                                <div className="d-flex justify-content-end">
+                                    <button type="button" onClick={handleSubmitIntereses} style={styles.buttonSaveStyle}>
+                                        Guardar Intereses
+                                    </button>
+                                </div>
+                            </div>
+                        )}
 
                         {activeSection === 'misEventos' && (
                             <MisEventos />
@@ -496,7 +482,7 @@ export const Perfil_Usuario = () => {
                             </div>
                         )}
                     </section>
-                
+
                 </div>
             </main>
         </>

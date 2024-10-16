@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import { Mapa } from './mapa';
+import ImageUploadModal from "./imageUploadModal";
 
 export const Evento_Form = () => {
     const { store, actions } = useContext(Context);
@@ -19,85 +20,89 @@ export const Evento_Form = () => {
         observaciones: '',
         interes_id: '',
         latitud: null,
-        longitud: null
+        longitud: null,
     });
     const [direccion, setDireccion] = useState("");
     const [alert, setAlert] = useState(null);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [eventoId, setEventoId] = useState(null);
     const navigate = useNavigate();
     const { theid } = useParams();
 
     useEffect(() => {
         actions.getInteres();
-        // Cargar el evento si el ID está presente
         if (theid) {
             const evento = store.eventos.find(evento => evento.id === parseInt(theid));
             if (evento) {
-
-                const fechaParts = evento.fecha.split(' '); // Suponiendo que la fecha está en formato "DD de Mes de YYYY"
+                const fechaParts = evento.fecha.split(' ');
                 const dia = fechaParts[0];
-                const mes = new Date(Date.parse(fechaParts[2] + " " + fechaParts[1] + " 1")).getMonth() + 1; // Convertir el mes a número
+                const mes = new Date(Date.parse(fechaParts[2] + " " + fechaParts[1] + " 1")).getMonth() + 1;
                 const anio = fechaParts[4];
-                const formattedDate = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`; // Formato 'YYYY-MM-DD'
+                const formattedDate = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
 
                 setNuevoEvento({
                     ...evento,
-                    fecha: formattedDate, // Asignar la fecha formateada
+                    fecha: formattedDate,
                     hora_inicio: evento.horario.split(' - ')[0],
-                    hora_fin: evento.horario.split(' - ')[1]
+                    hora_fin: evento.horario.split(' - ')[1],
                 });
-                setTimeout(() => {
-                    setDireccion(evento.direccion);
-                    setMapaLoaded(true);
-                }, 500);
+                setDireccion(evento.direccion);
             }
         }
     }, [theid, store.eventos]);
 
+    const validateFields = () => {
+        const {
+            nombre, fecha, hora_inicio, hora_fin, direccion,
+            latitud, longitud, breve_descripcion, dificultad,
+            precio, cupo, observaciones, interes_id
+        } = nuevoEvento;
+
+        return (
+            nombre && fecha && hora_inicio && hora_fin && direccion && latitud !== null && longitud !== null && 
+            breve_descripcion && dificultad && precio !== '' && cupo !== '' && observaciones && interes_id
+        );
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        const { nombre, fecha, hora_inicio, hora_fin, direccion, latitud, longitud, breve_descripcion, dificultad, precio, cupo, observaciones, interes_id } = nuevoEvento;
-        // Validación de campos
-        if (!nombre || !fecha || !hora_inicio || !hora_fin || !direccion || latitud === null || longitud === null || !breve_descripcion || !dificultad || (precio === '') || !cupo || !observaciones || !interes_id) {
-            if (!alert || alert.type !== 'danger') {
-                setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
-            }
-        } else {
-            // Formatear la fecha
-            const formattedDate = new Date(fecha).toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
-            const formattedStartTime = hora_inicio; // formato 'HH:MM'
-            const formattedEndTime = hora_fin; // formato 'HH:MM'
 
-            const eventoData = {
-                ...nuevoEvento,
-                fecha: formattedDate,
-                hora_inicio: formattedStartTime,
-                hora_fin: formattedEndTime,
-                partner_id: store.partnerId // Agregar el campo partner_id
-            };
-
-            if (theid) {
-                actions.updateEvento(theid, eventoData, () => {
-                    setAlert({ type: 'success', message: ' Evento updated successfully' });
-                    setTimeout(() => {
-                        navigate(-1);
-                    }, 1000);
-                });
-            } else {
-                actions.addEvento(eventoData, () => {
-                    setAlert({ type: 'success', message: ' Evento created successfully' });
-                    setTimeout(() => {
-                        navigate(-1);
-                    }, 1000);
-                }, () => {
-                    setAlert({ type: 'danger', message: ' Error creating event' });
-                });
-            }
+        if (!validateFields()) {
+            setAlert({ type: 'danger', message: 'Por favor, complete todos los campos' });
+            return;
         }
+
+        const formattedDate = new Date(nuevoEvento.fecha).toISOString().split('T')[0];
+
+        const eventoData = {
+            ...nuevoEvento,
+            fecha: formattedDate,
+            partner_id: store.partnerId,
+        };
+
+        // Guardar el evento y obtener su ID
+        actions.addEvento(eventoData, (nuevoId) => {
+            setAlert({ type: 'success', message: 'Evento creado correctamente' });
+            setEventoId(nuevoId); // Aquí ahora tendrás el ID
+            setShowImageModal(true); // Mostrar el modal para cargar la imagen
+        }, () => {
+            setAlert({ type: 'danger', message: 'Error al crear evento' });
+        });
     };
+
+    const handleImageUploadClose = (url) => {
+        if (url) {
+            // Maneja la URL de la imagen si se subió exitosamente
+            setNuevoEvento((prev) => ({ ...prev, foto_evento: url }));
+        }
+        setShowImageModal(false); // Cerrar el modal
+        navigate(-1); // Navegar a la vista deseada si es necesario
+    };
+
     return (
         <>
             <form onSubmit={handleSubmit} className="m-5 mx-auto w-50 p-4 shadow rounded" style={{ backgroundColor: '#ffffff' }}>
-                <h1 className="text-center" style={{ color: '#7c488f' }}>{theid ? 'Editar Evento' : 'Crear Evento'}</h1>
+                <h1 className="text-center" style={{ color: '#7c488f' }}>Crear Evento</h1>
                 {alert && (
                     <div className={`alert fade show alert-${alert.type}`} role="alert">
                         {alert.type === 'danger' ? <i className="fa-solid fa-triangle-exclamation"></i> : <i className="fa-solid fa-circle-check"></i>}
@@ -209,6 +214,9 @@ export const Evento_Form = () => {
                     o volver a la lista de eventos
                 </Link>
             </form>
+            {showImageModal && (
+                 <ImageUploadModal eventoId={eventoId} onClose={handleImageUploadClose} />
+            )}
         </>
     );
 };

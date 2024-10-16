@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Navigate } from "react-router-dom";
+import { GetEventoImage } from "./getEventoImage";
 import "../../styles/home.css";
 
 export const Partner_Eventos = () => {
@@ -72,12 +73,9 @@ export const Partner_Eventos = () => {
                     {Array.isArray(store.eventos) && store.eventos.map((evento) => (
                         <li key={evento.id} className="list-group-item d-flex justify-content-between" style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px' }}>
                             <div className="d-flex justify-content-between flex-grow-1">
-                                <img
-                                    src="https://cdn-icons-png.freepik.com/512/3544/3544735.png"
-                                    alt="profileImage"
-                                    className="rounded-circle my-auto ms-4"
-                                    style={{ height: '100%', maxHeight: '100px' }}
-                                />
+                            <div style={{ width: '300px', height: 'auto', margin: '0' }}>
+                            <GetEventoImage eventoId={evento.id} setImagenUrl={(url) => evento.foto_evento = url} partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))} />
+                                </div>
                                 <ul className="ms-5 flex-grow-1" style={{ listStyle: 'none', padding: 0 }}>
                                     <li className="fs-3" style={{ color: '#7c488f' }}>{evento.nombre}</li>
                                     <li className="text-muted fs-5">
@@ -98,7 +96,7 @@ export const Partner_Eventos = () => {
                             {evento.partner_id === parseInt(localStorage.getItem("partner_id")) && (
                                 <div className="d-flex justify-content-end align-items-start">
                                     <button className="btn btn-icon"
-                                        onClick={() => navigate(`/formulario-evento/${evento.id}`)} tabIndex="-1">
+                                        onClick={() => navigate(`/formulario-evento-editar/${evento.id}`)} tabIndex="-1">
                                         <i className="fa-solid fa-pencil" style={{ color: '#7c488f' }} tabIndex="-1" />
                                     </button>
 

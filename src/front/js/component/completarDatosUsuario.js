@@ -43,7 +43,7 @@ const styles = {
         resize: 'none',
     },
     button: {
-        backgroundColor: '#7c488f',
+        backgroundColor: '#7c488f#7',
         color: 'white',
         padding: '5px 5px',
         border: 'none',
@@ -116,7 +116,7 @@ const CompletarDatosUsuario = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        let isMounted = true; // Variable de bandera para verificar el estado del componente
+        let isMounted = true; 
 
         const fetchIntereses = async () => {
             try {
