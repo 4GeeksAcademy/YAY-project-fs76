@@ -697,46 +697,42 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion,latitud,longitud,breve_descripcion,intereses) => {
+            updateProfile: async (userId, nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion, intereses) => {
                 try {
-                  
-                  const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
-                  console.log("URL del fetch:", url);
-                  const response = await fetch(url, {
-                    method: "PUT", 
-                    headers: {
-                      "Content-Type": "application/json", 
-                      Authorization: `Bearer ${sessionStorage.getItem('token')}` 
-                    },
-                    body: JSON.stringify({
-                      nombre,
-                      apellidos,
-                      fecha_nacimiento,
-                      direccion,
-                      latitud,
-                      longitud,
-                      breve_descripcion,
-                      intereses,
-                    }), 
-                  });
-              
-                
-                  if (response.ok) {
-                    const data = await response.json(); 
-                    console.log("Datos del usuario actualizados exitosamente", data);
-                    localStorage.setItem("nombre", nombre)
-                   
-                    return true;
-                  } else {
-                    const errorData = await response.json(); // Obtener datos de error
-                    console.error("Error al actualizar los datos del usuario:", errorData);
-                    return false; // Indicar que la actualización falló
-                  }
+                    const url = `${process.env.BACKEND_URL}/api/usuarios/${userId}`;
+                    console.log("URL del fetch:", url);
+                    const response = await fetch(url, {
+                        method: "PUT", 
+                        headers: {
+                            "Content-Type": "application/json", 
+                            Authorization: `Bearer ${sessionStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({
+                            nombre,
+                            apellidos,
+                            fecha_nacimiento,
+                            direccion,
+                            latitud,
+                            longitud,
+                            breve_descripcion,
+                        })
+                    });
+            
+                    if (response.ok) {
+                        const data = await response.json(); 
+                        console.log("Datos del usuario actualizados exitosamente", data);
+                        localStorage.setItem("nombre", nombre);
+                        return true;
+                    } else {
+                        const errorData = await response.json(); 
+                        console.error("Error al actualizar los datos del usuario:", errorData);
+                        return false; 
+                    }
                 } catch (error) {
-                  console.error("Error en la solicitud de actualización de datos:", error);
-                  return false; // Indicar que hubo un error
+                    console.error("Error en la solicitud de actualización de datos:", error);
+                    return false; 
                 }
-              },
+            },
             
               getProfile: async (userId) => {
                 try {

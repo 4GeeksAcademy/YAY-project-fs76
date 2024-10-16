@@ -121,7 +121,7 @@ export const PartnerMisEventos = () => {
                                                     {evento.usuarios.slice(0, 4).map((usuario, index) => (
                                                         <div key={index} style={{ textAlign: 'center' }}>
                                                             <img
-                                                                src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                                                src={usuario.foto_perfil || "https://i.ibb.co/4WsXL7Z/vector-logo.png" }
                                                                 alt={usuario}
                                                                 className="rounded-circle mb-1"
                                                                 style={{ width: '50px', height: '50px' }}
@@ -173,7 +173,7 @@ export const PartnerMisEventos = () => {
                                     {selectedUsuarios.map((usuario) => (
                                         <div key={usuario.id} style={{ textAlign: 'center' }}>
                                             <img
-                                                src={usuario.foto_perfil || "https://i.ibb.co/tbbV6G0/yay-fondo.png"}
+                                                src={usuario.foto_perfil || "https://i.ibb.co/4WsXL7Z/vector-logo.png" }
                                                 alt={usuario.nombre}
                                                 className="rounded-circle mb-1"
                                                 style={{ width: '50px', height: '50px' }}

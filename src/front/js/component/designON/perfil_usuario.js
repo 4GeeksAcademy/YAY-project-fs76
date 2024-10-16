@@ -4,6 +4,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { MisEventos } from "./misEventos";
 import GetUserPerfilImage from "../getUserPerfilImage";
 import GetUserImages from "../getUserImagens";
+import { Mapa } from "../mapa";
+
 import "../../../styles/profile.css";
 
 const styles = {
@@ -92,6 +94,10 @@ export const Perfil_Usuario = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
+    const [latitud, setLatitud] = useState(null);
+    const [longitud, setLongitud] = useState(null);
+    const [showMap, setShowMap] = useState(false);
+
     useEffect(() => {
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
         if (idToUse) {
@@ -131,40 +137,45 @@ export const Perfil_Usuario = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile({ ...profile, [name]: value });
+        if (name === 'direccion' && value) {
+            setShowMap(true); //Mostrar el mapa cuando se introduce una dirección
+        }
     };
 
-    const handleSubmit = (e) => {
+    const setDireccion = (direccion, lat, lng) => {
+        setProfile(prev => ({ ...prev, direccion }));
+        setLatitud(lat);
+        setLongitud(lng);
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const profileConIntereses = {
-            ...profile,
-            intereses: misIntereses
-        };
 
-        actions.completarDatos(
-            userId,
-            profileConIntereses.nombre,
-            profileConIntereses.apellidos,
-            profileConIntereses.fecha_nacimiento,
-            profileConIntereses.direccion,
-            profileConIntereses.breve_descripcion,
-            profileConIntereses.telefono,
-            profileConIntereses.genero,
-            profileConIntereses.intereses
-        )
-            .then(() => {
+        const { nombre, apellidos, fecha_nacimiento, direccion, latitud, longitud, breve_descripcion, telefono, genero } = profile;
+
+        try {
+            const response = await actions.updateProfile(
+                userId,
+                nombre,
+                apellidos,
+                fecha_nacimiento,
+                direccion,
+                latitud,
+                longitud,
+                breve_descripcion,
+                misIntereses
+            );
+            if (response) {
                 setAlertMessage("¡Cambios guardados exitosamente!");
-                setShowAlert(true);
-                setTimeout(() => setShowAlert(false), 5000);
-            })
-            .catch((error) => {
-                console.error("Error al actualizar el perfil:", error);
-                setAlertMessage("Hubo un error al guardar los cambios.");
-                setShowAlert(true);
-                setTimeout(() => setShowAlert(false), 5000);
-            });
+            }
+        } catch (error) {
+            console.error("Error al actualizar el perfil:", error);
+            setAlertMessage("Hubo un error al guardar los cambios.");
+        } finally {
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 5000);
+        }
     };
-
-
     const confirmDeleteAccount = () => {
         actions.deleteAccount(userId)
             .then(() => {
@@ -179,23 +190,19 @@ export const Perfil_Usuario = () => {
         setActiveSection("informacionPersonal");
     };
 
-    // Estado para la sección de Seguridad
     const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
 
-    // Estado para las notificaciones
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true); // Valor inicial
+    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
-    // Función para alternar la autenticación de 2 factores
     const toggleTwoFactor = async () => {
         try {
-            await actions.toggleTwoFactorAuth(userId); // Debes implementar esta función en tu contexto
+            await actions.toggleTwoFactorAuth(userId);
             setIsTwoFactorEnabled(prev => !prev);
         } catch (error) {
             console.error("Error al cambiar la autenticación de dos factores:", error);
         }
     };
 
-    // Función para alternar las notificaciones
     const toggleNotifications = () => {
         setNotificationsEnabled(prev => !prev);
     };
@@ -208,10 +215,10 @@ export const Perfil_Usuario = () => {
                 newSet.delete(interesId);
                 setInteresesDisponibles(prev => [...prev, { id: interesId }]);
             } else {
-                newSet.add(interesId); // Si no está, añade
+                newSet.add(interesId);
                 setInteresesDisponibles(prev => prev.filter(i => i.id !== interesId));
             }
-            return newSet; // Devuelve el nuevo Set
+            return newSet;
         });
     };
 
@@ -240,7 +247,7 @@ export const Perfil_Usuario = () => {
 
     const handleSubmitIntereses = async () => {
         try {
-            await actions.editarInteres(misIntereses); 
+            await actions.editarInteres(misIntereses);
             setAlertMessage("¡Intereses guardados exitosamente!");
             setShowAlert(true);
             setTimeout(() => setShowAlert(false), 5000);
@@ -286,7 +293,6 @@ export const Perfil_Usuario = () => {
                                     <h2 className="profile-card-header text-black">Información personal</h2>
                                     <form onSubmit={handleSubmit}>
 
-                                        {/* Estructura de filas para nombre y apellidos, fecha de nacimiento y teléfono */}
                                         <div className="row">
                                             <div className="col">
                                                 <div className="form-group">
@@ -387,6 +393,20 @@ export const Perfil_Usuario = () => {
                                             </div>
                                         </div>
                                         <div className="form-group">
+                                        <label>Dirección</label>
+                                        <input
+                                            type="text"
+                                            name="direccion"
+                                            value={profile.direccion}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            placeholder="Introduce tu dirección..."
+                                        />
+                                    </div>
+                                    <button type="submit" style={styles.buttonSaveStyle}>Guardar cambios</button>
+
+
+                                        <div className="form-group">
                                             <label>Breve Descripción (pública)</label>
                                             <textarea
                                                 name="breve_descripcion"
@@ -403,15 +423,21 @@ export const Perfil_Usuario = () => {
                                             <button type="submit" style={styles.buttonSaveStyle}>Guardar cambios</button>
                                         </div>
                                         {showAlert && (
-                    <div className={`alert alert-success alert-dismissible my-3 fade show`} role="alert">
-                        <i className="fas fa-check me-2"></i>
-                        {alertMessage}
-                        <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close"></button>
-                    </div>
-                )}
+                                            <div className={`alert alert-success alert-dismissible my-3 fade show`} role="alert">
+                                                <i className="fas fa-check me-2"></i>
+                                                {alertMessage}
+                                                <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close"></button>
+                                            </div>
+                                        )}
                                     </form>
-                                    
+
                                 </div>
+                                {showMap && (
+                            <Mapa
+                                setDireccion={setDireccion}
+                                initialDireccion={profile.direccion}
+                            />
+                        )}
                                 <div className="profile-card delete-account">
                                     <h4 className="profile-card-header">Eliminar tu Cuenta</h4>
                                     <p>Cuando elimine su cuenta, perderá el acceso a los servicios de la cuenta y borraremos permanentemente sus datos personales. Puedes cancelar la eliminación durante 14 días.</p>
@@ -477,12 +503,12 @@ export const Perfil_Usuario = () => {
                                     </button>
                                 </div>
                                 {showAlert && (
-                    <div className={`alert alert-success alert-dismissible my-3 fade show`} role="alert">
-                        <i className="fas fa-check me-2"></i>
-                        {alertMessage}
-                        <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close"></button>
-                    </div>
-                )}
+                                    <div className={`alert alert-success alert-dismissible my-3 fade show`} role="alert">
+                                        <i className="fas fa-check me-2"></i>
+                                        {alertMessage}
+                                        <button type="button" className="btn-close" onClick={() => setShowAlert(false)} aria-label="Close"></button>
+                                    </div>
+                                )}
                             </div>
                         )}
                         {activeSection === 'misEventos' && (
@@ -533,7 +559,7 @@ export const Perfil_Usuario = () => {
                                 </div>
                             </div>
                         )}
-                        
+
                     </section>
 
                 </div>

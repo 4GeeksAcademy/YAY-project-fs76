@@ -29,7 +29,7 @@ export const Navbar = () => {
             <div className="container-fluid" style={{ width: '85rem' }}>
                 <Link to="/">
                     <img
-                        src="https://i.ibb.co/SVvvn2D/logo-sin-fondo-y-sin-slogan.png"
+                        src= "https://i.ibb.co/d7LLSD1/vector-sin-eslogan.png"
                         alt="logo-ai"
                         style={{ height: '100%', maxHeight: '50px', width: 'auto' }}
                     />
