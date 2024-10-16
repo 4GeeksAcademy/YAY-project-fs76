@@ -41,18 +41,33 @@ const getState = ({ getStore, getActions, setStore }) => {
                     ...newStore, // Actualizar el estado global con el nuevo store
                 }));
             },
-            setAuthState: ({ auth, token, user_id }) => {
+            setAuthState: ({ auth, token, user_id, partner_id }) => {
                 setStore({
                     auth: auth,
                     token: token,
                     user_id: user_id,
+                    partner_id: partner_id,
                 });
             
-                // También guarda en localStorage si es necesario
+              
                 localStorage.setItem("auth", auth);
                 localStorage.setItem("token", token);
                 localStorage.setItem("user_id", user_id);
+                localStorage.setItem("partner_id", partner_id); 
             },
+            setAuthStatePartner: ({ auth, token, partner_id }) => {
+                setStore({
+                    auth: auth,
+                    token: token,
+                    partner_id: partner_id,
+                });
+            
+              
+                localStorage.setItem("auth", auth);
+                localStorage.setItem("token", token);
+                localStorage.setItem("partner_id", partner_id); 
+            },
+            
 
 
             getUserId: () => {
@@ -800,7 +815,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 localStorage.removeItem("auth");
                 localStorage.removeItem("token");
                 localStorage.removeItem("user_id");
-                setStore({ auth: false, user_id: null, token: null });
+                localStorage.removeItem("usuario_id");
+                setStore({ auth: false, user_id: null, token: null, usuarioId:null, usuario_id:null });
             },
 
             inscribirse: async (usuarioId, eventoId) => {

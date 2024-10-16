@@ -1,20 +1,31 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import { useNavigate } from "react-router-dom";
 import { Partner_Eventos } from "../component/partner_eventos";
 import { PartnerMisEventos } from "../component/partner_mis_eventos";
-import "../../styles/partnersHome.css"; // Archivo de CSS para estilos personalizados
+import "../../styles/partnersHome.css";
 
 export const Partners_Home = () => {
-    const { store } = useContext(Context);
-    const navigate = useNavigate(); // Usar navigate
-
+    const { store, actions } = useContext(Context); // Importar actions
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!store.auth && !localStorage.getItem("token")) {
+        const token = localStorage.getItem("token");
+        const auth = localStorage.getItem("auth");
+        const partner_id = localStorage.getItem("partner_id");
+
+        if (!token || !auth || !partner_id) {
+            // Redirige al login si falta algún dato de autenticación
             navigate("/partner-login"); 
+        } else {
+            // Si existen los datos, setearlos en el store
+            actions.setAuthStatePartner({
+                auth: auth,
+                token: token,
+                partner_id: partner_id,
+            });
         }
-    }, []);
+    }, [navigate, actions]); // Incluir actions como dependencia
 
     return (
         <div className="partners-home-container container mt-5">
