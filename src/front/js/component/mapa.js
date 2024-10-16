@@ -9,6 +9,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
     const [address, setAddress] = useState('');
     const [markerPosition, setMarkerPosition] = useState(initialDireccion || { lat: 41.39124311587592, lng: 2.1558980676717767 });
     const [center, setCenter] = useState(initialDireccion || { lat: 41.39124311587592, lng: 2.1558980676717767 });
+    const [isMapLoaded, setIsMapLoaded] = useState(false);
 
     const mapRef = React.useRef();
 
@@ -90,7 +91,9 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
         <LoadScript
             googleMapsApiKey="AIzaSyBLVJxF33WzBypiNQ9ih1oZKX2TdEnjoeA"
             libraries={libraries}
+            onLoad={() => setIsMapLoaded(true)}
         >
+             {isMapLoaded && ( 
             <GoogleMap
                 ref={mapRef}
                 mapContainerStyle={mapContainerStyle}
@@ -123,6 +126,7 @@ export const Mapa = ({ setDireccion, initialDireccion }) => {
                 />
 
             </GoogleMap>
+                )}
         </LoadScript>
     );
 };

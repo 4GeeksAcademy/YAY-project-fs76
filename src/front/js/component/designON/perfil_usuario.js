@@ -80,6 +80,8 @@ export const Perfil_Usuario = () => {
         apellidos: '',
         fecha_nacimiento: '',
         direccion: '',
+        latitud: '',
+        longitud:'',
         breve_descripcion: '',
         telefono: '',
         genero: 'otro',
@@ -94,9 +96,7 @@ export const Perfil_Usuario = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-    const [latitud, setLatitud] = useState(null);
-    const [longitud, setLongitud] = useState(null);
-    const [showMap, setShowMap] = useState(false);
+    const [direccionActual, setDireccionActual] = useState('');
 
     useEffect(() => {
         const idToUse = userId || localStorage.getItem("userId") || store.user_id;
@@ -104,8 +104,9 @@ export const Perfil_Usuario = () => {
             actions.getProfile(idToUse)
                 .then((data) => {
                     if (data) {
-                        setProfile(data);
-                        setMisIntereses(data.intereses.map(i => i.id)); // Ajustes para asegurarte de que traes solo IDs
+                        setProfile({ ...data, latitud: data.latitud || null, longitud: data.longitud || null }); 
+                        setDireccionActual(data.direccion);
+                        setMisIntereses(data.intereses.map(i => i.id)); 
                     }
                 }).catch(error => console.error("Error al obtener el perfil:", error));
 
@@ -137,15 +138,10 @@ export const Perfil_Usuario = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfile({ ...profile, [name]: value });
-        if (name === 'direccion' && value) {
-            setShowMap(true); //Mostrar el mapa cuando se introduce una dirección
-        }
-    };
 
-    const setDireccion = (direccion, lat, lng) => {
-        setProfile(prev => ({ ...prev, direccion }));
-        setLatitud(lat);
-        setLongitud(lng);
+        if (name === 'direccion') {
+            setShowMap(true);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -240,7 +236,7 @@ export const Perfil_Usuario = () => {
         setMisIntereses(prev => prev.filter(id => id !== interesId));
         setInteresesDisponibles(prev =>
             prev.map(interes =>
-                interes.id === interesId ? { ...interes, selected: false } : interes // Reestablecer a no seleccionado
+                interes.id === interesId ? { ...interes, selected: false } : interes 
             )
         );
     };
@@ -296,7 +292,7 @@ export const Perfil_Usuario = () => {
                                         <div className="row">
                                             <div className="col">
                                                 <div className="form-group">
-                                                    <label>Nombre</label>
+                                                    <label className="fs-5">Nombre</label>
                                                     <input
                                                         type="text"
                                                         name="nombre"
@@ -310,7 +306,7 @@ export const Perfil_Usuario = () => {
                                             </div>
                                             <div className="col">
                                                 <div className="form-group">
-                                                    <label>Apellidos</label>
+                                                <label className="fs-5">Apellidos</label>
 
                                                     <input
                                                         type="text"
@@ -328,7 +324,7 @@ export const Perfil_Usuario = () => {
                                         <div className="row">
                                             <div className="col">
                                                 <div className="form-group">
-                                                    <label>Fecha de nacimiento</label>
+                                                <label className="fs-5">Fecha de nacimiento</label>
                                                     <input
                                                         type="date"
                                                         name="fecha_nacimiento"
@@ -341,7 +337,7 @@ export const Perfil_Usuario = () => {
                                             </div>
                                             <div className="col">
                                                 <div className="form-group">
-                                                    <label>Teléfono</label>
+                                                <label className="fs-5">Teléfono</label>
                                                     <input
                                                         type="tel"
                                                         name="telefono"
@@ -356,9 +352,9 @@ export const Perfil_Usuario = () => {
                                         </div>
                                         <div className="col">
                                             <div className="form-group">
-                                                <label>Género</label>
+                                            <label className="fs-5">Género</label>
                                                 <div className="gender-options">
-                                                    <label>
+                                                <label className="fs-5">
                                                         <input
                                                             type="radio"
                                                             className="me-1"
@@ -368,7 +364,7 @@ export const Perfil_Usuario = () => {
                                                         />
                                                         Masculino
                                                     </label>
-                                                    <label>
+                                                    <label className="fs-5">
                                                         <input
                                                             type="radio"
                                                             className="me-1"
@@ -378,7 +374,7 @@ export const Perfil_Usuario = () => {
                                                         />
                                                         Femenino
                                                     </label>
-                                                    <label>
+                                                    <label className="fs-5">
                                                         <input
                                                             type="radio"
                                                             className="me-1"
@@ -389,25 +385,10 @@ export const Perfil_Usuario = () => {
                                                         Otro
                                                     </label>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                        <label>Dirección</label>
-                                        <input
-                                            type="text"
-                                            name="direccion"
-                                            value={profile.direccion}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                            placeholder="Introduce tu dirección..."
-                                        />
-                                    </div>
-                                    <button type="submit" style={styles.buttonSaveStyle}>Guardar cambios</button>
-
-
-                                        <div className="form-group">
-                                            <label>Breve Descripción (pública)</label>
+                                        <label className="fs-5">Breve Descripción (pública)</label>
                                             <textarea
                                                 name="breve_descripcion"
                                                 value={profile.breve_descripcion}
@@ -415,6 +396,16 @@ export const Perfil_Usuario = () => {
                                                 className="form-control"
                                                 rows="3"
                                                 style={{ fontSize: "1.1rem" }}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                        <label className="fs-5">Dirección</label>
+                                        <Mapa
+                                                setDireccion={(direccion, lat, lng) => {
+                                                    setDireccionActual(direccion);  
+                                                    setProfile(prev => ({ ...prev, direccion, latitud: lat, longitud: lng })); 
+                                                }}
+                                                initialDireccion={profile.direccion}
                                             />
                                         </div>
 
@@ -430,14 +421,8 @@ export const Perfil_Usuario = () => {
                                             </div>
                                         )}
                                     </form>
-
                                 </div>
-                                {showMap && (
-                            <Mapa
-                                setDireccion={setDireccion}
-                                initialDireccion={profile.direccion}
-                            />
-                        )}
+
                                 <div className="profile-card delete-account">
                                     <h4 className="profile-card-header">Eliminar tu Cuenta</h4>
                                     <p>Cuando elimine su cuenta, perderá el acceso a los servicios de la cuenta y borraremos permanentemente sus datos personales. Puedes cancelar la eliminación durante 14 días.</p>
@@ -563,6 +548,7 @@ export const Perfil_Usuario = () => {
                     </section>
 
                 </div>
+
             </main>
         </>
     );
