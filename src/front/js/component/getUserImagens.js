@@ -32,6 +32,7 @@ const GetUserImages = () => {
     };
 
     const handleImageClick = (url) => {
+        console.log("Imagen seleccionada: ", url); // Verificar si se captura la imagen
         setSelectedImage(url); // Establece la imagen seleccionada
         setIsModalOpen(true); // Abre el modal
     };
@@ -56,6 +57,7 @@ const GetUserImages = () => {
                             src={url}
                             alt={`Imagen ${index + 1}`}
                             className="user-gallery-image"
+                            onClick={() => handleImageClick(url)} // Agregar onClick para abrir el modal
                         />
                         <button 
                             onClick={() => handleDeleteClick(url)} 

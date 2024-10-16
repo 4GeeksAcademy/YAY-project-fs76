@@ -41,19 +41,19 @@ const getState = ({ getStore, getActions, setStore }) => {
                     ...newStore, // Actualizar el estado global con el nuevo store
                 }));
             },
-            setAuthState: ({ auth, token, user_id, partner_id }) => {
+            setAuthState: ({ auth, token, user_id,}) => {
                 setStore({
                     auth: auth,
                     token: token,
                     user_id: user_id,
-                    partner_id: partner_id,
+        
                 });
             
               
                 localStorage.setItem("auth", auth);
                 localStorage.setItem("token", token);
                 localStorage.setItem("user_id", user_id);
-                localStorage.setItem("partner_id", partner_id); 
+         
             },
             setAuthStatePartner: ({ auth, token, partner_id }) => {
                 setStore({
