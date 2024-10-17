@@ -15,7 +15,7 @@ const UserInterest = () => {
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const apiKey = '';
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY; 
   const apiEndpoint = 'https://api.openai.com/v1/chat/completions';
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const UserInterest = () => {
   return (
     <div className='profile-card text-center'>
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1}}>
+        <div style={{ flex: 1 }}>
           {interests.map((interest) => (
             <div key={interest.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <span style={{ width: '80%' }}>{interest.name}</span>
@@ -83,44 +83,37 @@ const UserInterest = () => {
           ))}
 
           <h3>¿Necesitas ayuda?</h3>
-          <h5> Si no sabes qué eventos podrían encajar con tus intereses...</h5>
+          <h5>Si no sabes qué eventos podrían encajar con tus intereses...</h5>
         </div>
       </div>
       <button className="btn btn-lg mb-3"
-
         onClick={handleAskAI}
         style={{
           backgroundColor: '#7c488f',
           color: '#ffffff'
         }}
       >
-
         Pide consejo a Eureka <i className="fa-solid fa-robot" style={{ color: '#ffffff' }}></i>
-
       </button>
 
-     {loading && (
-  <div className="loading-overlay">
-    <div className="loading-content">
-      <div className="🤚">
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="🌴"></div>
-        <div className="👍"></div>
-      </div>
-      {/* Contenedor para el texto */}
-      <div className="loading-text">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="🤚">
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="🌴"></div>
+              <div className="👍"></div>
+            </div>
+            <div className="loading-text">
+              Estoy pensando qué actividades basadas en tus intereses te podrían gustar...
+            </div>
+          </div>
+        </div>
+      )}
 
-        Estoy pensando qué actividades basadas en tus intereses te podrían gustar...
-
-      </div>
-    </div>
-  </div>
-)}
-
-      {/* Modal */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
