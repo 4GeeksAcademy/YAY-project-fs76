@@ -68,7 +68,7 @@ class Eventos(db.Model):
     foto_evento = db.Column(db.String(255), nullable=True)
     is_active = db.Column(db.Boolean(), default=True, nullable=False)
     partner_id = db.Column(db.Integer, db.ForeignKey('partners.id'), nullable=True)
-    partner = db.relationship('Partners', backref='eventos', lazy=True),
+    partner = db.relationship('Partners', backref='eventos', lazy=True)
     partner_nombre = db.Column(db.String(120), nullable=True)
     interes_id = db.Column(db.Integer, db.ForeignKey('intereses.id'), nullable=True)
     interes = db.relationship('Intereses', backref='eventos', lazy=True)
