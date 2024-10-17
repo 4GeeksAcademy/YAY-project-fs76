@@ -70,13 +70,16 @@ export const Landing_Card = () => {
                 <div className="card-pinned-top-start card-ancla-top-start">
                   <span className="badge badge-lg bg-dark m-2" style={{ fontSize: "15px", fontWeight: '400' }}>{intereses[evento.id]}</span>
                 </div>
-                <div style={{width: '100%', height: '100%', maxHeight: '220px', objectFit: 'cover'}}>
-                <GetEventoImage
-                  eventoId={evento.id}
-                  setImagenUrl={(url) => evento.foto_evento = url}
-                  partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))}
-                />
-                </div>
+
+           <div className='card-pinned card-ancla' style={{position: 'relative', display: 'block'}}>
+                  <GetEventoImage
+                    eventoId={evento.id}
+                    className="image-wrapper"
+                    setImagenUrl={(url) => evento.foto_evento = url}
+                    partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))}
+                  />
+        </div>
+           
               </div>
               {/* Body */}
               <div className="card-body margen-body">
@@ -103,16 +106,17 @@ export const Landing_Card = () => {
         ))}
 
         <div className="mt-5 w-100 text-center">
-          <a className="custom-button btn"
+          <button className="custom-button btn btn-lg"
             onClick={handleShowInfoModal}
             style={{
               borderColor: '#7c488f',
+              backgroundColor: '#7c488f26',
               borderWidth: '2px',
               color: '#494949',
               fontWeight: '500'
             }}>
             Ver todos los eventos <i className="bi-chevron-right small ms-1"></i>
-          </a>
+          </button>
         </div>
       </div>
       {showModalInfo && (

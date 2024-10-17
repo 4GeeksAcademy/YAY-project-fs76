@@ -174,7 +174,7 @@ export const Evento_Form = () => {
                     <div className="col-md-3">
                         <label htmlFor="precioInput" className="form-label">Precio</label>
                         <div className="position-relative">
-                            <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio..." min="0" />
+                            <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Puede ser 0..." min="0" />
                             <span className="position-absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>€</span>
                         </div>
                     </div>

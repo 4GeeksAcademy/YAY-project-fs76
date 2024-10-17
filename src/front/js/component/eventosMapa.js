@@ -127,11 +127,12 @@ export const EventosMapa = () => {
                 <div className='ms-5'>
                     <div className="d-flex justify-content-between">
                         <h2 className="mb-2">Eventos disponibles <i className="fa-solid fa-map-location-dot"></i></h2>
-                        <button className="custom-button btn btn-lg mb-3"
+                        <button className="custom-button btn btn-lg mb-3 fs-5"
                             onClick={() => navigate(`/eventos`)}
                             style={{
                                 borderColor: '#ffc107',
-                                color: '#494949'
+                                color: '#494949',
+                                backgroundColor: '#7c488f26'
                             }}
                         >
                             Ver en Lista  <i className="fa-solid fa-rectangle-list" style={{ color: '#7c488f' }}></i>
@@ -183,7 +184,7 @@ export const EventosMapa = () => {
                     <div className='d-flex flex-column align-items-center justify-content-cente mt-5 ms-5' style={{ marginInline: 'auto' }}>
                         <div className="card-pinned card-ancla p-0" >
                             <div className=" mt-2" key={selectedEvent.id} style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', border: 'none', marginBottom: '10px', width: '500px' }}>
-                                <div style={{ width: '100%', maxHeight: '250px', objectFit: 'cover', margin: '0', padding: '0', overflow: 'hidden' }}>
+                                <div style={{ width: '100%', maxHeight: '250px', objectFit: 'cover', margin: '0', padding: '0', overflow: 'hidden', marginBottom: '10px' }}>
                                     <GetEventoImage
                                         eventoId={selectedEvent.id}
                                         setImagenUrl={(url) => selectedEvent.foto_evento = url}

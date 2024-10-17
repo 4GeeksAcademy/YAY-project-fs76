@@ -52,7 +52,7 @@ export const GetEventoImage = ({ eventoId, setImagenUrl, partnerId }) => {
                     <ImageEventoUpload fetchEventoImage={fetchEventoImage} eventoId={eventoId} onUploadComplete={handleUploadComplete} />
                 ) : (
                     <div style={{maxHeight: '200px'}}>
-                    <img src="https://i.ibb.co/FVKb9Lp/Logo-sin-fondo.png" alt="Imagen por defecto" className="evento-image"  />
+                    <img src="https://i.ibb.co/RSfPzcJ/defecto-evento.png"  alt="Imagen por defecto" className="evento-image"  />
                     </div>
                 )
             )}

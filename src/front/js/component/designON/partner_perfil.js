@@ -45,38 +45,38 @@ export const Partner_Perfil = () => {
         <div className="container-fluid perfil-container">
             <div className="row justify-content-center">
                 <div className="col-md-3 sidebar my-auto pb-3">
-                    <h3 className="text-center" style={{ color: '#7c488f' }}>Menú</h3>
+                    <h3 className="text-center fs-3" style={{ color: '#7c488f' }}>Menú</h3>
                     <ul className="list-group">
-                        <li className="list-group-item" onClick={() => navigate(`/editPartnerProfile/${partnerId}`)}>Editar Perfil</li>
-                        <li className="list-group-item" onClick={() => navigate(`/formulario-evento`)}>Crear Evento</li>
-                        <li className="list-group-item" onClick={() => navigate(`/partner-mis-eventos/${partnerId}`)}>Mis Eventos</li>
-                        <li className="list-group-item" onClick={() => navigate(`/partners-home`)}>Home</li>
-                        <li className="list-group-item"onClick={() => navigate(`/#land-contacto`)}>Contactar con Yay</li>
-                        <li className="list-group-item"onClick={() => navigate(`/#land-contacto`)}>Pedir Ayuda</li>
-                        <li className="list-group-item" onClick={() => navigate(`/sobre-nosotros`)}>Sobre Nosotros</li>
+                        <li className="list-group-item fs-5" onClick={() => navigate(`/editPartnerProfile/${partnerId}`)}>Editar Perfil</li>
+                        <li className="list-group-item fs-5" onClick={() => navigate(`/formulario-evento`)}>Crear Evento</li>
+                        <li className="list-group-item fs-5" onClick={() => navigate(`/partner-mis-eventos/${partnerId}`)}>Mis Eventos</li>
+                        <li className="list-group-item fs-5" onClick={() => navigate(`/partners-home`)}>Home</li>
+                        <li className="list-group-item fs-5"onClick={() => navigate(`/#land-contacto`)}>Contactar con Yay</li>
+                        <li className="list-group-item fs-5"onClick={() => navigate(`/#land-contacto`)}>Pedir Ayuda</li>
+                        <li className="list-group-item fs-5" onClick={() => navigate(`/sobre-nosotros`)}>Sobre Nosotros</li>
                     </ul>
                 </div>
                 <div className="col-md-8">
                     <div className="card p-4 profile-card shadow" style={{ backgroundColor: 'white', border: 'none' }}>
-                        <h2 className="mb-4" style={{ color: '#7c488f' }}>Información</h2>
-                        <div className="form-group mb-3">
-                            <label><strong>Nombre:</strong></label>
+                        <h2 className="mb-4 " style={{ color: '#7c488f' }}>Información</h2>
+                        <div className="form-group mb-3 fs-5">
+                            <label><strong>Nombre</strong></label>
                             <p>{profile.nombre}</p>
                         </div>
-                        <div className="form-group mb-3">
-                            <label><strong>NIF o DNI:</strong></label>
+                        <div className="form-group mb-3 fs-5">
+                            <label><strong>NIF o DNI</strong></label>
                             <p>{profile.nif}</p>
                         </div>
-                        <div className="form-group mb-3">
-                            <label><strong>Dirección:</strong></label>
+                        <div className="form-group mb-3 fs-5">
+                            <label><strong>Dirección</strong></label>
                             <p>{profile.direccion}</p>
                         </div>
-                        <div className="form-group mb-3">
-                            <label><strong>Sector:</strong></label>
+                        <div className="form-group mb-3 fs-5">
+                            <label><strong>Sector</strong></label>
                             <p>{profile.sector}</p>
                         </div>
-                        <div className="form-group mb-3">
-                            <label><strong>Entidad ID:</strong></label>
+                        <div className="form-group mb-3 fs-5">
+                            <label><strong>Entidad ID</strong></label>
                             <p>{tipoEntidad}</p>
                         </div>
                     </div>

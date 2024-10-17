@@ -5,8 +5,8 @@ import "../../styles/imagenes.css";
 
 const GetUserImages = () => {
     const [images, setImages] = useState([]);
-    const [selectedImage, setSelectedImage] = useState(null); // Estado para la imagen seleccionada
-    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
+    const [selectedImage, setSelectedImage] = useState(null); 
+    const [isModalOpen, setIsModalOpen] = useState(false); 
     const [error, setError] = useState(null);
     const { store, actions } = useContext(Context);
 
