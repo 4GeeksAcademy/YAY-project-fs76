@@ -7,6 +7,7 @@ import GetUserImages from "../getUserImagens";
 import { Mapa } from "../mapa";
 
 import "../../../styles/profile.css";
+import UserInterest from "../userInterest";
 
 const styles = {
     buttonRemove: {
@@ -279,7 +280,7 @@ export const Perfil_Usuario = () => {
                                 <button className="nav-link" onClick={() => setActiveSection("notificaciones")}>Notificaciones</button>
                             </nav>
                         </div>
-
+                        <UserInterest />
                     </aside>
 
                     <section className="profile-details">

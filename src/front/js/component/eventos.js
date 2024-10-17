@@ -3,22 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Inscripciones } from "./inscripciones";
 import { GetEventoImage } from "./getEventoImage";
+import { handleAskAI } from './recomendaciones';
+
 
 export const Eventos = () => {
-    const { store, actions } = useContext(Context);
-    const [loading, setLoading] = useState(true);
-    const [inscripcionIds, setInscripcionIds] = useState({});
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+  const { store, actions } = useContext(Context);
+  const [loading, setLoading] = useState(true);
+  const [inscripcionIds, setInscripcionIds] = useState({});
+  const [error, setError] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        actions.loadEventosConUsuarios()
-            .then(() => setLoading(false), actions.loadInscripciones())
-            .catch(err => {
-                setLoading(false);
-                setError("Error al cargar eventos");
-            });
-    }, [actions.loadEventosConUsuarios]);
+  useEffect(() => {
+    actions.loadEventosConUsuarios()
+      .then(() => setLoading(false), actions.loadInscripciones())
+      .catch(err => {
+        setLoading(false);
+        setError("Error al cargar eventos");
+      });
+  }, [actions.loadEventosConUsuarios]);
 
     const setInscripcionIdForEvento = (eventoId, id, userId) => {
         setInscripcionIds(prev => ({ ...prev, [eventoId]: id, [userId]: id }));
@@ -66,18 +70,26 @@ export const Eventos = () => {
                         </div>
                         <div className="d-flex justify-content-end align-items-start mt-5">
 
-                            <Inscripciones
-                                usuarioId={actions.getUserId()}
-                                eventoId={evento.id}
-                                nombreEvento={evento.nombre}
-                                inscripcionId={inscripcionIds[evento.id]}
-                                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id, actions.getUserId())}
-                            />
-                        </div>
-                    </li>
-                ))}
-            </ul>
+              <Inscripciones
+                usuarioId={actions.getUserId()}
+                eventoId={evento.id}
+                nombreEvento={evento.nombre}
+                inscripcionId={inscripcionIds[evento.id]}
+                setInscripcionId={(id) => setInscripcionIdForEvento(evento.id, id, actions.getUserId())}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+      
 
+      {chatMessages.length > 0 && (
+        <div className="chat-messages">
+          {chatMessages.map((message, index) => (
+            <div key={index}>{message}</div>
+          ))}
         </div>
-    );
+      )}
+    </div>
+  );
 };
