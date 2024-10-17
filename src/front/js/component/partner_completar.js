@@ -76,11 +76,11 @@ export const Partner_Completar = () => {
                         <div className="modal-dialog">
                             <div className="modal-content">
                                 <div className="modal-header" style={{ backgroundColor: '#7c488f', color: 'white' }}>
-                                    <h5 className="modal-title">Éxito</h5>
+                                    <h3 className="modal-title">Perfil completado</h3>
                                     <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Close"></button>
                                 </div>
                                 <div className="modal-body">
-                                    <p>Tu perfil ha sido actualizado exitosamente. En unos segundos, serás redirigido/a para que puedas iniciar sesión.</p>
+                                    <p className="fs-5">Tu perfil ha sido actualizado exitosamente. En unos segundos, serás redirigido/a para que puedas <b>iniciar sesión</b>.</p>
                                 </div>
                             </div>
                         </div>

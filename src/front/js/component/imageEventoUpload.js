@@ -53,7 +53,7 @@ export const ImageEventoUpload = ({ fetchEventoImage, eventoId, onUploadComplete
                 <div className="mb-3 text-center">
                     <button 
                         className={`btn text-white btn-sm ${loading ? "disabled" : ""}`}
-                        style={{ backgroundColor: '#7c488f'}}
+                        style={{ backgroundColor: file ? 'green' : '#7c488f' }}
                         onClick={handleUpload} 
                         disabled={loading}
                     >

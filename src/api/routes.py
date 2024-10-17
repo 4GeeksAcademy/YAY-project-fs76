@@ -969,9 +969,9 @@ def get_perfil_image():
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
     
 
-@api.route('/perfil/image/<int:usuario_id>/<string:public_id>', methods=['DELETE'])
+@api.route('/perfil/image/<int:usuario_id>', methods=['DELETE'])
 @jwt_required()
-def delete_perfil_image(usuario_id, public_id):
+def delete_perfil_image(usuario_id):
     # Obtener el ID del usuario que está eliminando la imagen
     current_usuario_id = get_jwt_identity()
 
@@ -984,11 +984,11 @@ def delete_perfil_image(usuario_id, public_id):
 
     if usuario:
         try:
-            # Verificar si el public_id de la imagen de perfil coincide
-            if usuario.public_id_perfil != public_id:
-                return jsonify({"ERROR": "Imagen de perfil no encontrada"}), 404
+            # Eliminar la imagen de Cloudinary si existe
+            if usuario.public_id_perfil:
+                cloudinary.uploader.destroy(usuario.public_id_perfil)
 
-            # Aquí solo actualizamos los campos en la base de datos
+            # Limpiar los campos de la base de datos
             usuario.foto_perfil = None  # Eliminar la referencia a la imagen
             usuario.public_id_perfil = None  # Eliminar el public ID
             db.session.commit()  # Guardar los cambios en la base de datos
@@ -999,7 +999,6 @@ def delete_perfil_image(usuario_id, public_id):
             return jsonify({"ERROR": str(e)}), 500
     else:
         return jsonify({"ERROR": "Usuario no encontrado"}), 404
-    
     
 @api.route('/perfil/upload-image/partner', methods=['POST'])
 @jwt_required()

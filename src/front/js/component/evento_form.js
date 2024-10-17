@@ -162,7 +162,7 @@ export const Evento_Form = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="accesibilidadInput" className="form-label">Accesibilidad</label>
+                    <label htmlFor="accesibilidadInput" className="form-label">Accesibilidad </label>
                     <input type="checkbox" checked={nuevoEvento.accesibilidad} onChange={(e) => setNuevoEvento({ ...nuevoEvento, accesibilidad: e.target.checked })} className="form-check-input" id="accesibilidadInput" />
                 </div>
 

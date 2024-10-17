@@ -1,4 +1,14 @@
-PARA RELLENAR EL BACK EN LA PRESENTACION
+-------------------------KEYS
+
+OPENAI---------------------------------------------------------------------------
+
+Agregar unalínea en el archivo .env, debajo de la linea de BACKEND_URL, que ponga: 
+    
+    REACT_APP_OPENAI_API_KEY= <----Poner aqui nuestra Key---->
+
+
+
+--------------------IDEAS PARA RELLENAR EL BACK EN LA PRESENTACION
 
 TIPOS DE INTERESES----------------------------------------------------------
     
@@ -15,8 +25,8 @@ TIPOS DE INTERESES----------------------------------------------------------
     Juegos de mesa
     Costura
     Fotografía
-
-
+    Manualidades
+    Juegos de mesa
 
 
 TIPOS DE ENTIDADES----------------------------------------------------------

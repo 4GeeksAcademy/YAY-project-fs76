@@ -167,6 +167,11 @@
     font-size: 2rem;
     color: #333;
     cursor: pointer;
+    background-color: white;
+    border-radius: 10%;
+    padding-inline: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 /* Efecto hover para que la imagen crezca */
 .user-gallery-image-card:hover .user-gallery-image {

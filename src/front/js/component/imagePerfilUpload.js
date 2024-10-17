@@ -52,14 +52,14 @@ const ImageUploadPerfil = ({ fetchPerfilImage }) => { // Recibimos fetchPerfilIm
                 <div className="mb-3 text-center">
                     <button 
                         className={`btn text-white btn-sm ${loading ? "disabled" : ""}`}
-                        style={{ backgroundColor: '#7c488f'}}
+                        style={{ backgroundColor: file ? 'green' : '#7c488f' }}
                         onClick={handleUpload} 
                         disabled={loading}
                     >
                         {loading ? (
                             "Subiendo..."
                         ) : (
-                            file ? "aceptar" : "Elegir Imagen"
+                            file ? "Aceptar" : "Elegir Imagen"
                         )}
                     </button>
                 </div>
