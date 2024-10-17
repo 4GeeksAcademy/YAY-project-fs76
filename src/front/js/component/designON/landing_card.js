@@ -71,11 +71,14 @@ export const Landing_Card = () => {
                   <span className="badge badge-lg bg-dark m-2" style={{ fontSize: "15px", fontWeight: '400' }}>{intereses[evento.id]}</span>
                 </div>
 
-                <GetEventoImage
-                  eventoId={evento.id}
-                  setImagenUrl={(url) => evento.foto_evento = url}
-                  partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))}
-                />
+           <div className='card-pinned card-ancla' style={{position: 'relative', display: 'block'}}>
+                  <GetEventoImage
+                    eventoId={evento.id}
+                    className="image-wrapper"
+                    setImagenUrl={(url) => evento.foto_evento = url}
+                    partnerId={evento.partner_id === parseInt(localStorage.getItem("partner_id"))}
+                  />
+        </div>
            
               </div>
               {/* Body */}
