@@ -82,7 +82,7 @@ export const Perfil_Usuario = () => {
         fecha_nacimiento: '',
         direccion: '',
         latitud: '',
-        longitud:'',
+        longitud: '',
         breve_descripcion: '',
         telefono: '',
         genero: 'otro',
@@ -105,9 +105,9 @@ export const Perfil_Usuario = () => {
             actions.getProfile(idToUse)
                 .then((data) => {
                     if (data) {
-                        setProfile({ ...data, latitud: data.latitud || null, longitud: data.longitud || null }); 
+                        setProfile({ ...data, latitud: data.latitud || null, longitud: data.longitud || null });
                         setDireccionActual(data.direccion);
-                        setMisIntereses(data.intereses.map(i => i.id)); 
+                        setMisIntereses(data.intereses.map(i => i.id));
                     }
                 }).catch(error => console.error("Error al obtener el perfil:", error));
 
@@ -237,7 +237,7 @@ export const Perfil_Usuario = () => {
         setMisIntereses(prev => prev.filter(id => id !== interesId));
         setInteresesDisponibles(prev =>
             prev.map(interes =>
-                interes.id === interesId ? { ...interes, selected: false } : interes 
+                interes.id === interesId ? { ...interes, selected: false } : interes
             )
         );
     };
@@ -280,7 +280,7 @@ export const Perfil_Usuario = () => {
                                 <button className="nav-link" onClick={() => setActiveSection("notificaciones")}>Notificaciones</button>
                             </nav>
                         </div>
-                        <UserInterest />
+                        <UserInterest intereses={misIntereses} /> 
                     </aside>
 
                     <section className="profile-details">
@@ -307,7 +307,7 @@ export const Perfil_Usuario = () => {
                                             </div>
                                             <div className="col">
                                                 <div className="form-group">
-                                                <label className="fs-5">Apellidos</label>
+                                                    <label className="fs-5">Apellidos</label>
 
                                                     <input
                                                         type="text"
@@ -325,7 +325,7 @@ export const Perfil_Usuario = () => {
                                         <div className="row">
                                             <div className="col">
                                                 <div className="form-group">
-                                                <label className="fs-5">Fecha de nacimiento</label>
+                                                    <label className="fs-5">Fecha de nacimiento</label>
                                                     <input
                                                         type="date"
                                                         name="fecha_nacimiento"
@@ -338,7 +338,7 @@ export const Perfil_Usuario = () => {
                                             </div>
                                             <div className="col">
                                                 <div className="form-group">
-                                                <label className="fs-5">Teléfono</label>
+                                                    <label className="fs-5">Teléfono</label>
                                                     <input
                                                         type="tel"
                                                         name="telefono"
@@ -353,9 +353,9 @@ export const Perfil_Usuario = () => {
                                         </div>
                                         <div className="col">
                                             <div className="form-group">
-                                            <label className="fs-5">Género</label>
+                                                <label className="fs-5">Género</label>
                                                 <div className="gender-options">
-                                                <label className="fs-5">
+                                                    <label className="fs-5">
                                                         <input
                                                             type="radio"
                                                             className="me-1"
@@ -389,7 +389,7 @@ export const Perfil_Usuario = () => {
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                        <label className="fs-5">Breve Descripción (pública)</label>
+                                            <label className="fs-5">Breve Descripción (pública)</label>
                                             <textarea
                                                 name="breve_descripcion"
                                                 value={profile.breve_descripcion}
@@ -400,11 +400,11 @@ export const Perfil_Usuario = () => {
                                             />
                                         </div>
                                         <div className="form-group">
-                                        <label className="fs-5">Dirección</label>
-                                        <Mapa
+                                            <label className="fs-5">Dirección</label>
+                                            <Mapa
                                                 setDireccion={(direccion, lat, lng) => {
-                                                    setDireccionActual(direccion);  
-                                                    setProfile(prev => ({ ...prev, direccion, latitud: lat, longitud: lng })); 
+                                                    setDireccionActual(direccion);
+                                                    setProfile(prev => ({ ...prev, direccion, latitud: lat, longitud: lng }));
                                                 }}
                                                 initialDireccion={profile.direccion}
                                             />

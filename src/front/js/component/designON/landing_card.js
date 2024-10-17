@@ -65,7 +65,7 @@ export const Landing_Card = () => {
         {Array.isArray(store.eventos) && store.eventos.slice(0, 6).map((evento) => (
           <div key={evento.id} className="col mb-3">
             {/* Card */}
-            <div className={`card landing-card card-flush card-land h-100 ${isVisible ? 'animate' : ''}`}>
+            <div className={`card landing-card card-flush card-land ${isVisible ? 'animate' : ''}`}>
               <div className="card-pinned card-ancla">
                 <div className="card-pinned-top-start card-ancla-top-start">
                   <span className="badge badge-lg bg-dark m-2" style={{ fontSize: "15px", fontWeight: '400' }}>{intereses[evento.id]}</span>

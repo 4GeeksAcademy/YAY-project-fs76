@@ -111,6 +111,7 @@ function Layout() {
                         <Route element={<Redirect_Partner />} path="/redirect-partner" />
                         <Route element={<Partner_Perfil />} path="/partner-profile/:partnerId" />
                         <Route element={<Evento_Form_Editar />} path="/formulario-evento-editar/:theid" />
+                     
 
 
                     </Routes>

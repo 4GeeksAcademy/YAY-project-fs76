@@ -12,19 +12,28 @@ export const MisEventos = () => {
     useEffect(() => {
         const fetchEventos = async () => {
             setLoading(true);
+
+            // Si store.eventos está vacío, llama a la acción para cargar eventos
+            if (store.eventos.length === 0) {
+                await actions.loadEventos(); 
+            }
+
             const eventosInscritos = [];
+
+            // Ahora que tenemos eventos, procedemos a verificar inscripciones
             for (const evento of store.eventos) {
                 const { inscrito, id } = await actions.getInscripcionUsuarioEventoInscrito(userId, evento.id);
                 if (inscrito) {
                     eventosInscritos.push({ ...evento, inscripcionId: id });
                 }
             }
+
             setMisEventos(eventosInscritos);
             setLoading(false);
         };
 
         fetchEventos();
-    }, [store.eventos, userId, actions]);
+    }, [store.eventos.length, userId]);
 
     return (
         <>
