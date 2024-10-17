@@ -19,7 +19,7 @@ export const Forgot_Password = () => {
         const userExists = await actions.checkUserExists(email);
         const partnerExists = await actions.checkPartnerExists(email);
         console.log('email introducido:', email)
-    
+
         if (!userExists && !partnerExists) {
             setMessage("El correo electrónico no existe en Yay.");
             return;
@@ -44,15 +44,15 @@ export const Forgot_Password = () => {
                                 <div className="flex-grow-1 p-5">
                                     <figure className="text-center">
 
-                                        <blockquote className="blockquote blockquote-light">“ ¿Pensaron alguna vez que si no fuera por todos, <br /> nadie sería nada? ”</blockquote>
+                                        <blockquote className="blockquote blockquote-light fs-3 mx-4">“¿Pensaron alguna vez que si no fuera por todos, nadie sería nada? ”</blockquote>
 
                                         <figcaption className="blockquote-footer blockquote-light">
-                                            <div className="mb-3">
-                                                <img className="avatar avatar-circle avatarSignin" src="https://i.pinimg.com/originals/39/7e/8e/397e8ec1c08498202adb949586da111f.png" alt="Image Description" />
+                                            <div className="mb-3 ">
+                                                <img className="avatar avatarSignin" src="https://i.pinimg.com/originals/39/7e/8e/397e8ec1c08498202adb949586da111f.png" alt="Image Description" />
                                             </div>
 
-                                            Mafalda
-                                            <span className="blockquote-footer-source">Quino | Argentina</span>
+                                            <span className="fs-5">Mafalda</span>
+                                            <span className="blockquote-footer-source fs-5">Quino | Argentina</span>
                                         </figcaption>
                                     </figure>
 
@@ -90,7 +90,7 @@ export const Forgot_Password = () => {
                                         <div className="mb-3">
                                             <div className="d-flex justify-content-between align-items-center">
                                                 <label className="form-label" htmlFor="signupModalFormSignupPassword">Contraseña</label>
-                                                <Link to={-1}><span className="form-label-link" style={{color: '#7c488f', fontWeight: '500'}}> <i className="fa-solid fa-chevron-left small me-1"></i>Volver al inicio de sesión</span></Link>
+                                                <Link to={-1}><span className="form-label-link" style={{ color: '#7c488f', fontWeight: '500' }}> <i className="fa-solid fa-chevron-left small me-1"></i>Volver al inicio de sesión</span></Link>
                                             </div>
                                             <input
                                                 type="email"

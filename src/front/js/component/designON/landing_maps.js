@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { CustomMarker } from '../customMarker';
 import { GetEventoImage } from '../getEventoImage';
+import { Link } from 'react-router-dom';
 
 
 export const Landing_Maps = () => {
@@ -212,7 +213,7 @@ export const Landing_Maps = () => {
                         </GoogleMap>
                     </LoadScript>
                 </div>
-                <div className="event-info d-flex justify-content-start align-items-center ms-5">
+                <div className="event-info d-flex justify-content-center align-items-center ms-5">
                     {selectedEvent ? (
                         <div key={selectedEvent.id} className="col mb-3">
                             {/* Card */}
