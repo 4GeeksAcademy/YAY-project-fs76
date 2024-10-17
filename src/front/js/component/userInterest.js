@@ -15,7 +15,7 @@ const UserInterest = () => {
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const apiKey = ' ';
+  const apiKey = '';
   const apiEndpoint = 'https://api.openai.com/v1/chat/completions';
 
   useEffect(() => {
@@ -81,18 +81,22 @@ const UserInterest = () => {
               <span style={{ width: '80%' }}>{interest.name}</span>
             </div>
           ))}
+
           <h3>¿Necesitas ayuda?</h3>
           <h5> Si no sabes qué eventos podrían encajar con tus intereses...</h5>
         </div>
       </div>
       <button className="btn btn-lg mb-3"
+
         onClick={handleAskAI}
         style={{
           backgroundColor: '#7c488f',
           color: '#ffffff'
         }}
       >
+
         Pide consejo a Eureka <i className="fa-solid fa-robot" style={{ color: '#ffffff' }}></i>
+
       </button>
 
      {loading && (
@@ -108,7 +112,9 @@ const UserInterest = () => {
       </div>
       {/* Contenedor para el texto */}
       <div className="loading-text">
+
         Estoy pensando qué actividades basadas en tus intereses te podrían gustar...
+
       </div>
     </div>
   </div>
