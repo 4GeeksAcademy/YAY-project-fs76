@@ -78,6 +78,7 @@
 		"bootstrap": "^5.3.3",
 		"cloudinary-react": "^1.8.1",
 		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
 		"openai": "^4.67.3",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",

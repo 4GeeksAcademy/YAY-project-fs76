@@ -97,7 +97,7 @@ const UserInterest = () => {
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 1 }}>
           <h3>¿Necesitas ayuda?</h3>
-          <h5> Si no sabes qué eventos podrían encajar con tus intereses...</h5>
+          <h5>Si no sabes qué eventos podrían encajar con tus intereses...</h5>
         </div>
       </div>
       <button className="btn btn-lg mt-3 mb-1"
