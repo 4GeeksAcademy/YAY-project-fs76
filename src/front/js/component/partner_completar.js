@@ -37,10 +37,10 @@ export const Partner_Completar = () => {
         actions.updatePartnerProfile(theid, nuevoPartner,
             () => {
                 // onSuccess
-                setShowModal(true); // Mostrar el modal al exitoso
+                setShowModal(true); 
                 setTimeout(() => {
-                    setShowModal(false); // Ocultar el modal después de 3 segundos
-                    navigate('/redirect-partner'); // Redirigir después de ocultar el modal
+                    setShowModal(false);
+                    navigate('/redirect-partner'); 
                 }, 5000);
                 setAlert({ type: 'success', message: 'Perfil actualizado exitosamente' });
             },
@@ -71,21 +71,21 @@ export const Partner_Completar = () => {
         <>
             {store.auth === true ? <Navigate to="/redirect-partner" /> :
                 <>
-{showModal && (
-                        <div className="modal show" style={{ display: 'block', position: 'fixed', zIndex: 1050, left: 0, top: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                            <div className="modal-dialog modal"> 
-                                <div className="modal-content">
-                                    <div className="modal-header" style={{ backgroundColor: '#7c488f', color: 'white' }}> 
-                                        <h5 className="modal-title">Éxito</h5>
-                                        <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Close"></button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p>Tu perfil ha sido actualizado exitosamente. Serás redirigido para que puedas iniciar sesión.</p>
-                                    </div>
+                {showModal && (
+                    <div className="modal fade show" style={{ display: 'block', position: 'fixed', zIndex: 1050, left: 0, top: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header" style={{ backgroundColor: '#7c488f', color: 'white' }}>
+                                    <h5 className="modal-title">Éxito</h5>
+                                    <button type="button" className="btn-close" onClick={() => setShowModal(false)} aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <p>Tu perfil ha sido actualizado exitosamente. En unos segundos, serás redirigido/a para que puedas iniciar sesión.</p>
                                 </div>
                             </div>
                         </div>
-                    )}
+                    </div>
+                )}
                     <form onSubmit={handleSubmit} className="container m-5 mx-auto w-50" style={{ backgroundColor: '#ffffff', borderRadius: '8px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
                         <h1 className="text-center">Completar tu perfil de Partner</h1>
                         {alert && (

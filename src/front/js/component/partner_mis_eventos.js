@@ -60,7 +60,7 @@ export const PartnerMisEventos = () => {
     };
 
     return (
-        <div className="container m-5 mx-auto w-75">
+        <div className="container m-5 mx-auto w-100">
             {error && <p className="text-danger">{error}</p>}
             <div className="d-flex justify-content-end mb-3">
                 <Link to="/formulario-evento">

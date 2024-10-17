@@ -29,7 +29,7 @@ export const Footer = ({ token }) => {
 							{/* Logo */}
 							<div className="mb-5">
 								<a className="navbar-brand" href="../index.html" aria-label="Space">
-									<img className="navbar-brand-logo" src= "https://i.ibb.co/d7LLSD1/vector-sin-eslogan.png" alt="Image Description" />
+									<img className="navbar-brand-logo" src= "https://i.ibb.co/9ZXQWRY/logoYAY.png" alt="Image Description" />
 								</a>
 							</div>
 							{/* End Logo */}

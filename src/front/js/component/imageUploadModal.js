@@ -38,13 +38,13 @@ const ImageUploadModal = ({ eventoId, onClose }) => {
                     <div className="modal-header">
                         <h5 className="modal-title">Subir Imagen de Evento</h5>
                         <button type="button" className="btn-close" onClick={() => onClose(null)}>
-                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div className="modal-body">
                         <input type="file" onChange={handleFileChange} accept="image/*" />
                         {error && <p className="text-danger">{error}</p>}
                         <div className="text-center mt-3">
+                            <button className='btn btn-secondary btn close me-3' onClick={() => onClose(null)}>Más tarde</button>
                             <button 
                                 className="btn"
                                 onClick={handleUpload}
