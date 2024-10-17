@@ -63,7 +63,7 @@ const GetUserImages = () => {
                             onClick={() => handleDeleteClick(url)} 
                             className="user-gallery-delete-button"
                         >
-                            x
+                            X
                         </button>
                     </div>
                 ))}

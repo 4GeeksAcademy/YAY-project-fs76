@@ -1042,20 +1042,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                 });
             },
             
-            deletePerfilImage: async (usuario_id, public_id) => {
+            deletePerfilImage: async (usuario_id) => {
                 const token = localStorage.getItem('token');
-                const userId = parseInt(localStorage.getItem('user_id'));
             
-                // Imprimir los valores para verificar que no son undefined
-                console.log("Usuario ID:", usuario_id, "Public ID:", public_id, "User ID desde localStorage:", userId);
-                
-                if (!usuario_id || !public_id) {
-                    console.error("Faltan parámetros: usuario_id o public_id están undefined");
+                if (!usuario_id) {
+                    console.error("Falta el parámetro: usuario_id está undefined");
                     return;
                 }
-                
+            
                 try {
-                    const response = await fetch(`${process.env.BACKEND_URL}/api/perfil/image/${usuario_id}/${public_id}`, {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/perfil/image/${usuario_id}`, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -1067,7 +1063,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         const errorData = await response.json();
                         throw new Error(errorData.ERROR || 'Error al eliminar la imagen de perfil');
                     }
-                    
+            
                     const data = await response.json();
                     return data; // Retornar la respuesta del servidor
                 } catch (error) {
@@ -1075,7 +1071,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                     throw error; // Re-lanzar el error para manejarlo en el componente
                 }
             },
-
             uploadPartnerImage: (file) => {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();

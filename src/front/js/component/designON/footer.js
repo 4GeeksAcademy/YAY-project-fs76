@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Footer = ({ token }) => {
 
@@ -28,7 +29,7 @@ export const Footer = ({ token }) => {
 						<div className="col-lg-3 mb-7 mb-lg-0">
 							{/* Logo */}
 							<div className="mb-5">
-								<a className="navbar-brand" href="../index.html" aria-label="Space">
+								<a className="navbar-brand" href="/" aria-label="Space">
 									<img className="navbar-brand-logo" src= "https://i.ibb.co/9ZXQWRY/logoYAY.png" alt="Image Description" />
 								</a>
 							</div>
@@ -48,32 +49,32 @@ export const Footer = ({ token }) => {
 							<h5 className="text-white mb-3">Compañia</h5>
 							{/* List */}
 							<ul className="list-unstyled list-py-1 mb-0">
-								<li><a className="link-sm link-light" href="#">Sobre nosotros</a></li>
+								<li><a className="link-sm link-light" href="/sobre-nosotros">Sobre nosotros</a></li>
 								<li><a className="link-sm link-light" href="#">Empleos <span className="badge text-white rounded-pill ms-1" style={{backgroundColor: '#7c488f'}}>Proceso abierto</span></a></li>
 								<li><a className="link-sm link-light" href="#">Noticias</a></li>
 								<li><a className="link-sm link-light" href="#">Reseñas<i className="bi-box-arrow-up-right small ms-1"></i></a></li>
-								<li><a className="link-sm link-light" href="#">Publicítate</a></li>
+								<li><a className="link-sm link-light" href="/#land-contacto">Publicítate</a></li>
 							</ul>
 						</div>
 
 						<div className="col-sm mb-7 mb-sm-0">
 							<h5 className="text-white mb-3">Usuarios</h5>
 							<ul className="list-unstyled list-py-1 mb-0">
-								<li><a className="link-sm link-light" href="#">Regístrate <i className="bi-box-arrow-up-right small ms-1"></i></a></li>
-								<li><a className="link-sm link-light" href="#">Inicio sesión</a></li>
-								<li><a className="link-sm link-light" href="#">Eventos</a></li>
-								<li><a className="link-sm link-light" href="#">Perfil</a></li>
+								<li><a className="link-sm link-light" href="/signup">Regístrate <i className="bi-box-arrow-up-right small ms-1"></i></a></li>
+								<li><a className="link-sm link-light" href="/login">Inicio sesión</a></li>
+								<li><a className="link-sm link-light" href="/#land-eventos">Eventos</a></li>
+								<li><a className="link-sm link-light" href="/login">Perfil</a></li>
 							</ul>
 						</div>
 
 						<div className="col-sm mb-7 mb-sm-0">
 							<h5 className="text-white mb-3">Partner</h5>
 							<ul className="list-unstyled list-py-1 mb-0">
-								<li><a className="link-sm link-light" href="#">Registro</a></li>
-								<li><a className="link-sm link-light" href="#">Inicio sesión</a></li>
+								<li><a className="link-sm link-light" href="/partners-signup">Registro</a></li>
+								<li><a className="link-sm link-light" href="/partners-login">Inicio sesión</a></li>
 								<li><a className="link-sm link-light" href="#">Estado</a></li>
 								<li><a className="link-sm link-light" href="#">Inscripciones</a></li>
-								<li><a className="link-sm link-light" href="#">Eventos</a></li>
+								<li><a className="link-sm link-light" href="/#land-eventos">Eventos</a></li>
 							</ul>
 						</div>
 
@@ -81,8 +82,8 @@ export const Footer = ({ token }) => {
 						<div className="col-sm">
 							<h5 className="text-white mb-3">Resources</h5>
 							<ul className="list-unstyled list-py-1 mb-5">
-								<li><a className="link-sm link-light" href="#"><i className="bi-question-circle-fill me-1"></i> Ayuda</a></li>
-								<li><a className="link-sm link-light" href="#"><i className="bi-person-circle me-1"></i> Tu cuenta</a></li>
+								<li><a className="link-sm link-light" href="/#land-contacto"><i className="bi-question-circle-fill me-1"></i> Ayuda</a></li>
+								<li><a className="link-sm link-light" href="/login"><i className="bi-person-circle me-1"></i> Tu cuenta</a></li>
 							</ul>
 						</div>
 					</div>
@@ -100,7 +101,7 @@ export const Footer = ({ token }) => {
 									<a className="link-sm link-light" href="https://policies.google.com/terms?hl=es" target="_blank">Términos y condiciones de uso</a>
 								</li>
 								<li className="list-inline-item">
-									<a className="link-sm link-light" href="#">Sitio Web</a>
+									<a className="link-sm link-light" href="/">Sitio Web</a>
 								</li>
 							</ul>
 							{/* End Socials */}

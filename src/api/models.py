@@ -147,6 +147,7 @@ class Usuarios(db.Model):
     apellidos = db.Column(db.String(120), nullable=True)
     foto = db.Column(db.String(255), nullable=True)
     foto_perfil = db.Column(db.String(255), nullable=True)
+    public_id_perfil = db.Column(db.String)
     fecha_nacimiento = db.Column(db.Date, nullable=True)  
     breve_descripcion = db.Column(db.String(255), nullable=True)  
     direccion = db.Column(db.String(255), nullable=True) 
@@ -171,7 +172,9 @@ class Usuarios(db.Model):
             "fecha_nacimiento": self.fecha_nacimiento.strftime('%Y-%m-%d') if self.fecha_nacimiento else None,
             "breve_descripcion": self.breve_descripcion,
             "email": self.email,
-            "is_active": self.is_active
+            "is_active": self.is_active,
+            "foto_perfil": self.foto_perfil, 
+            "public_id_perfil": self.public_id_perfil
             # No serializamos la contraseña por seguridad
         }
     

@@ -19,16 +19,14 @@ const GetUserPerfilImage = () => {
         }
     };
 
-    const handleDeleteClick = async (image) => {
+    const handleDeleteClick = async () => {
         const usuario_id = store.user_id; 
-        const public_id = image.split('/').pop().split('.')[0]; 
         
-        // Verifica los valores
+        // Verifica el valor de usuario_id
         console.log("Usuario ID:", usuario_id);
-        console.log("Public ID:", public_id);
         
         try {
-            await actions.deleteImage(usuario_id, public_id);
+            await actions.deletePerfilImage(usuario_id); // Llamar a la acción sin public_id
             setImage(null); // Clear the image after deletion
         } catch (error) {
             setError("No se pudo eliminar la imagen.");
@@ -61,25 +59,25 @@ const GetUserPerfilImage = () => {
                         onClick={() => handleImageClick(image)} 
                     />
                     <button 
-                        onClick={() => handleDeleteClick(image)} 
+                        onClick={handleDeleteClick}  // Sin pasar image
                         className="delete-button"
                     >
-                        x
+                        X
                     </button>
                 </div>
             ) : (
                 <ImageUploadPerfil fetchPerfilImage={fetchPerfilImage} />
             )}
-                {isModalOpen && (
-                    <div className="user-gallery-modal" onClick={closeModal}>
-                        <div className="user-gallery-modal-content" onClick={(e) => e.stopPropagation()}>
-                            <span className="user-gallery-modal-close" onClick={closeModal}>&times;</span>
-                            <img src={selectedImage} alt="Imagen grande" className="user-gallery-modal-image" />
-                        </div>
+            {isModalOpen && (
+                <div className="user-gallery-modal" onClick={closeModal}>
+                    <div className="user-gallery-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <span className="user-gallery-modal-close" onClick={closeModal}>&times;</span>
+                        <img src={selectedImage} alt="Imagen grande" className="user-gallery-modal-image" />
                     </div>
-                )}
-            </div>
-        );
-    };
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default GetUserPerfilImage;
