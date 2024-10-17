@@ -329,15 +329,17 @@ small {
     display: inline-block;
 }
 
-.landing-card:hover {
-    border: 1.5px solid #7c488f;
-}
 
 .landing-card {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1.5s, transform 1.5s;
     box-shadow: 0 .1875rem .375rem 0 rgba(140, 152, 164, .25);
+    width: 100%; /* Ancho completo de la tarjeta */
+    max-width: 300px; /* Ancho máximo para la tarjeta */
+    margin: 15px; 
+    
+
 }
 
 .landing-card.animate {
