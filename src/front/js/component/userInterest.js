@@ -1,38 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from '../store/appContext'; 
+import { Link } from 'react-router-dom';
 import "../../styles/userInterest.css";
-
-const interestsData = [
-  { id: 1, name: 'Cine' },
-  { id: 2, name: 'Deporte' },
-  { id: 3, name: 'Música' },
-  { id: 4, name: 'Arte' },
-  { id: 5, name: 'Cultura' },
-];
 
 const UserInterest = () => {
   const [interests, setInterests] = useState([]);
-  const [selectedInterests, setSelectedInterests] = useState([]);
   const [aiRecommendations, setAiRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
-  const apiKey = '';
-  const apiEndpoint = 'https://api.openai.com/v1/chat/completions';
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { actions } = useContext(Context); // Acceder a las acciones del contexto
+
+  const apiKey = process.env.REACT_APP_OPENAI_API_KEY;
+  const apiEndpoint = 'https://api.openai.com/v1/chat/completions'; // Aquí es donde se define apiEndpoint
 
   useEffect(() => {
-    const storedInterests = localStorage.getItem('selectedInterests');
-    if (storedInterests) {
-      setSelectedInterests(JSON.parse(storedInterests));
-    }
-  }, []);
+    const fetchInterests = async () => {
+      const fetchedInterests = await actions.obtenerIntereses(); // Llama a la acción para obtener intereses
+      setInterests(fetchedInterests); // Guarda los intereses en el estado
+    };
 
-  useEffect(() => {
-    localStorage.setItem('selectedInterests', JSON.stringify(selectedInterests));
-  }, [selectedInterests]);
+    fetchInterests();
+  }, [actions]);
 
   const handleAskAI = async () => {
     setLoading(true);
-    const interesesSeleccionados = JSON.parse(localStorage.getItem('selectedInterests'));
-    const prompt = `Genera 4 recomendaciones de actividades diferentes basadas en los siguientes intereses y que sean para personas mayores de 60 años con estilo de vida saludable y sociable: ${interesesSeleccionados}.`;
+
+    // Verifica si hay intereses
+    if (interests.length === 0) {
+      setAiRecommendations([]); // No hay recomendaciones en este caso
+      setIsModalOpen(true); // Abre el modal
+      setLoading(false); // Finaliza la carga
+      return; // Salir de la función
+    }
+
+
+    const interesesSeleccionados = interests.map(interest => interest.nombre);
+    const randomQuestion = `¡Estoy emocionado de ayudarte! `; // Frase aleatoria para agregar variabilidad
+    const prompt = `${randomQuestion}Genera 4 recomendaciones de actividades diferentes basadas en los siguientes intereses y que sean para personas mayores de 60 años con estilo de vida saludable y sociable: ${interesesSeleccionados.join(', ')}.`;
 
     try {
       const response = await fetch(apiEndpoint, {
@@ -45,22 +49,38 @@ const UserInterest = () => {
           model: 'gpt-3.5-turbo',
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 350,
-          temperature: 0.5,
+          temperature: 0.7, // Ajusta el nivel de aleatoriedad
         }),
       });
 
       const responseData = await response.json();
       const recommendationsContent = responseData.choices[0].message.content;
 
-      const recommendations = recommendationsContent.split('\n').map((rec, index) => ({
+      // Dividir el contenido en líneas (asumiendo que cada recomendación está en una nueva línea)
+      const recommendationsLines = recommendationsContent.split('\n').map(line => line.trim()).filter(line => line);
+
+      // Resaltar los nombres de los intereses y el enunciado de cada recomendación
+      const highlightedRecommendations = recommendationsLines.map(rec => {
+        const highlightedStatement = rec.replace(/^(.*?)\: /, (match, p1) => {
+          const highlightedPart = interesesSeleccionados.reduce((text, interest) => {
+            const regex = new RegExp(`(${interest})`, 'gi');
+            return text.replace(regex, '<strong>$1</strong>');
+          }, p1);
+          return `<strong>${highlightedPart}</strong>: `;
+        });
+
+        return highlightedStatement;
+      });
+
+      const recommendations = highlightedRecommendations.map((rec, index) => ({
         id: index + 1,
-        name: rec.trim(),
-      })).filter(rec => rec.name);
+        name: rec,
+      }));
 
       const limitedRecommendations = recommendations.slice(0, 4);
 
       setAiRecommendations(limitedRecommendations);
-      setIsModalOpen(true); 
+      setIsModalOpen(true);
     } catch (error) {
       console.error("Error al obtener recomendaciones:", error);
     } finally {
@@ -75,63 +95,68 @@ const UserInterest = () => {
   return (
     <div className='profile-card text-center'>
       <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1}}>
-          {interests.map((interest) => (
-            <div key={interest.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <span style={{ width: '80%' }}>{interest.name}</span>
-            </div>
-          ))}
-
+        <div style={{ flex: 1 }}>
           <h3>¿Necesitas ayuda?</h3>
           <h5> Si no sabes qué eventos podrían encajar con tus intereses...</h5>
         </div>
       </div>
-      <button className="btn btn-lg mb-3"
-
+      <button className="btn btn-lg mt-3 mb-1"
         onClick={handleAskAI}
         style={{
           backgroundColor: '#7c488f',
           color: '#ffffff'
         }}
       >
-
         Pide consejo a Eureka <i className="fa-solid fa-robot" style={{ color: '#ffffff' }}></i>
-
       </button>
+      <p className='text-start mt-0 ms-1'>*No olvides guardar antes tus cambios en 'Mis Intereses'</p>
 
-     {loading && (
-  <div className="loading-overlay">
-    <div className="loading-content">
-      <div className="🤚">
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="👉"></div>
-        <div className="🌴"></div>
-        <div className="👍"></div>
-      </div>
-      {/* Contenedor para el texto */}
-      <div className="loading-text">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-content">
+            <div className="🤚">
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="👉"></div>
+              <div className="🌴"></div>
+              <div className="👍"></div>
+            </div>
+            <div className="loading-text">
+              Estoy pensando qué actividades basadas en tus intereses te podrían gustar...
+            </div>
+          </div>
+        </div>
+      )}
 
-        Estoy pensando qué actividades basadas en tus intereses te podrían gustar...
-
-      </div>
-    </div>
-  </div>
-)}
-
-      {/* Modal */}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Recomendaciones de Eureka</h2>
-            <ul>
-              {aiRecommendations.map((recommendation) => (
-                <li key={recommendation.id}>{recommendation.name}</li>
-              ))}
-            </ul>
+          <div className="d-flex justify-content-between align-items-start">
+            <h1 className="flex-fill text-center">Recomendaciones de Eureka</h1>
+            <button
+          type="button"
+          className="btn-close"
+          onClick={handleCloseModal}
+          aria-label="Close"
+        ></button>
+        </div>
+            {interests.length === 0 ? ( // Verifica si no hay intereses
+              <>
+              <div className='container w-75'>
+                <p className='fs-4'><i className="fa-solid fa-circle-exclamation" style={{ color: '#7c488f' }}></i>  ¡Oh vaya! Parece que aún no has seleccionado ningún interés. Vete a la sección "Mis Intereses" en tu perfil y elige todos los que quieras. Guarda los cambios y vuelve cuando lo hayas hecho para poder ayudarte.</p>
+                
+                </div>
+              </>
+            ) : (
+              <ul>
+                {aiRecommendations.map((recommendation) => (
+                  <li key={recommendation.id} dangerouslySetInnerHTML={{ __html: recommendation.name }} />
+                ))}
+              </ul>
+            )}
             <div className="d-grid gap-2 d-md-block">
-              <button className="btn btn-secondary" onClick={handleCloseModal}>Cerrar</button>
+              <button className="btn btn-secondary float-end" onClick={handleCloseModal}>Cerrar</button>
             </div>
           </div>
         </div>

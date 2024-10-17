@@ -79,6 +79,9 @@ export const Evento_Card = () => {
                                 <span className="text-muted d-block mb-3">
                                     <b>Fecha</b>: {evento.fecha}
                                 </span>
+
+                                </div>
+                                <div className="d-flex justify-content-between mb-3 fs-5">
                                 <span className="text-muted d-block mb-3">
                                     <b>Horario</b>: {evento.horario}
                                 </span>
@@ -91,15 +94,16 @@ export const Evento_Card = () => {
                                     <b>Plazas</b>: {evento.cupo}
                                 </span>
                                 </div>
-                                <div className="d-flex justify-content-between mb-3 fs-5">
+                             
 
-                                <span className="text-muted d-block mb-3">
+                                <span className="text-muted d-block mb-3 fs-5">
                                     <b>Dificultad</b>: {evento.dificultad}
                                 </span>
-                                <span className="text-muted d-block mb-3">
+                
+                                <span className="text-muted d-block mb-3 fs-5">
                                     <b>Precio</b>: {evento.precio} €
                                 </span>
-                                </div>
+                             
                                 <span className="text-muted d-block mb-3 fs-5">
                                     <b>Descripción</b>: {evento.breve_descripcion}
                                 </span>
@@ -107,7 +111,7 @@ export const Evento_Card = () => {
                                     <b>Observaciones</b>: {evento.observaciones}
                                 </span>
                                 <span className="text-muted d-block mb-3 fs-5">
-                                    <b>Ubicacion</b>: {evento.direccion}
+                                    <b>Ubicación</b>: {evento.direccion}
                                 </span>
 
                                 {loading ? (

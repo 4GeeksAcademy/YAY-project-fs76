@@ -88,7 +88,7 @@ export const Evento_Form_Editar = () => {
     };
     return (
         <>
-            <form onSubmit={handleSubmit} className="m-5 mx-auto w-75">
+             <form onSubmit={handleSubmit} className="m-5 mx-auto w-50 p-4 shadow rounded" style={{ backgroundColor: '#ffffff' }}>
                 <h1 className="text-center" style={{ color: '#7c488f' }}>Editar Evento</h1>
                 {alert && (
                     <div className={`alert fade show alert-${alert.type}`} role="alert">
@@ -101,17 +101,19 @@ export const Evento_Form_Editar = () => {
                     <label htmlFor="nombreInput" className="form-label">Nombre del Evento</label>
                     <input type="text" value={nuevoEvento.nombre} onChange={(e) => setNuevoEvento({ ...nuevoEvento, nombre: e.target.value })} className="form-control" id="nombreInput" placeholder="Introduzca nombre del evento..." />
                 </div>
-                <div className="mb-3">
+                <div className="row mb-3">
+                <div className="col-md-4">
                     <label htmlFor="fechaInput" className="form-label">Fecha del Evento</label>
                     <input type="date" value={nuevoEvento.fecha} onChange={(e) => setNuevoEvento({ ...nuevoEvento, fecha: e.target.value })} className="form-control" id="fechaInput" />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-4">
                     <label htmlFor="hora_inicioInput" className="form-label">Hora de inicio</label>
                     <input type="time" value={nuevoEvento.hora_inicio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, hora_inicio: e.target.value })} className="form-control" id="hora_inicioInput" />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-4">
                     <label htmlFor="hora_finInput" className="form-label">Hora de fin</label>
                     <input type="time" value={nuevoEvento.hora_fin} onChange={(e) => setNuevoEvento({ ...nuevoEvento, hora_fin: e.target.value })} className="form-control" id="hora_finInput" />
+                </div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="direccionInput" className="form-label">Ubicacion</label>
@@ -134,26 +136,29 @@ export const Evento_Form_Editar = () => {
                     <label htmlFor="accesibilidadInput" className="form-label">Accesibilidad </label>
                     <input type="checkbox" checked={nuevoEvento.accesibilidad} onChange={(e) => setNuevoEvento({ ...nuevoEvento, accesibilidad: e.target.checked })} className="form-check-input" id="accesibilidadInput" />
                 </div>
-                <div className="mb-3">
+                <div className="row mb-3 align-items-end">
+                <div className="col-md-5">
                     <label htmlFor="dificultadInput" className="form-label">Dificultad</label>
                     <input type="text" value={nuevoEvento.dificultad} onChange={(e) => setNuevoEvento({ ...nuevoEvento, dificultad: e.target.value })} className="form-control" id="dificultadInput" placeholder="Introduzca dificultad..." />
                 </div>
-                <div className="mb-3">
+                <div className="col-md-3">
                     <label htmlFor="precioInput" className="form-label">Precio</label>
                     <div className="position-relative">
-                        <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Introduzca precio en euros..." min="0" />
+                        <input type="number" value={nuevoEvento.precio} onChange={(e) => setNuevoEvento({ ...nuevoEvento, precio: e.target.value })} className="form-control" id="precioInput" placeholder="Puede ser 0..." min="0" />
                         <span className="position-absolute" style={{ right: '30px', top: '50%', transform: 'translateY(-50%)' }}>€</span>
                     </div>
                 </div>
-                <div className="mb-3">
+                <div className="col-md-4">
                     <label htmlFor="cupoInput" className="form-label">Cupo</label>
                     <input type="number" value={nuevoEvento.cupo} onChange={(e) => setNuevoEvento({ ...nuevoEvento, cupo: e.target.value })} className="form-control" id="cupoInput" placeholder="Introduzca cupo..." min="0" />
+                </div>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="observacionesInput" className="form-label">Observaciones</label>
                     <input type="text" value={nuevoEvento.observaciones} onChange={(e) => setNuevoEvento({ ...nuevoEvento, observaciones: e.target.value })} className="form-control" id="observacionesInput" placeholder="Introduzca observaciones..." />
                 </div>
-                <div className="mb-3">
+                <div className="row mb-3">
+                <div className="col-md-6">
                     <label htmlFor="interesSelect" className="form-label">Interés</label>
                     <select
                         id="interesSelect"
@@ -167,8 +172,9 @@ export const Evento_Form_Editar = () => {
                         ))}
                     </select>
                 </div>
+                </div>
                 <div className="d-grid gap-2">
-                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#A7D0CD', color: '#494949' }} onFocus={(e) => e.target.blur()}>Guardar</button>
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: '#7c488f', color: 'white' }} onFocus={(e) => e.target.blur()}>Guardar</button>
                 </div>
                 <Link to="/partners-eventos" style={{ color: '#7c488f' }}>
                     o volver a la lista de eventos

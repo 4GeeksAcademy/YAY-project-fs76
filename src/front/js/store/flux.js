@@ -1294,7 +1294,6 @@ const getState = ({ getStore, getActions, setStore }) => {
         
                     if (resp.ok) {
                         const data = await resp.json();
-                        console.log("Intereses obtenidos:", data);
                         setStore({ intereses: Array.isArray(data) ? data : [] });
                         return Array.isArray(data) ? data : [];
                     } else {
